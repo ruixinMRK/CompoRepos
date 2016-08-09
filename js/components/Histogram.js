@@ -3,8 +3,8 @@
  */
 
 
-import Base from  '../Base.js';
-import Tools from '../Tools.js';
+import Base from  './Base.js';
+import Tools from '../Tools/Tools.js';
 
 class Histogram extends Base{
 

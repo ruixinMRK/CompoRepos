@@ -120,6 +120,27 @@ class Tools{
             div.style[attr] = obj[attr];
         }
     }
+    //角度转弧度
+    static getHD(num){
+
+        return num * Math.PI /180;
+
+    }
+    //弧度转角度
+    static getJD(num){
+        return num * 180 /Math.PI;
+    }
+    //获取坐标旋转固定角度之后的坐标
+    //x,y,角度，是否为弧度
+    static getXY(x1,y1,num,isHD){
+        if(!isHD){
+            num = Tools.getHD(num);
+        }
+        let x = Math.cos(x1) + Math.sin(y1);
+        let y = Math.cos(y1) - Math.sin(x1);
+        return [x,y];
+    }
+
     //获取div样式
     static getDivStyle(div,att){
         let style = null;

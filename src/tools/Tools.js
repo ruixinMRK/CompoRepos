@@ -714,6 +714,12 @@ class Tools{
         }
     }
     //跨浏览器删除事件
+    /**
+     * 
+     * @param obj
+     * @param type
+     * @param fn
+     */
     static removeEvent(obj, type, fn) {
         if (typeof obj.removeEventListener != 'undefined') {
             obj.removeEventListener(type, fn, false);

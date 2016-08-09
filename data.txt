@@ -1,0 +1,33 @@
+this.groupData = {"主要渠道": [
+      {"柜台及人工渠道": ["网点柜面服务渠道", "营销服务渠道", "委托及上门服务渠道", "后台业务服务渠道"]},
+      {"自助渠道": ["ATM", "POS", "自助终端"]},
+      {"电子渠道": ["电话银行（呼叫中心）", "电话银行（自助语音）", "网上银行", "电子商务", "手机银行", "短信银行", "电视银行", "专用业务客户端", "外部门户"]},
+      {"合作方直联渠道": ["财政直联", "政府直联", "公共事业单位直联", "企业直连", "其他直联", "分行特色直联渠道", "金融同业直联", "清算组织直联", "卡组织直联", "汇款公司直联"]},
+      {"批量及系统渠道": ["批量业务渠道", "系统内部业务渠道", "其他渠道"]},
+      {"信息服务发布渠道": [""]},
+      {"管理渠道": ["财务管理", "运营管理", "风险管理", "金融资产服务管理", "内部管理"]}]}
+
+
+
+for(var i=0;i<groupData.length;i++)
+    {
+      var tempObj = groupData[i];
+      var tempKey = Utils.getKey(tempObj);
+      var tempValue = Utils.getKeyValue(tempObj);
+      var content = new createjs.Container();
+      var item = this.createItem(tempKey);
+      content.addChild(item);
+      var tempNum = 50;
+      for(var j=0;j<tempValue.length;j++)
+      {
+        var littemItem = this.createLittleItem(tempValue[j]);
+        content.addChild(littemItem);
+        littemItem.y = tempNum;
+        tempNum+=35;
+      }
+      this.container.addChild(content);
+      content.y = tempLen;
+      tempLen+=tempNum;
+      this.itemArr.push(content);
+    }
+    this.contentHeight = tempLen-4;

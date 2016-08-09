@@ -715,7 +715,7 @@ class Tools{
     }
     //跨浏览器删除事件
     /**
-     * 
+     *
      * @param obj
      * @param type
      * @param fn

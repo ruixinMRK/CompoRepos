@@ -147,6 +147,7 @@ window.onload = function(){
     // b.y = 370;
     // stage.addChild(b);
 
+    console.log('tt');
 
     setInterval(function(){
         var obj = {};

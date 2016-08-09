@@ -2,8 +2,8 @@
 
 //import createjs from "createjs";
 
-import args from './createjs.js';
-import Histogram from  './components/Histogram.js';
+import args from './libs/createjs.js';
+import Histogram from  './framework/components/Histogram.js';
 
 window.onload = function(){
 
@@ -142,10 +142,10 @@ window.onload = function(){
     a.y = 15;
     stage.addChild(a);
 
-    let b = new Histogram(styleO);
-    b.x = 40;
-    b.y = 370;
-    stage.addChild(b);
+    // let b = new Histogram(styleO);
+    // b.x = 40;
+    // b.y = 370;
+    // stage.addChild(b);
 
 
     setInterval(function(){
@@ -166,31 +166,10 @@ window.onload = function(){
 
         console.log(historyA.length);
 
-        b.updata([{value:currentA,id:'A'}])
+        // b.updata([{value:currentA,id:'A'}])
     },5000)
 
-    // a.clear();
     createjs.Ticker.addEventListener('tick',stage);
 
-}
 
-// class Main{
-//
-//     constructor(){
-//         this.init();
-//         // alert('23432')
-//     }
-//
-//     init(){
-//
-//         let stage = new createjs.Stage('name');
-//
-//         let a = new GraphicsParent();
-//         stage.addChild(a);
-//
-//         createjs.Ticker.addEventListener('tick',stage);
-//
-//     }
-// }
-//
-// export default Main;
+}

@@ -6,6 +6,7 @@ class Tools{
 
     }
 
+    //获取节点
     static getDOM(args){
 
         let childElements = [];
@@ -104,7 +105,10 @@ class Tools{
         }
         return temps;
     }
-
+    //是否为obj自己的属性(非继承)
+    static hasPropSelf(o,prop){
+        return o.hasOwnProperty(prop) && !(prop in o);
+    }
     //获取dom节点的x,y,w,h
     static getDOMClient(div){
         let rect = div.getBoundingClientRect();
@@ -122,9 +126,7 @@ class Tools{
     }
     //角度转弧度
     static getHD(num){
-
         return num * Math.PI /180;
-
     }
     //弧度转角度
     static getJD(num){
@@ -133,14 +135,17 @@ class Tools{
     //获取坐标旋转固定角度之后的坐标
     //x,y,角度，是否为弧度
     static getXY(x1,y1,num,isHD){
-        if(!isHD){
-            num = Tools.getHD(num);
-        }
-        let x = Math.cos(x1) + Math.sin(y1);
-        let y = Math.cos(y1) - Math.sin(x1);
-        return [x,y];
+        if(!isHD) num = Tools.getHD(num);
+        let x = Math.cos(num)*x1 + Math.sin(num)*y1;
+        let y = Math.cos(num)*y1 - Math.sin(num)*x1;
+        return [x|0,y|0];
     }
-
+    //计算两点距离
+    static getDis(x1,y1,x2,y2){
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        return Math.sqrt(dx*dx+dy*dy);
+    }
     //获取div样式
     static getDivStyle(div,att){
         let style = null;
@@ -248,7 +253,6 @@ class Tools{
     static isMobile() {
         return navigator.userAgent.match(/android|iphone|ipod|blackberry|meego|symbianos|windowsphone|ucbrowser/i)
     }
-
     //跨浏览器获取视口大小
     static getInner() {
         if (typeof window.innerWidth != 'undefined') {
@@ -415,23 +419,6 @@ class Tools{
             }
         }
     }
-    //将数字转换为大写的数字
-    static doNumberRatio(num,unit){
-        if((typeof  unit) == "undefined" || unit == null)unit = "";
-        if(num<1000)
-        {
-            return num + unit;
-        }else if(num>=1000 && num<1000000)
-        {
-            return (num/1000).toFixed(0) + "ǧ" + unit;
-        }else if(num>=1000000 && num<1000000000)
-        {
-            return (num/1000000).toFixed(0) + "����" + unit;
-        }else if(num>=1000000000 && num<1000000000000)
-        {
-            return (num/1000000000).toFixed(0) + "ʮ��" + unit;
-        }
-    }
     //生成随机字符串
     static getRandomStr(len) {
         let str = "";
@@ -481,8 +468,6 @@ class Tools{
                 return c.apply(b,arguments);
             }
     }
-
-
     //createjs 中给文本换行
     static wrapText(cast, _displayTxt,nStr){
         let nn = nStr?nStr:'\n';
@@ -810,23 +795,23 @@ class Tools{
         if(!obj.async)  callBack();
     }
 
-    //快速排序
+    //快速排序(可能造成栈溢出)
     // var aaa = [3, 5, 2, 9, 1];
     // this.quickSort(aaa, 0, aaa.length - 1);
-    static quickSort(array, left, right) {
-        if (Object.prototype.toString.call(array).slice(8, -1) === 'Array' && typeof left === 'number' && typeof right === 'number') {
+    static quickSort(array, left, right,key) {
+        if (Array.isArray(array)) {
             if (left < right) {
-                var x = array[right], i = left - 1, temp;
+                var x = array[right][key], i = left - 1, temp;
                 for (let j = left; j <= right; j++) {
-                    if (array[j] <= x) {
+                    if (array[j][key] <= x) {
                         i++;
                         temp = array[i];
                         array[i] = array[j];
                         array[j] = temp;
                     }
                 }
-                this.quickSort(array, left, i - 1);
-                this.quickSort(array, i + 1, right);
+                Tools.quickSort(array, left, i - 1,key);
+                Tools.quickSort(array, i + 1, right,key);
             }
         } else {
             return 'array is not an Array or left or right is not a number!';
@@ -834,27 +819,8 @@ class Tools{
     }
 
     //createjs加载资源
-    static loadPlate() {
+    static loadPlate(arr,callBack) {
         let dataArr = [];
-        let index = 0;
-        let callBack;
-        let scrArr;
-        let request;
-        let dataLoader;
-        let loadData = function(arr,call)
-        {
-            if(dataLoader==null)
-            {
-                dataLoader = new createjs.LoadQueue(true);
-                dataLoader.on("fileprogress", handlerProgress);
-                dataLoader.on("complete", handlerComplete);
-                dataLoader.on("fileload", handlerFileloaded);
-            }
-            callBack = call;
-            //dataLoader.loadFile({src:url});
-            dataLoader.loadManifest(arr, true);
-
-        }
 
         let handlerProgress = function(event)
         {
@@ -869,130 +835,62 @@ class Tools{
         let handlerFileloaded = function(event)
         {
             let obj = {};
-
-            //let jsonObj =
             obj.source = event.result;
             obj.id = event.item.id;
-            //console.log(obj.id);
             dataArr.push(obj);
         }
 
-        let ajaxLoadData = function(arr,call)
-        {
-            if(arr.length==null||arr.length ==0)return;
-            dataArr = [];
-            scrArr = arr;
-            callBack = call;
-            index =0;
-            autoLoad();
-        }
-        let autoLoad = function()
-        {
-            //jQuery.post(scrArr[index].src,scrArr[index].data,this.loadDataComplete(data),"json")
-            //console.log(scrArr[index].src);
-            request = Tools.ajax({
-                url: scrArr[index].src,
-                type: "GET",
-                async: true,
-                dataType: "json",
-                //contentType: "charset=utf-8",
-                cache: false,
-                onreadystatechange:true,
-                success: loadDataComplete,
-                error: loadDataError,
-                complete :function (XHR, TS) {
-                    //console.log("!!!!!!!!!");
-                    XHR = null;
-                    request = null
-                }
-            });
+        let onError = function (e){
+            throw new Error('资源加载错误',e)
         }
 
-        let loadDataComplete = function(data)
-        {
-            let obj = {};
-            //let obk = JSON.parse(data);
-            obj.source = data;
-            obj.id = scrArr[index].id;
-            dataArr.push(obj);
-            request = null;
-            if(index==scrArr.length-1)
-            {
-                callBack(dataArr);
-                callBack = null;
-                return;
-            }
-            index++;
-            autoLoad();
-        }
-        let loadDataError = function(XHR,textStatus,err)
-        {
-            if(index==scrArr.length-1)
-            {
-                callBack(dataArr);
-                callBack = null;
-                return;
-            }
-            XHR = null;
-            request = null;
-            index++;
-            autoLoad();
-        }
-        return{
-            loadData:loadData,
-            ajaxLoad:ajaxLoadData,
-        }
+        let loader = new createjs.LoadQueue(true);
+        // loader.installPlugin(createjs.Sound);
+        // createjs.Sound.play(id, createjs.Sound.INTERRUPT_EARLY, 0, 0, loop)
+        loader.addEventListener("fileload", handlerFileloaded);
+        loader.addEventListener("progress",handlerProgress);
+        loader.addEventListener("complete", handlerComplete);
+        loader.addEventListener('fileerror',onError);
+        loader.loadManifest(arr);
+
     }
     //容器自适应
-    static getZoomByRate(){
+    static getZoomByRate(_srcWidth,_srcHeight,_maxWidth,_maxHeight){
 
-        // ��������
-        let isZoom=false;//�Ƿ�����
-        let srcWidth=0;//ԭʼ��
-        let srcHeight=0;//ԭʼ��
-        let maxWidth=0;//���ƿ�
-        let maxHeight=0;//���Ƹ�
-        let newWidth=0;//�¿�
-        let newHeight=0;//�¸�
-
-        let ZoomByRate = function(_srcWidth,_srcHeight,_maxWidth,_maxHeight){
-            srcWidth=_srcWidth;//���ԭʼ���
-            srcHeight=_srcHeight;//���ԭʼ�߶�
-            maxWidth=_maxWidth;//����޶����
-            maxHeight=_maxHeight;//����޶��߶�
-            if(srcWidth>0 && srcWidth>0){//���ͼƬ�߶��Ƿ�����
-                isZoom=true;//�߿�������ִ�����Ŵ���
-            }else{
-                isZoom=false;//������������0
-            }
-            conductimg();//ִ�������㷨
-        }
+        // 变量声明
+        let isZoom=false;//是否缩放
+        let srcWidth=_srcWidth;//原始宽
+        let srcHeight=_srcHeight;//原始高
+        let maxWidth=_maxWidth;//限制宽
+        let maxHeight=_maxHeight;//限制高
+        let newWidth=0;//新宽
+        let newHeight=0;//新高
 
         let conductimg = function(){
-            if(isZoom){//����߿���������ʼ����
+            if(isZoom){//如果高宽正常，开始计算
                 if(srcWidth/srcHeight>=maxWidth/maxHeight){
-                    //�Ƚϸ߿������ȷ���Կ�����Ǹ�Ϊ��׼���м��㡣
-                    if(srcWidth>maxWidth){//�Կ�Ϊ��׼��ʼ���㣬
-                        //����ȴ����޶���ȣ���ʼ����
+                    //比较高宽比例，确定以宽或者是高为基准进行计算。
+                    if(srcWidth>maxWidth){//以宽为基准开始计算，
+                        //当宽度大于限定宽度，开始缩放
                         newWidth=maxWidth;
                         newHeight=(srcHeight*maxWidth)/srcWidth
                     }else{
-                        //�����С���޶���ȣ�ֱ�ӷ���ԭʼ��ֵ��
+                        //当宽度小于限定宽度，直接返回原始数值。
                         newWidth=srcWidth;
                         newHeight=srcHeight;
                     }
                 }else{
-                    if(srcHeight>maxHeight){//�Ը�Ϊ��׼�����м���
-                        //���߶ȴ����޶��߶ȣ���ʼ���š�
+                    if(srcHeight>maxHeight){//以高为基准，进行计算
+                        //当高度大于限定高度，开始缩放。
                         newHeight=maxHeight;
                         newWidth=(srcWidth*maxHeight)/srcHeight
                     }else{
-                        //���߶�С���޶��߶ȣ�ֱ�ӷ���ԭʼ��ֵ��
+                        //当高度小于限定高度，直接返回原始数值。
                         newWidth=srcWidth;
                         newHeight=srcHeight;
                     }
                 }
-            }else{//������������0
+            }else{//不正常，返回0
                 newWidth=0;
                 newHeight=0;
             }
@@ -1008,11 +906,19 @@ class Tools{
             return num.toFixed(2);
         }
 
+
+        if(srcWidth>0 && srcWidth>0){//检查图片高度是否正常
+            isZoom=true;//高宽正常，执行缩放处理
+        }else{
+            isZoom=false;//不正常，返回0
+        }
+        conductimg();//执行缩放算法
+
         return{
-            ZoomByRate:ZoomByRate,
             getWidth:getWidth,
             getHeight:getHeight
         }
+
     }
 
 }

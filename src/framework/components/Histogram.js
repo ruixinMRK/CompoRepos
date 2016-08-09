@@ -4,7 +4,7 @@
 
 
 import Base from  './Base.js';
-import Tools from '../Tools/Tools.js';
+import Tools from '../../tools/Tools.js';
 
 class Histogram extends Base{
 
@@ -25,12 +25,14 @@ class Histogram extends Base{
         this.currentTime = 0;
         this.dataSp = new createjs.Container();
         this.yNum = 5;
+
+        //解析样式
+        this.setStyle(styleObj);
+
         //记录id和lineType的匹配,为后面的重绘
         this.dataObjArr = [];
         //记录传进来的样式
         this.style = styleObj.lineArr;
-        //解析样式
-        this.setStyle(styleObj);
 
         //以下为不会更新数据
         //画x轴,y轴
@@ -62,7 +64,8 @@ class Histogram extends Base{
         this.checkData(styleObj.lineArr);
         this.init();
        
-        // this.addChild(this.drawBezierDash(0,20,200,100,500,20,'#0f0'));
+
+        // console.log(Tools.getBrowser());
     }
 
     init(){

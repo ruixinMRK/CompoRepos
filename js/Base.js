@@ -8,7 +8,18 @@ class Base extends createjs.Container
     constructor(){
         super();
     }
+    init(){
 
+    }
+    updata(){
+
+    }
+    reset(){
+
+    }
+    clear(){
+
+    }
     //画虚线
     drawDash (x1,y1,x2,y2,color,alpha,dash,ed)
     {

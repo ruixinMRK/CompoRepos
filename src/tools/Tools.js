@@ -535,7 +535,7 @@ class Tools{
 
                 //console.log(images[i]);
 
-                image.onload = function()
+                image.onload = () =>
                 {
                     let name = this.src.split( '/' );
                     name = name[ name.length - 1 ].split( '.' )[0];

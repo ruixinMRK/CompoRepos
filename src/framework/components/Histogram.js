@@ -284,25 +284,23 @@ class Histogram extends Base{
         let Len = arr.length;
         if(!Len) return;
 
-
         //a为当前线
         //b为历史有阴影线
         //c为警告值线
         //d为普通线条
 
-        var getCurrentTime = function(obj){
+        let getCurrentTime = obj=>{
             let arr1 = obj.value;
             if(!arr1||!arr1.length) return;
             this.currentTime = +(arr1[arr1.length-1]['time']);
-            console.log(this.currentTime,parseFloat(arr1[arr1.length-1]['time']));
+            // console.log(this.currentTime,parseFloat(arr1[arr1.length-1]['time']));
             this.maxTime = this.currentTime + 1000 * 60 * 60 * this.beforeHour;
             this.minTime = this.currentTime - 1000 * 60 * 60 * this.afterHour;
-        }.bind(this);
+        };
 
         arr.forEach(a => {
 
             this.dataObjArr.forEach( b =>{
-
                 if(a.id == b.id&&b.lineType == 'a'){
                     getCurrentTime(a);
                 }
@@ -379,9 +377,7 @@ class Histogram extends Base{
 
         if (!arr1 || !arr1.length) return;
         let arr = Tools.clone(arr1);
-        arr.sort(function(a,b){
-            return a.value-b.value;
-        });
+        arr.sort((a,b)=>{return a.value-b.value});
         let max = arr[arr.length - 1]['value'];
         this.dataMax = this.dataMax>max?this.dataMax:max;
     }

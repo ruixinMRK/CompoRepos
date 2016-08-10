@@ -293,7 +293,8 @@ class Histogram extends Base{
         var getCurrentTime = function(obj){
             let arr1 = obj.value;
             if(!arr1||!arr1.length) return;
-            this.currentTime = arr1[arr1.length-1]['time'];
+            this.currentTime = +(arr1[arr1.length-1]['time']);
+            console.log(this.currentTime,parseFloat(arr1[arr1.length-1]['time']));
             this.maxTime = this.currentTime + 1000 * 60 * 60 * this.beforeHour;
             this.minTime = this.currentTime - 1000 * 60 * 60 * this.afterHour;
         }.bind(this);
@@ -346,7 +347,7 @@ class Histogram extends Base{
             if(!isV) this.dataObjArr.push(idObj);
 
             if(obj.lineType == 'c'||(!isNaN(obj.value)&&!Array.isArray(obj.value))){
-                this[obj.id + 'Data'] = obj.value;
+                this[obj.id + 'Data'] = (+obj.value);
                 this.dataMax = this.dataMax>this[obj.id + 'Data']?this.dataMax:this[obj.id + 'Data'];
                 idObj.sf = new createjs.Container();
                 continue;

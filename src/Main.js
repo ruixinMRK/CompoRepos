@@ -147,29 +147,29 @@ window.onload = function(){
     // b.y = 370;
     // stage.addChild(b);
 
-    console.log('tt');
 
     setInterval(function(){
         var obj = {};
-        obj.time = currentT + 1000 * 60;
-        obj.value = parseInt(100 + Math.random() * 300);
+        obj.time = currentT + 1000 * 60+'';
+        obj.value = parseInt(100 + Math.random() * 300) + '';
         currentA.push(obj);
-        currentT = obj.time;
+        currentT = parseFloat(obj.time);
 
         var obj1  ={};
-        obj1.time = historyT + + 1000 * 60;
-        obj1.value = parseInt(100 + Math.random() * 100);
+        obj1.time = historyT  + 1000 * 60 +'';
+        obj1.value = parseInt(100 + Math.random() * 100) + '';
         historyA.push(obj1);
-        historyT = obj1.time;
+        historyT = parseFloat(obj1.time);
 
-        var warn = 100 + parseInt(Math.random() * 100);
+        var warn = 300 + parseInt(Math.random() * 100)+'';
         a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'},{value:A,id:'E'},{value:150+100*Math.random(),id:'C'}]);
 
-        console.log(historyA.length);
+        console.log(historyA.length,'---');
 
         // b.updata([{value:currentA,id:'A'}])
     },5000)
 
+    console.log('testAgain');
     createjs.Ticker.addEventListener('tick',stage);
 
 

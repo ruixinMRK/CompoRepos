@@ -141,11 +141,6 @@ window.onload = function(){
     a.x = 40;
     a.y = 15;
     stage.addChild(a);
-    // let b = new Histogram(styleO);
-    // b.x = 40;
-    // b.y = 370;
-    // stage.addChild(b);
-
 
     setInterval( () =>{
 
@@ -162,6 +157,7 @@ window.onload = function(){
         historyT = parseFloat(obj1.time);
 
         var warn = 300 + parseInt(Math.random() * 100)+'';
+
         a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'},{value:A,id:'E'},{value:150+100*Math.random(),id:'C'}]);
 
         console.log(historyA.length);

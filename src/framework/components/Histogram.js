@@ -288,7 +288,6 @@ class Histogram extends Base{
         //b为历史有阴影线
         //c为警告值线
         //d为普通线条
-
         let getCurrentTime = obj=>{
             let arr1 = obj.value;
             if(!arr1||!arr1.length) return;
@@ -346,6 +345,7 @@ class Histogram extends Base{
 
             if(obj.lineType == 'c'||(!isNaN(obj.value)&&!Array.isArray(obj.value))){
                 this[obj.id + 'Data'] = (+obj.value);
+
                 this.dataMax = this.dataMax>this[obj.id + 'Data']?this.dataMax:this[obj.id + 'Data'];
                 idObj.sf = new createjs.Container();
                 continue;

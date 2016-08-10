@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #windows:
 Thumbs.db
 ehthumbs.db
@@ -29,3 +30,12 @@ node_modules
 npm-debug.log
 
 build
+=======
+.DS_Store
+node_modules
+asset/
+npm-debug.log
+site/
+nohup.out
+.idea
+>>>>>>> e2378cb599929003ec85f48ab8b7e05a669241a6

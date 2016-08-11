@@ -113,7 +113,7 @@ window.onload = function(){
             {
                 lineType:'c',
                 id:'D',
-                value:50,
+                value:'60',
                 valueColor:'#ff0',
                 valueSize:30,
                 lineColor:'#00f',

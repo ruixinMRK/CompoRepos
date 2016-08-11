@@ -63,9 +63,7 @@ class Histogram extends Base{
 
         this.checkData(styleObj.lineArr);
         this.init();
-       
 
-        // console.log(Tools.getBrowser());
     }
 
     init(){
@@ -132,9 +130,11 @@ class Histogram extends Base{
             }
 
             let txt = this.getTxt(dateTime,this.xAxis['txtColor'],this.xAxis['txtSize'],dis,this.h,'bottom',this.yAxis['txtFont']);
-
+            if(txt.getMeasuredWidth()>this.xSpace&&i%(Math.ceil(txt.getMeasuredWidth()/this.xSpace)+1)) txt.alpha = 0;
+            console.log(txt.getMeasuredWidth(),this.xSpace)
             if(this.xAxis['mark']&&i) {
                 let yS = this.drawLine(new createjs.Shape(),[dis,this.h-5,dis,this.h+5],'#ccc',1);
+                if(!txt.alpha) yS.alpha = 0;
                 this.dataSp.addChild(yS);
             }
             
@@ -158,7 +158,7 @@ class Histogram extends Base{
             if(values.toString().indexOf('.')>0){
                 values = parseFloat(values).toFixed(2);
             }
-
+            if(isNaN(values)) return;
             if(objA.sf.numChildren){
 
                 this[objA.id + 'ValueTxt'].text = values.toString();

@@ -19,7 +19,7 @@ window.onload = function(){
 
         var obj  ={};
         obj.time = 1470109099942 + 1000 * 60 * i;
-        obj.value = parseInt(100 + Math.random() * 100);
+        obj.value = parseInt(Math.random() * 100);
         currentA.push(obj);
         currentT = obj.time;
     }
@@ -28,7 +28,7 @@ window.onload = function(){
 
         var obj  ={};
         obj.time = 1470109099942 + + 1000 * 60 * j;
-        obj.value = parseInt(100 + Math.random() * 100);
+        obj.value = parseInt(Math.random() * 100);
         historyA.push(obj);
         historyT = obj.time;
     }
@@ -38,7 +38,7 @@ window.onload = function(){
 
         var obj  ={};
         obj.time = 1470109099942 + + 1000 * 60 * n;
-        obj.value = parseInt(200 + Math.random() * 100);
+        obj.value = parseInt(Math.random() * 100);
         A.push(obj);
     }
 
@@ -80,13 +80,21 @@ window.onload = function(){
                 lineType:'a',
                 id:'A',
                 value:currentA,
-                lineColor:'#0f0',
+                lineColor:'#A00',
                 thickness:2,
                 valueColor:'#0f0',
-                valueSize:20,
-                txtFont:'黑体',
+                valueSize:30,
+                valueFont:'黑体',
+                unitStr:'万',
+                unitColor:'#ccc',
+                unitSize:10,
+                unitFont:'Microsoft YaHei',
+                titleStr:'当前销售额',
+                titleColor:'#ccc',
+                titleSize:15,
+                titleFont:'Microsoft YaHei',
                 ballR:4,
-                ballColor:'#f00',
+                ballColor:'#f00'
             },
             {
                 lineType:'b',
@@ -95,41 +103,6 @@ window.onload = function(){
                 lineColor:'rgba(126,126,126,0)',
                 thickness:2,
                 fillColor:'rgba(126,126,126,0.5)'
-            },
-            {
-                lineType:'c',
-                id:'C',
-                value:300,
-                valueColor:'#a00',
-                valueSize:50,
-                lineColor:'#f00',
-                thickness:1,
-                titleStr:'系统预警:',
-                titleColor:'#ccc',
-                titleSize:20,
-                titleFont:'Microsoft YaHei',
-                valueFont:'Microsoft YaHei'
-            },
-            {
-                lineType:'c',
-                id:'D',
-                value:'60',
-                valueColor:'#ff0',
-                valueSize:30,
-                lineColor:'#00f',
-                thickness:1,
-                titleStr:'系统预警1:',
-                titleColor:'#ccc',
-                titleSize:15,
-                titleFont:'Microsoft YaHei',
-                valueFont:'Microsoft YaHei'
-            },
-            {
-                lineType:'d',
-                id:'E',
-                value:A,
-                lineColor:'#00f',
-                thickness:2
             }
 
         ]
@@ -146,21 +119,21 @@ window.onload = function(){
 
         var obj = {};
         obj.time = currentT + 1000 * 60+'';
-        obj.value = parseInt(100 + Math.random() * 300) + '';
+        obj.value = parseInt(Math.random() * 300) + '';
         currentA.push(obj);
         currentT = parseFloat(obj.time);
 
         var obj1  ={};
         obj1.time = historyT  + 1000 * 60 +'';
-        obj1.value = parseInt(100 + Math.random() * 100) + '';
+        obj1.value = parseInt(Math.random() * 100) + '';
         historyA.push(obj1);
         historyT = parseFloat(obj1.time);
 
-        var warn = 300 + parseInt(Math.random() * 100)+'';
+        var warn = parseInt(Math.random() * 100)+'';
 
-        a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'},{value:A,id:'E'},{value:150+100*Math.random(),id:'C'}]);
+        a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'}]);
 
-        console.log(historyA.length);
+        // console.log(historyA.length);
 
     },5000)
 

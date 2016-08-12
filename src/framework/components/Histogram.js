@@ -15,7 +15,7 @@ class Histogram extends Base{
         this.h = 300;
         this.beforeHour = 2;
         this.afterHour = 2;
-        this.xTime = 15;//间隔为15分钟
+        this.xTime = 30;//间隔为15分钟
 
         this.dataMax = 0;
         this.yDataMax = 0;
@@ -54,8 +54,8 @@ class Histogram extends Base{
 
         let defaultSp = new createjs.Container();
         defaultSp.addChild(yAxis,xAxis,yAxisThree,xAxisThree,titleTxt);
-        this.addChild(this.dataSp);
         this.addChild(defaultSp);
+        this.addChild(this.dataSp);
 
         //警告的容器
         this.waringSp = new createjs.Container();
@@ -75,7 +75,7 @@ class Histogram extends Base{
         //y轴间距
         this.ySpace = this.availH/this.yNum;
 
-        // console.log(this.yTxtArr.length);
+        console.log(this.yDataMax);
         //画y轴
         this.drawYTxt();
         this.drawXTxt();
@@ -202,7 +202,7 @@ class Histogram extends Base{
             }
 
             this.drawLine(objA.s,pointArr,style['lineColor'],1);
-            this.dataSp.addChild(objA.s);
+            if(!objA.s.parent) this.dataSp.addChild(objA.s);
 
             if(style.valueColor){
 
@@ -214,14 +214,37 @@ class Histogram extends Base{
                     this[objA.id + 'Txt'].text = valueS;
                 }
                 else{
-                    this[objA.id + 'Txt'] = this.getTxt(valueS,style['valueColor'],style['valueSize'],0,0,'',style['txtFont']);
+                    this[objA.id + 'Txt'] = this.getTxt(valueS,style['valueColor'],style['valueSize'],0,0,'',style['valueFont']);
                     this.dataSp.addChild(this[objA.id + 'Txt']);
                 }
                 this[objA.id + 'Txt'].x = ballX + 5;
                 this[objA.id + 'Txt'].y = ballY - this[objA.id + 'Txt'].getMeasuredHeight()/2-3;
             }
+            if(style.unitStr){
+                //单位
+                if(!this[objA.id + 'Unit']){
+                    this[objA.id + 'Unit'] = this.getTxt(style['unitStr'],style['unitColor'],style['unitSize'],0,0,'',style['unitFont']);
+                    this.dataSp.addChild(this[objA.id + 'Unit']);
+                }
+                this[objA.id + 'Unit'].x = this[objA.id + 'Txt'].x + this[objA.id + 'Txt'].getMeasuredWidth() + 3;
+                this[objA.id + 'Unit'].y = this[objA.id + 'Txt'].y + this[objA.id + 'Txt'].getMeasuredHeight() - this[objA.id + 'Unit'].getMeasuredHeight() + 6;
+            }
+            if(style.titleStr){
+                //当前线的标题
+                if(!this[objA.id + 'Title']){
+                    this[objA.id + 'Title'] = this.getTxt(style['titleStr'],style['titleColor'],style['titleSize'],0,0,'',style['titleFont']);
+                    this.dataSp.addChild(this[objA.id + 'Title']);
+                }
+                if(this[objA.id + 'Unit']){
+                    this[objA.id + 'Title'].x =  this[objA.id + 'Unit'].x + this[objA.id + 'Unit'].getMeasuredWidth() - this[objA.id + 'Title'].getMeasuredWidth();
+                }
+                else{
+                    this[objA.id + 'Title'].x =  this[objA.id + 'Txt'].x + this[objA.id + 'Txt'].getMeasuredWidth() - this[objA.id + 'Title'].getMeasuredWidth();
+                }
+                this[objA.id + 'Title'].y = this[objA.id + 'Txt'].y  - this[objA.id + 'Title'].getMeasuredHeight() -3;
+            }
             if(style.ballR){
-
+                //球
                 if(!this[objA.id + 'Ball']){
                     this[objA.id + 'Ball'] = this.drawCircle(0,0,style['ballR'],style['ballColor']);
                     this.addChild(this[objA.id + 'Ball']);
@@ -235,9 +258,8 @@ class Histogram extends Base{
                 let copy = Array.prototype.slice.call(pointArr);
                 copy.unshift(pointArr[0],this.h);
                 copy.push(pointArr[pointArr.length -2],this.h);
-                // console.log(objA.sf);
                 this.drawLine(objA.sf,copy,style['lineColor'],1,true,style['fillColor']);
-                this.dataSp.addChild(objA.sf);
+                if(!objA.sf.parent) this.dataSp.addChild(objA.sf);
             }
 
 

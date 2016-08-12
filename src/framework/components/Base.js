@@ -139,15 +139,16 @@ class Base extends createjs.Container
     }
 
     //画线
-    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor)
+    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor,$joinType)
     {
         let $lC = $lineColor||"#ffffff";
         let $tN = $thickness||2.5;
         let $iF = $isFill == 'undefined'?false:$isFill;
         let $fC = $fillColor||"#ffffff";
+        let $T  = $joinType||0;
         if(!$s) return;
         $s.graphics.clear();
-        $s.graphics.setStrokeStyle($tN);
+        $s.graphics.setStrokeStyle($tN,0,$T);
         $s.graphics.beginStroke($lC);
         if($iF) $s.graphics.beginFill($fC);
 

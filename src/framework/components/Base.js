@@ -138,16 +138,273 @@ class Base extends createjs.Container
         return $s;
     }
 
+    //画水管线
+    drawPiPing($s,$dataArr,$think,r,$lineColor,$beginF){
+
+        let $lC = $lineColor||"#ffffff";
+        let $n = $think||20;
+        let $r = r||10;
+        let $hn = $n>>1;
+        let $bf = $beginF;
+
+        if(!$s) return;
+
+        $s.graphics.clear();
+        $s.graphics.setStrokeStyle($n);
+        $s.graphics.beginStroke($lC);
+        $s.graphics.beginFill($bf);
+        //console.log('into')
+        let len = $dataArr.length;
+        if(len < 6) return;
+
+        let rArr = Array.prototype.slice.call($dataArr).reverse();
+        rArr.forEach((a,b)=>{
+            if(b%2==0){
+                let temp = 0;
+                temp = rArr[b];
+                rArr[b] = rArr[b+1];
+                rArr[b+1] = temp;
+            }
+        })
+
+        let H = 0;
+        let V = 0;
+        for(let j =0;j<2;j++){
+            for(let i =0;i<len;i+=2){
+
+                //外层线(靠右边的线)
+                if(j==0){
+
+                    //console.log(isNaN($dataArr[i+4]),$dataArr[i+4],'check');
+                    //画线终点
+                    if(isNaN($dataArr[i+4])){
+                        let O = $dataArr[len-1];//倒数第一个y
+                        let T = $dataArr[len-2];//x
+                        let Th = $dataArr[len-3];//y
+                        console.log(H<0&&V<0,O==Th);
+                        if(H>0&&V>0){
+                            if(O==Th)  $s.graphics.lineTo(T,O-$hn);
+                            else  $s.graphics.lineTo(T+$hn,O);
+                        }
+                        else if(H<0&&V>0){
+                            if(O==Th) $s.graphics.lineTo(T,O+$hn);
+                            else $s.graphics.lineTo(T+$hn,O);
+                        }
+                        else if(H<0&&V<0){
+                            if(O==Th) $s.graphics.lineTo(T,O+ $hn);
+                            else $s.graphics.lineTo(T- $hn,O );
+                        }
+                        else if(H>0&&V<0){
+                            if(O==Th) $s.graphics.lineTo(T,O-$hn);
+                            else $s.graphics.lineTo(T-$hn,O);
+                        }
+                        continue;
+                    }
+                    //水平距离和垂直距离
+                    H = $dataArr[i]-$dataArr[i+4];
+                    V = $dataArr[i+1]-$dataArr[i+5];
+                    console.log(H,V,'1H','1V');
+
+                    //水平线
+                    if($dataArr[i+1] == $dataArr[i+3]){
+                        console.log('1H');
+                        //起始点
+                        if(i == 0) {
+                            if(H<0&&V>0) {
+                                $s.graphics.moveTo($dataArr[i],$dataArr[i+1] + $hn);
+                            }
+                            else if(H>0&&V>0){
+                                $s.graphics.moveTo($dataArr[i],$dataArr[i+1] - $hn);
+                            }
+                            else if(H>0&&V<0){
+                                $s.graphics.moveTo($dataArr[i],$dataArr[i+1] - $hn);
+                            }
+                            else if(H<0&&V<0){
+                                $s.graphics.moveTo($dataArr[i],$dataArr[i+1] + $hn);
+                            }
+                        }
+
+                        //r-t
+                        if(H>=0&&V>0){
+                            $s.graphics.lineTo($dataArr[i+2] + ($r+$hn),$dataArr[i+1] - $hn);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+1] - $hn, $dataArr[i+2] + $hn, $dataArr[i+1] - $hn - $r);
+                        }
+                        //r-b
+                        if(H>=0&&V<=0){
+                            $s.graphics.lineTo($dataArr[i+2] + ($r+$hn),$dataArr[i+1] - $hn);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+1] - $hn, $dataArr[i+2] - $hn, $dataArr[i+1] + $hn + $r);
+                        }
+                        //l-t
+                        if(H<=0&&V>0){
+                            $s.graphics.lineTo($dataArr[i+2] - ($r+$hn),$dataArr[i+1] + $hn);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+1] + $hn, $dataArr[i+2] + $hn, $dataArr[i+1] - $hn - $r);
+                        }
+                        //l-b
+                        if(H<=0&&V<=0){
+                            $s.graphics.lineTo($dataArr[i+2] - $r-$hn,$dataArr[i+1] + $hn);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+1] + $hn, $dataArr[i+2] - $hn, $dataArr[i+1] + $hn + $r);
+                        }
+
+                    }
+                    else if($dataArr[i] == $dataArr[i+2]){
+                        console.log('1V');
+                        //竖直线
+                        if(i == 0) {
+                            if(H<0&&V>0||H>0&&V>0) $s.graphics.moveTo($dataArr[i]+$hn,$dataArr[i+1]);
+                            else $s.graphics.moveTo($dataArr[i]-$hn,$dataArr[i+1]);
+                        }
+                        //b-l
+                        if(H>=0&&V>0){
+                            $s.graphics.lineTo($dataArr[i+2] + $hn,$dataArr[i+3] + $hn + $r);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+3] - $hn, $dataArr[i+2] - $hn-$r, $dataArr[i+3] - $hn);
+                        }
+                        //b-r
+                        if(H>=0&&V<=0){
+                            $s.graphics.lineTo($dataArr[i+2] - $hn,$dataArr[i+3] - $hn - $r);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+3] - $hn, $dataArr[i+2] - $hn-$r, $dataArr[i+3] - $hn);
+                        }
+                        //t-l
+                        if(H<=0&&V>0){
+                            $s.graphics.lineTo($dataArr[i+2] + $hn,$dataArr[i+3] + $hn + $r);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+3] + $hn, $dataArr[i+2] + $hn+$r, $dataArr[i+3] + $hn);
+                        }
+                        //t-r
+                        if(H<=0&&V<=0){
+                            $s.graphics.lineTo($dataArr[i+2] - $hn,$dataArr[i+3] - $hn - $r);
+                            $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+3] + $hn, $dataArr[i+2] + $hn+$r, $dataArr[i+3] + $hn);
+                        }
+                    }
+
+                }
+                else{
+
+                    //rArr内层线数据
+                    //内层线
+                    if(isNaN(rArr[i+4])){
+
+                        let O = rArr[len-1];//倒数第一个y
+                        let T = rArr[len-2];//x
+                        let Th = rArr[len-3];//y
+                        if(H>0&&V>0){
+                            if(O==Th)  $s.graphics.lineTo(T,O-$hn);
+                            else  $s.graphics.lineTo(T+$hn,O);
+                        }
+                        else if(H<0&&V>0){
+                            if(O==Th) $s.graphics.lineTo(T,O+$hn);
+                            else $s.graphics.lineTo(T+$hn,O);
+                        }
+                        else if(H<0&&V<0){
+                            if(O==Th) $s.graphics.lineTo(T,O+ $hn);
+                            else $s.graphics.lineTo(T- $hn,O );
+                        }
+                        else if(H>0&&V<0){
+                            if(O==Th) $s.graphics.lineTo(T,O-$hn);
+                            else $s.graphics.lineTo(T-$hn,O);
+                        }
+                        continue;
+                    }
+                    //水平距离和垂直距离
+                    H = rArr[i]-rArr[i+4];
+                    V = rArr[i+1]-rArr[i+5];
+                    console.log(H,V,'2H','2V');
+
+                    //水平线
+                    if(rArr[i+1] == rArr[i+3]){
+                        console.log('2H');
+                        //起始点
+                        if(i == 0) {
+
+                            if(H>0&&V<0) {
+                                $s.graphics.lineTo(rArr[i],rArr[i+1] - $hn);
+                            }
+                            if(H<0&&V<0){
+                                $s.graphics.lineTo(rArr[i],rArr[i+1] + $hn);
+                            }
+                            if(H<0&&V>0){
+                                $s.graphics.lineTo(rArr[i] ,rArr[i+1]+ $hn);
+                            }
+                            if(H>0&&V>0){
+                                $s.graphics.lineTo(rArr[i] ,rArr[i+1]- $hn);
+                            }
+                        }
+
+                        if(H>=0&&V<0){
+                            $s.graphics.lineTo(rArr[i+2] + ($r+$hn),rArr[i+1] - $hn);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+1] - $hn, rArr[i+2] - $hn, rArr[i+1] + $hn + $r);
+                        }
+                        if(H<0&&V<0){
+                            $s.graphics.lineTo(rArr[i+2] - $r - $hn,rArr[i+1] + $hn);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+1] + $hn, rArr[i+2] - $hn, rArr[i+1] + $hn + $r);
+                        }
+                        if(H<0&&V>0){
+                            $s.graphics.lineTo(rArr[i+2] - $r - $hn,rArr[i+1] + $hn);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+1] + $hn, rArr[i+2] + $hn, rArr[i+1] - $hn - $r);
+                        }
+                        if(H>0&&V>0){
+                            $s.graphics.lineTo(rArr[i+2] + $r + $hn,rArr[i+1] - $hn);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+1] - $hn, rArr[i+2] + $hn, rArr[i+1] - $hn - $r);
+                        }
+                    }
+                    else if(rArr[i] == rArr[i+2]){
+                        console.log('2V');
+                        //竖直线
+                        if(i == 0) {
+
+                            if(H>0&&V>0){
+                                $s.graphics.lineTo(rArr[i]+ $hn ,rArr[i+1]);
+                            }
+                            if(H<0&&V>0){
+                                $s.graphics.lineTo(rArr[i]+ $hn ,rArr[i+1]);
+                            }
+                            if(H<0&&V<0){
+                                $s.graphics.lineTo(rArr[i]- $hn ,rArr[i+1]);
+                            }
+                            if(H>0&&V<0){
+                                $s.graphics.lineTo(rArr[i]- $hn ,rArr[i+1]);
+                            }
+                        }
+
+                        if(H<0&&V>0){
+                            $s.graphics.lineTo(rArr[i+2] + $hn,rArr[i+3] + $hn + $r);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+3] + $hn, rArr[i+2] + $hn + $r, rArr[i+3] + $hn);
+                        }
+                        if(H>0&&V>0){
+                            $s.graphics.lineTo(rArr[i+2] + $hn,rArr[i+3] + $hn + $r);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+3] - $hn, rArr[i+2] - $hn - $r, rArr[i+3] - $hn);
+                        }
+                        if(H>0&&V<0){
+                            $s.graphics.lineTo(rArr[i+2] - $hn,rArr[i+3] - $hn - $r);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+3] - $hn, rArr[i+2] - $hn - $r, rArr[i+3] - $hn);
+                        }
+                        if(H<0&&V<0){
+                            $s.graphics.lineTo(rArr[i+2] - $hn,rArr[i+3] - $hn - $r);
+                            $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+3] + $hn, rArr[i+2] + $hn + $r, rArr[i+3] + $hn);
+                        }
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        $s.graphics.endFill();
+        return $s;
+    }
+
     //画线
-    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor)
+    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor,$joinType)
     {
         let $lC = $lineColor||"#ffffff";
         let $tN = $thickness||2.5;
         let $iF = $isFill == 'undefined'?false:$isFill;
         let $fC = $fillColor||"#ffffff";
+        let $jT = $joinType||0;
+
         if(!$s) return;
         $s.graphics.clear();
-        $s.graphics.setStrokeStyle($tN);
+        $s.graphics.setStrokeStyle($tN,0,$jT);
         $s.graphics.beginStroke($lC);
         if($iF) $s.graphics.beginFill($fC);
 

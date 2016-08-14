@@ -64,6 +64,7 @@ class Histogram extends Base{
         this.checkData(styleObj.lineArr);
         this.init();
 
+
     }
 
     init(){

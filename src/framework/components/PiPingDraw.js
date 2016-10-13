@@ -4,114 +4,424 @@
 //管道图
 
 import Base from './Base.js';
+import Tools from 'common/Tools.js';
+
 class PiPingDraw extends Base{
 
-    constructor(rw,r){
+    constructor(rw,r,f,arr){
         super();
         this.rw  =rw;
         this.r = r;
+        this._arr = Tools.clone(arr);
+        this._f = f;
+        this._id = '';
+        this.init();
+    }
+
+    get id(){
+      return this._id;
+    }
+    set id(value){
+      this._id = value;
+    }
+    updata(arr){
+
+        arr.forEach(a=>{
+            let tempSp = this.getChildByName(a.name);
+            if(tempSp){
+
+              let index = this.matchArr(a);
+              tempSp.alpha = 1;
+              this._arr[index].color = a.color;
+              this.drawItem(this._arr[index],tempSp.getChildAt(0));
+              tempSp = null;
+            }
+        });
 
     }
 
-    updata(arr){
-        this._arr = arr;
-        this.init();
+    getChild(str){
+
+      let tempSp = this.getChildByName(str);
+      return tempSp;
+    }
+
+    matchArr(a){
+      let index;
+      this._arr.forEach((b,i)=>{
+        if(a.name == b.name){
+          index = i;
+        }
+      },this);
+      return index;
     }
 
     init(){
 
+        //注意管道接口处坐标应该大于w/2+r
         let L = this._arr.length;
-        let x1 = 0;
-        let y1 = 0;
-        let w1 = 0;
-        let h1 = 0;
 
         for(let i =0;i<L;i++){
-
-            let obj = this._arr[i];
-            let sp = new createjs.Container();
-            let s1 = this.drawPiPing(new createjs.Shape(),obj.value,this.rw,this.r,'rgba(0,0,0,0)',obj.color)
-            let s2 = this.drawPiPing(new createjs.Shape(),obj.value,this.rw,this.r,'rgba(0,0,0,0)','#rgba(0,0,0)')
-            let sFil = this.drawPiPing(new createjs.Shape(),obj.value,this.rw/2,this.r/2,'rgba(0,0,0,0)',obj.color);
-            let maskS = this.drawPiPing(new createjs.Shape(),obj.value,this.rw,this.r,'rgba(0,0,0,0)','#rgba(0,0,0)')
-            s2.alpha = 0.45;
-            sFil.alpha = 0.5;
-
-            obj.value.forEach((b,ind) =>{
-                if(ind%2==0){
-                    x1 = x1 > b?b:x1;
-                    w1 = w1 > b?w1:b;
-                }
-                else{
-                    y1 = y1 > b?b:y1;
-                    h1 = h1 > b?h1:b;
-                }
-            })
-
-            let blurFilter = new createjs.BlurFilter(this.rw/2, this.rw/2, 1);
-            sFil.filters = [blurFilter];
-            sFil.cache(x1,y1,w1,h1);
-            sp.addChild(s1,s2,sFil);
-            sp.mask = maskS;
-            this.addChild(sp);
-
+          if(!this._f) this.drawItem(this._arr[i]);
+          else this.drawF(this._arr[i]);
         }
-        //this.addChild(this.drawPiPing(new createjs.Shape(),[50,200,50,50,300,50,300,350],30,10,'rgba(0,0,0,0)','#0f0'));
-        //this.addChild(this.drawPiPing(new createjs.Shape(),[50,200,50,50,300,50,300,350],30,10,'rgba(0,0,0,0)','rgba(0,0,0,0.55)'));
-        //var A = this.drawPiPing(new createjs.Shape(),[50,200,50,50,300,50,300,350],15,5,'rgba(0,0,0,0)','rgba(0,255,0,0.5)');
-        //var ms = this.drawPiPing(new createjs.Shape(),[50,200,50,50,300,50,300,350],15,5,'rgba(0,0,0,0)','rgba(0,255,0,0.5)');
-        //A.mask = ms;
-        //this.addChild(this.drawLine(new createjs.Shape(),[0,0,200,0,200,150,400,150,400,100],'#0f0',30,'','',1));
-        //this.addChild(this.drawLine(new createjs.Shape(),[0,0,200,0,200,150,400,150,400,100],'rgba(0,0,0,0.4)',30,'','',1));
-        //
-        //var A = this.drawLine(new createjs.Shape(),[0,0,200,0,200,150,400,150,400,100],'rgba(0,255,0,0.5)',15,'','',1);
-        //
-        //var a = [50,200,50,50,300,50,300,350];
-        //
-        //
-        //a.forEach((b,ind) =>{
-        //    if(ind%2==0){
-        //        x1 = x1 > b?b:x1;
-        //        w1 = w1 > b?w1:b;
-        //    }
-        //    else{
-        //        y1 = y1 > b?b:y1;
-        //        h1 = h1 > b?h1:b;
-        //    }
-        //})
-        //console.log(x1,y1,w1,h1);
-        //var blurFilter = new createjs.BlurFilter(12, 12, 1);
-        //A.filters = [blurFilter];
-        //var bounds = A.getBounds();
-        //A.cache(x1,y1,w1,h1);
-        //this.addChild(A);
-
-        //this.addChild(this.drawBezierDash(80,110,110,110,110,140,'#0f0'))
-        //this.addChild(this.drawBezierDash(80,130,90,130,90,140,'#0f0'))
-
-       // console.log('b-r');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[50,200,50,50,300,50],30,10,'#0f0','#0f0'));
-       // console.log('b-l');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[350,300,350,100,100,100],30,10,'#0f0','#0f0'));
-       // console.log('t-l');
-       //this.addChild(this.drawPiPing(new createjs.Shape(),[400,100,400,300,300,300],30,10,'#00f','#0f0'));
-       // console.log('t-r');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[500,100,500,300,700,300],30,10,'#ff0','#0f0'));
-       // console.log('r-b');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[800,100,600,100,600,400],30,10,'#ff0','#0f0'));
-       // console.log('l-b');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[900,100,1200,100,1200,400],30,10,'#ff0','#0f0'));
-       // console.log('l-t');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[1300,400,1600,400,1600,100],30,10,'#ff0','#0f0'));
-       // console.log('r-t');
-       // this.addChild(this.drawPiPing(new createjs.Shape(),[2000,400,1700,400,1700,100],30,10,'#ff0','#0f0'));
-        //this.addChild(this.drawLine(new createjs.Shape(),[800,100,600,100,600,400],'#f00'));
-        //this.addChild(this.drawLine(new createjs.Shape(),[50,200,50,50,300,50,300,350,500,350,500,100,700,100,700,600,200,600,200,550,500,550,500,450,100,450,100,500],'#f00'));
-        console.log('is ok?无奈了');
-
 
     }
 
+    drawF(obj){
+
+      this.addChild(this.drawLine(new createjs.Shape(),obj.value,obj.color,this.rw,false,'',1))
+    }
+
+    drawItem(obj,tempSp){
+
+
+      let x1 = 0;
+      let y1 = 0;
+      let w1 = 0;
+      let h1 = 0;
+      let sp = new createjs.Container();
+      //分别为底图 灰色层图  高光层 遮罩
+      let sh = tempSp||new createjs.Shape();
+      this.drawPiPing(sh,obj.value,this.rw,this.r,'rgba(255,0,0,1)',obj.color);
+      //let s2 = this.drawPiPing(new createjs.Shape(),obj.value,this.rw,this.r,'rgba(0,0,0,0)','#rgba(0,0,0)')
+      //let sFil = this.drawPiPing(new createjs.Shape(),obj.value,this.rw/2,this.r/2,'rgba(0,0,0,0)',obj.color);
+      //let maskS = this.drawPiPing(new createjs.Shape(),obj.value,this.rw,this.r,'rgba(0,0,0,0)','#rgba(0,0,0)')
+      //s2.alpha = 0.45;
+      //sFil.alpha = 0.65;
+
+      obj.value.forEach((b,ind) =>{
+        if(ind%2==0){
+          x1 = x1 > b?b:x1;
+          w1 = w1 > b?w1:b;
+        }
+        else{
+          y1 = y1 > b?b:y1;
+          h1 = h1 > b?h1:b;
+        }
+      })
+
+      // let blurFilter = new createjs.BlurFilter(this.rw/2, this.rw/2, 1);
+      //sFil.filters = [blurFilter];
+      //sFil.cache(x1,y1,w1,h1);
+      //sp.addChild(s1,s2,sFil);
+
+      //sp.mask = maskS;
+
+      // let t = new createjs.Text(obj.name,"16px 黑体","white");
+      // t.x = obj.value[0] + 3;
+      // t.y = obj.value[1] - 8;
+      // if(obj.value[0] == obj.value[2]) {
+      //   t.x -= 8;
+      //   t.y += 15;
+      // }
+      if(!tempSp){
+        sp.addChild(sh);
+        sp.name = obj.name;
+      }
+
+      this.addChild(sp);
+    }
+
+    //画水管线
+    drawPiPing($s,$dataArr,$think,r,$lineColor,$beginF){
+
+      let $lC = $lineColor||"#ffffff";
+      let $n = $think||20;
+      let $r = r||10;
+      let $hn = $n>>1;
+      let $bf = $beginF;
+
+      if(!$s) return;
+
+      $s.graphics.clear();
+      // $s.graphics.setStrokeStyle(2);
+      // $s.graphics.beginStroke($lC);
+      $s.graphics.beginFill($bf);
+
+      let len = $dataArr.length;
+      if(len < 4) return;
+
+      let rArr = Array.prototype.slice.call($dataArr).reverse();
+      rArr.forEach((a,b)=>{
+        if(b%2==0){
+          let temp = 0;
+          temp = rArr[b];
+          rArr[b] = rArr[b+1];
+          rArr[b+1] = temp;
+        }
+      })
+
+      let H = 0;
+      let V = 0;
+      for(let j =0;j<2;j++){
+        for(let i =0;i<len;i+=2){
+
+          //外层线(靠右边的线)
+          if(j==0){
+
+            //console.log(isNaN($dataArr[i+4]),$dataArr[i+4],'check');
+            //画线终点
+
+            if($dataArr.length == 4){
+
+              H = $dataArr[i]-$dataArr[i+2];
+              V = $dataArr[i+1]-$dataArr[i+3];
+              if(isNaN(H)&&isNaN(V)) continue;
+              if(H==0) $s.graphics.moveTo($dataArr[i]+$hn,$dataArr[i+1]);
+              else if(V==0) $s.graphics.moveTo($dataArr[i],$dataArr[i+1]-$hn);
+              continue;
+            }
+
+            if(isNaN($dataArr[i+4])){
+              let O = $dataArr[len-1];//倒数第一个y
+              let T = $dataArr[len-2];//x
+              let Th = $dataArr[len-3];//y
+              // console.log(H<0&&V<0,O==Th);
+
+              if(H>=0&&V>=0){
+                if(O==Th)  $s.graphics.lineTo(T,O-$hn);
+                else  $s.graphics.lineTo(T+$hn,O);
+              }
+              else if(H<0&&V>0){
+                if(O==Th) $s.graphics.lineTo(T,O+$hn);
+                else $s.graphics.lineTo(T+$hn,O);
+              }
+              else if(H<=0&&V<=0){
+                if(O==Th) $s.graphics.lineTo(T,O+ $hn);
+                else $s.graphics.lineTo(T- $hn,O );
+              }
+              else if(H>0&&V<0){
+                if(O==Th) $s.graphics.lineTo(T,O-$hn);
+                else $s.graphics.lineTo(T-$hn,O);
+              }
+              continue;
+            }
+            //水平距离和垂直距离
+            H = $dataArr[i]-$dataArr[i+4];
+            V = $dataArr[i+1]-$dataArr[i+5];
+            // console.log(H,V,'1H','1V');
+
+            //水平线
+            if($dataArr[i+1] == $dataArr[i+3]){
+              // console.log('1H');
+              //起始点
+              if(i == 0) {
+                if(H<0&&V>0) {
+                  $s.graphics.moveTo($dataArr[i],$dataArr[i+1] + $hn);
+                }
+                else if(H>0&&V>0){
+                  $s.graphics.moveTo($dataArr[i],$dataArr[i+1] - $hn);
+                }
+                else if(H>0&&V<0){
+                  $s.graphics.moveTo($dataArr[i],$dataArr[i+1] - $hn);
+                }
+                else if(H<0&&V<0){
+                  $s.graphics.moveTo($dataArr[i],$dataArr[i+1] + $hn);
+                }
+              }
+
+              //r-t
+              if(H>=0&&V>0){
+                $s.graphics.lineTo($dataArr[i+2] + ($r+$hn),$dataArr[i+1] - $hn);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+1] - $hn, $dataArr[i+2] + $hn, $dataArr[i+1] - $hn - $r);
+              }
+              //r-b
+              if(H>=0&&V<=0){
+                $s.graphics.lineTo($dataArr[i+2] + ($r+$hn),$dataArr[i+1] - $hn);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+1] - $hn, $dataArr[i+2] - $hn, $dataArr[i+1] + $hn + $r);
+              }
+              //l-t
+              if(H<=0&&V>0){
+                $s.graphics.lineTo($dataArr[i+2] - ($r+$hn),$dataArr[i+1] + $hn);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+1] + $hn, $dataArr[i+2] + $hn, $dataArr[i+1] - $hn - $r);
+              }
+              //l-b
+              if(H<=0&&V<=0){
+                $s.graphics.lineTo($dataArr[i+2] - $r-$hn,$dataArr[i+1] + $hn);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+1] + $hn, $dataArr[i+2] - $hn, $dataArr[i+1] + $hn + $r);
+              }
+
+            }
+            else if($dataArr[i] == $dataArr[i+2]){
+              // console.log('1V');
+              //竖直线
+              if(i == 0) {
+                if(H<0&&V>0||H>0&&V>0) $s.graphics.moveTo($dataArr[i]+$hn,$dataArr[i+1]);
+                else $s.graphics.moveTo($dataArr[i]-$hn,$dataArr[i+1]);
+              }
+              //b-l
+              if(H>=0&&V>0){
+                $s.graphics.lineTo($dataArr[i+2] + $hn,$dataArr[i+3] + $hn + $r);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+3] - $hn, $dataArr[i+2] - $hn-$r, $dataArr[i+3] - $hn);
+              }
+              //b-r
+              if(H>=0&&V<=0){
+                $s.graphics.lineTo($dataArr[i+2] - $hn,$dataArr[i+3] - $hn - $r);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+3] - $hn, $dataArr[i+2] - $hn-$r, $dataArr[i+3] - $hn);
+              }
+              //t-l
+              if(H<=0&&V>0){
+                $s.graphics.lineTo($dataArr[i+2] + $hn,$dataArr[i+3] + $hn + $r);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] + $hn,$dataArr[i+3] + $hn, $dataArr[i+2] + $hn+$r, $dataArr[i+3] + $hn);
+              }
+              //t-r
+              if(H<=0&&V<=0){
+                $s.graphics.lineTo($dataArr[i+2] - $hn,$dataArr[i+3] - $hn - $r);
+                $s.graphics.quadraticCurveTo($dataArr[i+2] - $hn,$dataArr[i+3] + $hn, $dataArr[i+2] + $hn+$r, $dataArr[i+3] + $hn);
+              }
+            }
+
+          }
+          else{
+
+            //rArr内层线数据
+            //内层线
+
+            if($dataArr.length == 4){
+
+              H = $dataArr[i]-$dataArr[i+2];
+              V = $dataArr[i+1]-$dataArr[i+3];
+
+              if(isNaN(H)&&isNaN(V)) continue;
+              // console.log(H,V)
+              if((H>0&&V==0)||(H<0&&V==0)){
+                $s.graphics.lineTo($dataArr[i+2],$dataArr[i+3]-$hn);
+                $s.graphics.lineTo($dataArr[i+2],$dataArr[i+3]+$hn);
+                $s.graphics.lineTo($dataArr[i],$dataArr[i+3]+$hn);
+              }
+              if((H==0&&V>0)||(H==0&&V<0)){
+                $s.graphics.lineTo($dataArr[i+2]+$hn,$dataArr[i+3]);
+                $s.graphics.lineTo($dataArr[i+2]-$hn,$dataArr[i+3]);
+                $s.graphics.lineTo($dataArr[i]-$hn,$dataArr[i+1]);
+              }
+
+              continue;
+            }
+
+            if(isNaN(rArr[i+4])){
+
+              let O = rArr[len-1];//倒数第一个y
+              let T = rArr[len-2];//x
+              let Th = rArr[len-3];//y
+              if(H>0&&V>0){
+                if(O==Th)  $s.graphics.lineTo(T,O-$hn);
+                else  $s.graphics.lineTo(T+$hn,O);
+              }
+              else if(H<0&&V>0){
+                if(O==Th) $s.graphics.lineTo(T,O+$hn);
+                else $s.graphics.lineTo(T+$hn,O);
+              }
+              else if(H<0&&V<0){
+                if(O==Th) $s.graphics.lineTo(T,O+ $hn);
+                else $s.graphics.lineTo(T- $hn,O );
+              }
+              else if(H>0&&V<0){
+                if(O==Th) $s.graphics.lineTo(T,O-$hn);
+                else $s.graphics.lineTo(T-$hn,O);
+              }
+              continue;
+            }
+            //水平距离和垂直距离
+            H = rArr[i]-rArr[i+4];
+            V = rArr[i+1]-rArr[i+5];
+            // console.log(H,V,'2H','2V');
+
+            //水平线
+            if(rArr[i+1] == rArr[i+3]){
+              // console.log('2H');
+              //起始点
+              if(i == 0) {
+
+                if(H>0&&V<0) {
+                  $s.graphics.lineTo(rArr[i],rArr[i+1] - $hn);
+                }
+                if(H<0&&V<0){
+                  $s.graphics.lineTo(rArr[i],rArr[i+1] + $hn);
+                }
+                if(H<0&&V>0){
+                  $s.graphics.lineTo(rArr[i] ,rArr[i+1]+ $hn);
+                }
+                if(H>0&&V>0){
+                  $s.graphics.lineTo(rArr[i] ,rArr[i+1]- $hn);
+                }
+              }
+
+              if(H>=0&&V<0){
+                $s.graphics.lineTo(rArr[i+2] + ($r+$hn),rArr[i+1] - $hn);
+                $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+1] - $hn, rArr[i+2] - $hn, rArr[i+1] + $hn + $r);
+              }
+              if(H<0&&V<0){
+                $s.graphics.lineTo(rArr[i+2] - $r - $hn,rArr[i+1] + $hn);
+                $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+1] + $hn, rArr[i+2] - $hn, rArr[i+1] + $hn + $r);
+              }
+              if(H<0&&V>0){
+                $s.graphics.lineTo(rArr[i+2] - $r - $hn,rArr[i+1] + $hn);
+                $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+1] + $hn, rArr[i+2] + $hn, rArr[i+1] - $hn - $r);
+              }
+              if(H>0&&V>0){
+                $s.graphics.lineTo(rArr[i+2] + $r + $hn,rArr[i+1] - $hn);
+                $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+1] - $hn, rArr[i+2] + $hn, rArr[i+1] - $hn - $r);
+              }
+            }
+            else if(rArr[i] == rArr[i+2]){
+              // console.log('2V');
+              //竖直线
+              if(i == 0) {
+
+                if(H>0&&V>0){
+                  $s.graphics.lineTo(rArr[i]+ $hn ,rArr[i+1]);
+                }
+                if(H<0&&V>0){
+                  $s.graphics.lineTo(rArr[i]+ $hn ,rArr[i+1]);
+                }
+                if(H<0&&V<0){
+                  $s.graphics.lineTo(rArr[i]- $hn ,rArr[i+1]);
+                }
+                if(H>0&&V<0){
+                  $s.graphics.lineTo(rArr[i]- $hn ,rArr[i+1]);
+                }
+              }
+
+              if(H<0&&V>0){
+                $s.graphics.lineTo(rArr[i+2] + $hn,rArr[i+3] + $hn + $r);
+                $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+3] + $hn, rArr[i+2] + $hn + $r, rArr[i+3] + $hn);
+              }
+              if(H>0&&V>0){
+                $s.graphics.lineTo(rArr[i+2] + $hn,rArr[i+3] + $hn + $r);
+                $s.graphics.quadraticCurveTo(rArr[i+2] + $hn,rArr[i+3] - $hn, rArr[i+2] - $hn - $r, rArr[i+3] - $hn);
+              }
+              if(H>0&&V<0){
+                $s.graphics.lineTo(rArr[i+2] - $hn,rArr[i+3] - $hn - $r);
+                $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+3] - $hn, rArr[i+2] - $hn - $r, rArr[i+3] - $hn);
+              }
+              if(H<0&&V<0){
+                $s.graphics.lineTo(rArr[i+2] - $hn,rArr[i+3] - $hn - $r);
+                $s.graphics.quadraticCurveTo(rArr[i+2] - $hn,rArr[i+3] + $hn, rArr[i+2] + $hn + $r, rArr[i+3] + $hn);
+              }
+            }
+
+          }
+
+
+        }
+
+      }
+
+      $s.graphics.endStroke();
+      $s.graphics.endFill();
+      rArr.length = 0;
+    }
+
+    clear(){
+
+      while(this.numChildren){
+        this.removeChildAt(0);
+      }
+
+      Tools.clearProp(this);
+
+    }
 }
 
 export default PiPingDraw;

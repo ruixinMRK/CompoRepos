@@ -4,6 +4,7 @@
 
 import args from './libs/createjs.js';
 import Histogram from  './framework/components/Histogram.js';
+import PiPingDraw from  './framework/components/PiPingDraw.js';
 
 window.onload = function(){
 
@@ -110,6 +111,7 @@ window.onload = function(){
 
     }
 
+<<<<<<< HEAD
     let a = new Histogram(styleO);
     a.x = 40;
     a.y = 15;
@@ -134,8 +136,40 @@ window.onload = function(){
         a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'}]);
 
         // console.log(historyA.length);
+=======
+    //let a = new Histogram(styleO);
+    //a.x = 40;
+    //a.y = 15;
+    //stage.addChild(a);
 
-    },5000)
+    let a = new PiPingDraw(50,30);
+    a.y = 20;
+    a.updata([{value:[50,200,50,50,300,50,300,350],color:'#33ff00'},{value:[300,350,300,500,500,500],color:'#ccff33'}])
+    stage.addChild(a);
+>>>>>>> 6bc390f5f9f8cfe85e2f6136fc859759dd94aac5
+
+    //
+    //setInterval( () =>{
+    //
+    //    var obj = {};
+    //    obj.time = currentT + 1000 * 60+'';
+    //    obj.value = parseInt(100 + Math.random() * 300) + '';
+    //    currentA.push(obj);
+    //    currentT = parseFloat(obj.time);
+    //
+    //    var obj1  ={};
+    //    obj1.time = historyT  + 1000 * 60 +'';
+    //    obj1.value = parseInt(100 + Math.random() * 100) + '';
+    //    historyA.push(obj1);
+    //    historyT = parseFloat(obj1.time);
+    //
+    //    var warn = 300 + parseInt(Math.random() * 100)+'';
+    //
+    //    a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'},{value:A,id:'E'},{value:150+100*Math.random(),id:'C'}]);
+    //
+    //    console.log(historyA.length);
+    //
+    //},5000)
 
     createjs.Ticker.addEventListener('tick',stage);
 

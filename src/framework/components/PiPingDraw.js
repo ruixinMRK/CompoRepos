@@ -4,7 +4,8 @@
 //管道图
 
 import Base from './Base.js';
-import Tools from 'common/Tools.js';
+import Tools from '../../tools/Tools.js';
+
 
 class PiPingDraw extends Base{
 

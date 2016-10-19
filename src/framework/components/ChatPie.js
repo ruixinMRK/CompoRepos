@@ -2,16 +2,16 @@
  * Created by Administrator on 2016-06-03.
  */
 import Base from  './Base.js';
-import Tools from 'common/Tools.js';
-import 'createjs.js';
-import ObjectPool from 'common/ObjectPool.js';
+import Tools from '../../tools/Tools.js';
+import ObjectPool from '../../tools/ObjectPool';
+import '../../libs/createjs.js';
 
 class ChatPie extends Base{
 
   //长轴  短轴 数据 名称 颜色 透明度 是否将第二块突出  是否在图例中显示数值
   constructor(styleObj){
     super();
-
+    
     this.a = 0;
     this.b = 0;
     this.h = 0;

@@ -4,8 +4,8 @@
 
 
 import Base from  './Base.js';
-import Tools from 'common/Tools.js';
-import ObjectPool from 'common/ObjectPool.js';
+import Tools from '../../tools/Tools.js';
+import ObjectPool from '../../tools/ObjectPool';
 
 //x轴固定的线图
 class FixedXHistogram extends Base{

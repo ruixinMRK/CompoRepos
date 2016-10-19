@@ -1,7 +1,7 @@
 
 import Base from './Base.js';
-import Tools from 'common/Tools';
-import ObjectPool from 'common/ObjectPool';
+import Tools from '../tools/Tools.js';
+import ObjectPool from '../tools/ObjectPool';
 
 class HorHistogram extends Base{
 

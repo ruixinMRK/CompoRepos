@@ -4,7 +4,7 @@
 
 
 import Base from  './Base.js';
-import Tools from './Tools.js';
+import Tools from '../../tools/Tools';
 
 class Histogram extends Base{
 
@@ -39,8 +39,8 @@ class Histogram extends Base{
         let yAxis = this.drawLine(new createjs.Shape(),[0,0,0,this.h],this.yAxis['lineColor'],this.yAxis['thickness']);
         let xAxis = this.drawLine(new createjs.Shape(),[0,this.h,this.w,this.h],this.xAxis['lineColor'],this.xAxis['thickness']);
         //画轴三角
-        let yAxisThree = this.drawLine(new createjs.Shape(),[-5,0,5,0,0,-12],this.yAxis['lineColor'],1,true,this.yAxis['lineColor']);
-        let xAxisThree = this.drawLine(new createjs.Shape(),[this.w,this.h-5,this.w,this.h+5,this.w+12,this.h],this.yAxis['lineColor'],1,true,this.yAxis['lineColor']);
+        let yAxisThree = this.drawLine(new createjs.Shape(),[-5,0,5,0,0,-12],'rgba(0,0,0,0)',1,true,'#ccc');
+        let xAxisThree = this.drawLine(new createjs.Shape(),[this.w,this.h-5,this.w,this.h+5,this.w+12,this.h],'rgba(0,0,0,0)',1,true,'#ccc');
         //可以画的宽和高
         this.availW = this.w/20*19;
         this.availH = this.h/20*19;
@@ -138,7 +138,7 @@ class Histogram extends Base{
                 if(!txt.alpha) yS.alpha = 0;
                 this.dataSp.addChild(yS);
             }
-
+            
             this.xTxtArr.push(txt);
             this.dataSp.addChild(txt);
         }
@@ -203,6 +203,8 @@ class Histogram extends Base{
             }
 
             this.drawLine(objA.s,pointArr,style['lineColor'],style['thickness']);
+            if(objA.shad) objA.s.shadow = objA.shad;
+
             if(!objA.s.parent) this.dataSp.addChild(objA.s);
 
             if(style.valueColor){
@@ -211,8 +213,6 @@ class Histogram extends Base{
                 if(valueS.toString().indexOf('.')>0){
                     valueS = parseFloat(valueS).toFixed(2);
                 }
-                valueS = valueS.toLocaleString();
-                //当前线的文本
                 if(this[objA.id + 'Txt']){
                     this[objA.id + 'Txt'].text = valueS;
                 }
@@ -254,6 +254,7 @@ class Histogram extends Base{
                 }
                 this[objA.id + 'Ball'].x = ballX;
                 this[objA.id + 'Ball'].y = ballY;
+                if(objA.shad) this[objA.id + 'Ball'].shadow = objA.shad;
             }
 
             //填充效果
@@ -360,7 +361,7 @@ class Histogram extends Base{
             idObj.lineType = obj.lineType;
             idObj.s = new createjs.Shape();
             if(obj.lineType == 'b') idObj.sf = new createjs.Shape();
-
+            if(obj.shadowColor) idObj.shad =  new createjs.Shadow(obj.shadowColor, 0, 0, obj.shadowSize);
             let isV = this.dataObjArr.some( a => {
                 return a.id === obj.id;
             })

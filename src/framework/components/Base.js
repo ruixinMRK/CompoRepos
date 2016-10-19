@@ -2,8 +2,8 @@
  * Created by Administrator on 2016/8/1 0001.
  */
 //父类
-import 'createjs.js';
-import ObjectPool from 'common/ObjectPool.js';
+import '../../libs/createjs.js';
+import ObjectPool from '../../tools/ObjectPool.js';
 
 class Base extends createjs.Container
 {

@@ -21,78 +21,7 @@ class Base extends createjs.Container
 
     }
     clear(){
-
     }
-    //画虚线
-    drawDash (sh,x1,y1,x2,y2,color,alpha,dash,ed)
-    {
-        let s = sh||new createjs.Shape();
-        s.graphics.clear();
-        s.graphics.setStrokeStyle(1);
-        s.graphics.beginStroke(color);
-        //计算起点终点连续的角度
-        var angle = Math.atan2(y2 - y1,x2 - x1);
-        //步长，每次循环改变的长度
-        var step = dash + ed;
-        //每段实线水平和竖直长度
-        var dashx = dash * Math.cos(angle);
-        var dashy = dash * Math.sin(angle);
-        //每段虚线水平和竖直长度
-        var edx = ed * Math.cos(angle);
-        var edy = ed * Math.sin(angle);
-        //每段实线和虚线的水平和垂直长度
-        var stepx = step * Math.cos(angle);
-        var stepy = step * Math.sin(angle);
-        //起点和终点的距离
-        var _length = Math.sqrt(Math.pow(x2 - x1,2) + Math.pow(y2 - y1,2));
-
-        //使用循环，逐段绘制
-        for (var i=step,px=x1,py=y1; i<_length; i+=step) {
-            s.graphics.moveTo (px+edx,py+edy);
-            s.graphics.lineTo (px+dashx,py+dashy);
-            //循环递归
-            px+=stepx;
-            py+=stepy;
-        }
-        return s;
-    }
-
-    // 贝塞尔虚线
-    drawBezierDash(x1,y1,x2,y2,x3,y3,color){
-
-        let s = new createjs.Shape();
-        s.graphics.setStrokeStyle(1);
-        s.graphics.beginStroke(color);
-
-        let t = 0;
-        let drawLineIndex = 0;
-        let lineX = 0;
-        let lineY = 0;
-
-        while(t<=1){
-
-            t += 0.01;
-            drawLineIndex++;
-
-            //二次贝塞尔曲线公式
-            lineX = Math.pow((1-t),2)*x1+2*t*(1-t)*x2 + Math.pow(t,2)*x3;
-            lineY = Math.pow((1-t),2)*y1+2*t*(1-t)*y2 + Math.pow(t,2)*y3;
-
-            //三次贝塞尔曲线公式
-            //lineX = Math.pow((1-t),3)*p1.x + 3*p2.x*t*(1-t)*(1-t) + 3*p3.x*t*t*(1-t) + p4.x *Math.pow(t,3);
-            //lineY = Math.pow((1-t),3)*p1.y + 3*p2.y*t*(1-t)*(1-t) + 3*p3.y*t*t*(1-t) + p4.y *Math.pow(t,3);
-
-            if (drawLineIndex % 2 == 0) {
-                s.graphics.lineTo(lineX, lineY);
-            } else {
-                s.graphics.moveTo(lineX, lineY);
-            }
-
-        }
-
-        return s;
-    }
-
     //矩形
     drawRect(w1,h1,color){
 

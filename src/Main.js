@@ -7,43 +7,44 @@ import Histogram from  './framework/components/Histogram.js';
 import PiPingDraw from  './framework/components/PiPingDraw.js';
 import FixedXHistogram from  './framework/components/FixedXHistogram.js';
 import ChatPie from  './framework/components/ChatPie.js';
+import ProgressBar from './framework/components/ProgressBar';
 
 window.onload = function(){
 
     let stage = new createjs.Stage('name');
 
-    var currentA = [];
-    var historyA = [];
-    var currentT = 0;
-    var historyT = 0;
-    var A = [];
-
-    for(var i = 0;i<100;i++){
-
-        var obj  ={};
-        obj.time = 1470109099942 + 1000 * 60 * i;
-        obj.value = parseInt(Math.random() * 100);
-        currentA.push(obj);
-        currentT = obj.time;
-    }
-
-    for(var j = 0;j<400;j++){
-
-        var obj  ={};
-        obj.time = 1470109099942 + + 1000 * 60 * j;
-        obj.value = parseInt(Math.random() * 100);
-        historyA.push(obj);
-        historyT = obj.time;
-    }
-
-
-    for(var n = 0;n<200;n++){
-
-        var obj  ={};
-        obj.time = 1470109099942 + + 1000 * 60 * n;
-        obj.value = parseInt(Math.random() * 100);
-        A.push(obj);
-    }
+    // var currentA = [];
+    // var historyA = [];
+    // var currentT = 0;
+    // var historyT = 0;
+    // var A = [];
+    //
+    // for(var i = 0;i<100;i++){
+    //
+    //     var obj  ={};
+    //     obj.time = 1470109099942 + 1000 * 60 * i;
+    //     obj.value = parseInt(Math.random() * 100);
+    //     currentA.push(obj);
+    //     currentT = obj.time;
+    // }
+    //
+    // for(var j = 0;j<400;j++){
+    //
+    //     var obj  ={};
+    //     obj.time = 1470109099942 + + 1000 * 60 * j;
+    //     obj.value = parseInt(Math.random() * 100);
+    //     historyA.push(obj);
+    //     historyT = obj.time;
+    // }
+    //
+    //
+    // for(var n = 0;n<200;n++){
+    //
+    //     var obj  ={};
+    //     obj.time = 1470109099942 + + 1000 * 60 * n;
+    //     obj.value = parseInt(Math.random() * 100);
+    //     A.push(obj);
+    // }
 
     // let styleO = {
     //
@@ -120,17 +121,17 @@ window.onload = function(){
     // a.y = 15;
     // stage.addChild(a);
 
-    this.currentA = [];
-    for(var i = 0;i<12;i++){
-        this.currentA.push((300*Math.random())|0);
-    }
-
-    this.currentB = [];
-
-    for(var i = 0;i<5;i++){
-
-        this.currentB.push((300*Math.random())|0);
-    }
+    // this.currentA = [];
+    // for(var i = 0;i<12;i++){
+    //     this.currentA.push((300*Math.random())|0);
+    // }
+    //
+    // this.currentB = [];
+    //
+    // for(var i = 0;i<5;i++){
+    //
+    //     this.currentB.push((300*Math.random())|0);
+    // }
 
     // let style = {
     //     w:540,
@@ -226,25 +227,25 @@ window.onload = function(){
     //name:this.arrRed[i].name,color:colorD
 
 
-    let pieStyle = {
-        a:90,
-        b:50,
-        h:20,
-        open:true,
-        colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"],
-        dataList:[50,50,50,150],
-        nameList:['w','h','ww','ee'],
-        txtColor:'#fff',
-        lineColor:'#fff',
-        txtSize:16,
-        txtFont:'微软雅黑',
-    }
-
-    this.pie1 = new ChatPie(pieStyle);
-    this.pie1.createView();
-    this.pie1.x = 200;
-    this.pie1.y = 210;
-    stage.addChild(this.pie1);
+    // let pieStyle = {
+    //     a:90,
+    //     b:50,
+    //     h:20,
+    //     open:true,
+    //     colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"],
+    //     dataList:[50,50,50,150],
+    //     nameList:['w','h','ww','ee'],
+    //     txtColor:'#fff',
+    //     lineColor:'#fff',
+    //     txtSize:16,
+    //     txtFont:'微软雅黑',
+    // }
+    //
+    // this.pie1 = new ChatPie(pieStyle);
+    // this.pie1.createView();
+    // this.pie1.x = 200;
+    // this.pie1.y = 210;
+    // stage.addChild(this.pie1);
 
 
     //
@@ -270,6 +271,40 @@ window.onload = function(){
     //
     //},5000)
 
+
+    this.bar = new ProgressBar({
+        barWidth:500,
+        barHeight:50,
+        // prgColor:"rgb(69,161,169)",//如果此属性存在 则用纯色填充 否则则用渐变填充效果
+        bgColor:"rgb(31,31,31)",
+        shadowLinearGradientColors:["rgb(55,164,174)","#000","rgb(55,164,174)"],
+        shadowLinearGradientRatios:[0,0.5,1],
+        shadowLinearGradientDir:"#0f0",
+        borderThickness:3,
+        flagTrgColor:"rgb(69,69,69)",
+        curTrgColor:"rgb(254,171,39)",
+        boardColor:"#6c6c6c",//"#685420",
+        flagTrgHalfLength:8,//长度的一半
+        flagTrgHeight:20,//高度
+        flagTrgBarGap:8,
+        curTrgBarGap:8,
+        barRound:10,
+        barMaginLeft:0,
+        curPos:0,
+        tweenDuring:2000,
+        txtArr:[
+            {value:'年度指标:',id:'mainTitle',size:24,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'},
+            {value:'6000',id:'mainValue',size:32,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:-7,autoSize:'left'},
+            {value:'万',id:'mainTitleEM',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:5,autoSize:'left'},
+            {value:'目标完成度:',id:'secTitle',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:10,autoSize:'left'},
+            {value:'20.13%',id:'secValue',size:35,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'}
+        ]
+    });
+    // this.bar.setFlagRatio(0.4,2000);
+    this.bar.updata([{id:'total',value:'3030'},{id:'history',value:0.2},{id:'current',value:0.6}])
+    // this.bar.setCurrentRatio(0.5,1000);
+    stage.addChild(this.bar);
+    this.bar.y = 100;
     createjs.Ticker.addEventListener('tick',stage);
 
 

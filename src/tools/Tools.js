@@ -116,6 +116,7 @@ class Tools{
   //获取dom节点的x,y,w,h
   static getDOMClient(div){
     let rect = div.getBoundingClientRect();
+    
     let x = rect.left|0;
     let y = rect.top|0;
     let w = (rect.width||rect.right - x)|0;

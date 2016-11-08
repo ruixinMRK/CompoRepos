@@ -4,12 +4,14 @@
 //父类
 import '../../libs/createjs.js';
 import ObjectPool from '../../tools/ObjectPool.js';
+import Tools from '../../tools/Tools';
 
 class Base extends createjs.Container
 {
 
     constructor(){
         super();
+        this.poolArr = [];
     }
     init(){
 
@@ -21,14 +23,20 @@ class Base extends createjs.Container
 
     }
     clear(){
+        ObjectPool.returnObj(this.poolArr);
+        this.poolArr = [];
+        this.removeAllChildren();
+        if(this.parent) this.parent.removeChild(this);
+        Tools.clearProp(this);
     }
     //矩形
     drawRect(w1,h1,color){
 
-        let roundObject = new createjs.Shape();
+        let roundObject = ObjectPool.getObj('shape');
         roundObject.graphics.beginFill(color);
         roundObject.graphics.drawRect(0,0,w1,h1);
         roundObject.graphics.endFill();
+        this.poolArr.push(roundObject);
         return roundObject;
     }
 
@@ -36,7 +44,7 @@ class Base extends createjs.Container
     drawCylinder(w1,h1,r,colorArr)
     {
         r = r||6;
-        let roundObject = new createjs.Shape();
+        let roundObject = ObjectPool.getObj('shape');
         let colors = colorArr||["#00FFFF","#0099FF"];
         let alphas = [1,1];
         let ratios = [0,0xFF];
@@ -55,6 +63,7 @@ class Base extends createjs.Container
         roundObject.graphics.bezierCurveTo(0,-2 *r, w1,-2 * r, w1, 0);
         roundObject.graphics.bezierCurveTo(w1,2 *r,0,2 * r,0,0);
         roundObject.graphics.endFill();
+        this.poolArr.push(roundObject);
         return roundObject;
     }
 
@@ -62,19 +71,20 @@ class Base extends createjs.Container
     //画圆
     drawCircle($x,$y,$radius,$color)
     {
-        let $s = new createjs.Shape();
+        let $s = ObjectPool.getObj('shape');
         $s.graphics.beginFill($color);
         $s.graphics.drawCircle(0,0,$radius);
         $s.graphics.endFill();
         $s.x = $x;
         $s.y = $y;
+        this.poolArr.push($s);
         return $s;
     }
 
 
 
     //画线
-    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor,$joinType)
+    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor,$joinType,$dash)
     {
         let $lC = $lineColor||"#ffffff";
         let $tN = $thickness||2.5;
@@ -82,10 +92,12 @@ class Base extends createjs.Container
         let $fC = $fillColor||"#ffffff";
 
         let $T  = $joinType||0;
+        let $d = typeof $dash === 'boolean'?$dash:false;
+
         if(!$s) return;
         $s.graphics.clear();
         $s.graphics.setStrokeStyle($tN,0,$T);
-
+        $d&&$s.graphics.setStrokeDash([8, 4], 0);
         $s.graphics.beginStroke($lC);
         if($iF) $s.graphics.beginFill($fC);
 
@@ -99,6 +111,8 @@ class Base extends createjs.Container
             }
         }
         $s.graphics.endFill();
+        $s.graphics.endStroke();
+        this.poolArr.push($s);
         return $s;
     }
 
@@ -147,7 +161,7 @@ class Base extends createjs.Container
             txt.x = _x;
             txt.y = _y;
         }
-
+        this.poolArr.push(txt);
         return txt;
     }
 

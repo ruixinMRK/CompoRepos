@@ -1,7 +1,7 @@
 
 import Base from './Base.js';
-import Tools from '../tools/Tools.js';
-import ObjectPool from '../tools/ObjectPool';
+import Tools from '../../tools/Tools';
+import ObjectPool from '../../tools/ObjectPool';
 
 class HorHistogram extends Base{
 
@@ -10,7 +10,7 @@ class HorHistogram extends Base{
 
     this.w = 400;
     this.h = 300;
-    this.pageNum = 0;//是否分页显示
+    // this.pageNum = 0;//是否分页显示
     this.oneNum = 0;//每页显示个数(限制每页的显示个数，由外界传参,如果不传按顺序排下)
     this.dataVis = false;
     this.sort = false;
@@ -19,24 +19,12 @@ class HorHistogram extends Base{
     //解析样式
     this.setStyle(styleObj);
 
-    this.yTxtArr = [];
-    this.yTxtSp = new createjs.Container();
-    this.xTxtArr = [];
-    this.xTxtSp = new createjs.Container();
-    this.allSp = new createjs.Container();
-    this.postSp = new createjs.Container();
-    this.postArr = [];
-
-    this.dataTxtArr = [];
-    this.dataTxtSp = new createjs.Container();
+    //存储动画显示对象
+    this.tweenArr = [];
 
     if(this.oneNum!=0) this.ySpace = this.h/this.dataArr.value.length;
     else this.ySpace = this.h/this.oneNum;
 
-    this.yAxis = new createjs.Shape();
-    this.waringShape = new createjs.Shape();
-
-    // console.log(this.ySpace);
 
     //分别存储数据和y轴
     this.yData = [];
@@ -46,11 +34,6 @@ class HorHistogram extends Base{
     this.parseData(this.dataArr.value);
 
     this.init();
-
-    this.addChild(this.allSp);
-    this.allSp.addChild(this.yTxtSp,this.xTxtSp,this.postSp,this.dataTxtSp,this.yAxis,this.waringShape);
-
-
   }
 
   updata(arr){
@@ -61,9 +44,7 @@ class HorHistogram extends Base{
     this.parseData(arr);
 
     this.init();
-    this.addChild(this.allSp);
-    this.allSp.addChild(this.yTxtSp,this.xTxtSp,this.postSp,this.dataTxtSp);
-    // this.allSp.addChild(this.yTxtSp,this.xTxtSp,this.postSp,this.dataTxtSp);
+
   }
 
   parseData(arr){
@@ -84,8 +65,6 @@ class HorHistogram extends Base{
       }
 
     })
-
-    // console.log(this.yData,this.data);
 
   }
 
@@ -123,9 +102,11 @@ class HorHistogram extends Base{
 
   drawPost(arr){
 
+
     if(this.waring){
       let w = (+this.waring.value)/this.xDataMax * (this.xSpace * 5) + this.txtMaxL;
-      this.allSp.addChild(this.drawDash(this.waringShape,w,0-this.yArr.size/2,w,this.h-this.yArr.size/2,this.waring.lineColor,1,5,2));
+      this.waringShape = ObjectPool.getObj('shape');
+      this.addChild(this.drawLine(this.waringShape,[w,0-this.yArr.size/2,w,this.h-this.yArr.size/2],this.waring.lineColor,1,false,null,0,true));
     }
 
     for(let i =0 ;i<arr.length;i++){
@@ -143,43 +124,39 @@ class HorHistogram extends Base{
       zz.y = this.ySpace * i - (this.dataArr.zw - this.yArr.size)/2 + 2;
       zz.x = this.txtMaxL ;
       zz.scaleX = 0;
-      this.postSp.addChild(zz);
-      this.postArr.push(zz);
 
+
+      this.poolArr.push(zz);
+
+      let dataTxt = null;
       //柱子后的文字
       if(this.dataVis) {
-        let dataTxt = this.drawTxt(arr[i],this.dataArr.size,this.dataArr.txtColor,this.dataArr.font);
-        dataTxt.x = this.txtMaxL + w + 10;
-        dataTxt.y = zz.y;
+        dataTxt = this.getTxt(arr[i],this.dataArr.txtColor,this.dataArr.size,this.txtMaxL + w + 10,zz.y,'',this.dataArr.font);
         dataTxt.alpha = 0;
-        this.dataTxtSp.addChild(dataTxt);
-        this.dataTxtArr.push(dataTxt);
       }
+      this.addChild(zz,dataTxt);
+      this.tweenArr.push(zz,dataTxt);
 
     }
-
-
-
-    this.postArr.forEach( a =>{
-
-      createjs.Tween.get(a).to({scaleX:1}, 1500).call(b=>{
-        createjs.Tween.removeTweens(a);
-        this.tweenTxt();
-      });
-
-    })
-
-
+    this.tweenNext();
   }
 
-  tweenTxt(){
+  tweenNext(top = true){
 
-    this.dataTxtArr.forEach( a =>{
+    let L = this.tweenArr.length;
+    let i = top?0:1;
+    let t = 1;
 
-      createjs.Tween.get(a).to({alpha:1}, 1000).call(function(){
-        createjs.Tween.removeTweens(this);
+    for(;i<L;i+=2){
+
+      let obj = this.tweenArr[i];
+      if(obj ==null) continue;
+      createjs.Tween.get(obj).to(top?{scaleX:1}:{alpha:1}, 1500).call(b=>{
+        createjs.Tween.removeTweens(b);
+        t?top?(this.tweenNext(false),t=0):'':'';
       });
-    })
+
+    }
 
   }
 
@@ -187,12 +164,11 @@ class HorHistogram extends Base{
 
     for(let i = 1;i<arr.length;i++){
 
-      var txt = this.drawTxt(arr[i],this.xArr.size,this.xArr.color);
+      var txt = this.getTxt(arr[i],this.xArr.color,this.xArr.size,0,0,'');
       txt.x = this.txtMaxL + this.xSpace * i - txt.getMeasuredWidth()/2;
       txt.y = -txt.getMeasuredHeight() - 5;
 
-      this.xTxtArr.push(txt);
-      this.xTxtSp.addChild(txt);
+      this.addChild(txt);
 
     }
 
@@ -203,43 +179,28 @@ class HorHistogram extends Base{
     this.txtMaxL = 0;
     for(let i = 0;i<arr.length;i++){
 
-      var txt = this.drawTxt(arr[i],this.yArr.size,this.yArr.color,this.yArr.font);
+      var txt = this.getTxt(arr[i],this.yArr.color,this.yArr.size,0,0,'',this.yArr.font);
       txt.y = this.ySpace * i;
-      // txt.x = 50 - txt.getMeasuredWidth();
-      this.yTxtArr.push(txt);
-      this.yTxtSp.addChild(txt);
+      this.addChild(txt);
       this.txtMaxL = this.txtMaxL>txt.getMeasuredWidth()?this.txtMaxL:txt.getMeasuredWidth();
-
+      txt.x = this.txtMaxL - txt.getMeasuredWidth();
     }
 
     if(this.yTitle){
-      var txtTitle = this.drawTxt(this.yTitle.value,this.yTitle.size,this.yTitle.color,this.yTitle.font);
+      let txtTitle = this.getTxt(this.yTitle.value,this.yTitle.color,this.yTitle.size,0,0,'',this.yTitle.font);
       txtTitle.y -= txtTitle.getMeasuredHeight() + 10;
-      this.yTxtSp.addChild(txtTitle);
+      this.addChild(txtTitle);
     }
-    //y轴设置位置
-    this.yTxtArr.forEach(a=>{
-      a.x = this.txtMaxL - a.getMeasuredWidth();
-    })
 
     //画Y轴
     // if(this.yAxis.parent) this.yAxis.parent.removeChild(this.yAxis);
-    if(this.yVis) this.drawLine(this.yAxis,[this.txtMaxL+15,-this.dataArr.zw/2 - 5,this.txtMaxL+15,this.h-this.dataArr.zw/2],'#fff',1);
+    if(this.yVis){
+      this.yAxis = ObjectPool.getObj('shape');
+      this.drawLine(this.yAxis,[this.txtMaxL+15,-this.dataArr.zw/2 - 5,this.txtMaxL+15,this.h-this.dataArr.zw/2],'#fff',1);
+    }
+
 
     this.txtMaxL+=15;
-  }
-
-  //绘制文字
-  drawTxt(str,numx,color1,font){
-
-    let color = color1||"#ffffff";
-    font = font||'Microsoft YaHei';
-    // var txt = new createjs.Text(str,numx + "px " + font,color);
-    let txt = ObjectPool.getObj('txt');
-    txt.text = str;
-    txt.font = numx + "px " + font;
-    txt.color = color;
-    return txt;
   }
 
   //读取属性
@@ -252,64 +213,24 @@ class HorHistogram extends Base{
 
   }
 
-  //清空
+  //重置
   reset(){
 
-    this.postArr.forEach( a =>{
+    this.tweenArr.forEach( a =>{
         createjs.Tween.removeTweens(a);
     })
-
-    this.dataTxtArr.forEach( a =>{
-        createjs.Tween.removeTweens(a);
-    })
-
-    for(let str in this){
-      let obj = this[str];
-      if(!super[str]&&Array.isArray(this[str])){
-        obj.length = 0;
-      }
-    }
-
-
-    // this.yTxtSp.removeAllChildren();
-    // this.xTxtSp.removeAllChildren();
-    // this.postSp.removeAllChildren();
-    // this.dataTxtSp.removeAllChildren();
-    this.recove(this.yTxtSp);
-    this.recove(this.xTxtSp);
-    this.recove(this.postSp);
-    this.recove(this.dataTxtSp);
     this.removeAllChildren();
-    // this.resetSp(this.allSp);
+
+    ObjectPool.returnObj(this.poolArr);
+
+    this.poolArr.length = this.tweenArr.length = this.yData.length = this.data.length = 0;
 
   }
 
-  //回收对象
-  recove(sp){
-    while(sp.numChildren){
-      ObjectPool.returnObj(sp.getChildAt(0));
-      sp.removeChildAt(0);
-    }
-
-  }
 
   clear(){
     this.reset();
-    Tools.clearProp(this);
-  }
-  resetSp(sp){
-
-    if (sp.hasOwnProperty('numChildren')){
-
-      if(sp.getChildAt(0).hasOwnProperty('numChildren') ){
-        if(sp.parent) this.resetSp(sp);
-      }
-
-    }
-    else{
-      if(sp.parent) sp.parent.removeChild(sp);
-    }
-
+    super.clear();
   }
 
 }

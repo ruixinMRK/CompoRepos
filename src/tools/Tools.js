@@ -568,10 +568,11 @@ class Tools{
   //*********此方法必须要在最后调用(清除属性)********/
   static clearProp(_this){
     let arr = Object.keys(_this);
+
     for(let i=0;i<arr.length;i++){
       let obj = _this[arr[i]];
       //||typeof obj === 'function'
-      if(!obj||(Tools.replaceArr.indexOf(arr[i])>-1)||Tools.checkGL(obj)) continue;
+      if(!obj||(Tools.replaceArr.indexOf(arr[i])>-1)||Tools.checkGL(obj)||typeof obj === 'function') continue;
       if(obj.canvas&&obj.canvas.tagName =='CANVAS') {
         //使用createjs框架时,要把stage挂在this上
 
@@ -598,6 +599,7 @@ class Tools{
         }
       }
 
+      if(_this['poolArr']) continue;
       delete _this[arr[i]];
       _this[arr[i]] = null;
       obj = null;
@@ -608,26 +610,26 @@ class Tools{
 
   //判断字符是否是对象的属性(包括原型链)
   static hasProperty(o,prop){
-        return (prop in o);
-      }
-      //判断字符是否是存在于对象的原型链中
-      static hasPropertyJustInPrototype(o,prop){
-        return !o.hasOwnProperty(prop) && (prop in o);
-      }
-      //取canvas点击处的颜色
-      static getColor(can,x,y,isHex){
-        
-        if(!can) return new Error('is not canvas');
-        let ctx = can.getContext("2d");
-        let imgData = ctx.getImageData(x,y,1,1).data.slice(0,4);
+    return (prop in o);
+  }
+  //判断字符是否是存在于对象的原型链中
+  static hasPropertyJustInPrototype(o,prop){
+    return !o.hasOwnProperty(prop) && (prop in o);
+  }
+  //取canvas点击处的颜色
+  static getColor(can,x,y,isHex){
 
-        if(isHex){
-          let HexStr = '#';
-      imgData.forEach(a=>{
-        let str = a.toString(16);
-        HexStr += str.length<2?'0'+str:str;
-      });
-      imgData = HexStr;
+    if(!can) return new Error('is not canvas');
+    let ctx = can.getContext("2d");
+    let imgData = ctx.getImageData(x,y,1,1).data.slice(0,4);
+
+    if(isHex){
+      let HexStr = '#';
+    imgData.forEach(a=>{
+      let str = a.toString(16);
+      HexStr += str.length<2?'0'+str:str;
+    });
+    imgData = HexStr;
     }
     return imgData;
   }

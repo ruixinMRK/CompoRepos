@@ -8,6 +8,9 @@ import PiPingDraw from  './framework/components/PiPingDraw.js';
 import FixedXHistogram from  './framework/components/FixedXHistogram.js';
 import ChatPie from  './framework/components/ChatPie.js';
 import ProgressBar from './framework/components/ProgressBar';
+import Tools from './tools/Tools';
+import HorHistogram from './framework/components/HorHistogram';
+import Timer from './tools/Timer';
 
 window.onload = function(){
 
@@ -45,7 +48,7 @@ window.onload = function(){
     //     obj.value = parseInt(Math.random() * 100);
     //     A.push(obj);
     // }
-
+    //
     // let styleO = {
     //
     //     w:900,
@@ -121,6 +124,8 @@ window.onload = function(){
     // a.y = 15;
     // stage.addChild(a);
 
+    // a.clear();
+
     // this.currentA = [];
     // for(var i = 0;i<12;i++){
     //     this.currentA.push((300*Math.random())|0);
@@ -132,7 +137,7 @@ window.onload = function(){
     //
     //     this.currentB.push((300*Math.random())|0);
     // }
-
+    //
     // let style = {
     //     w:540,
     //     h:265,
@@ -192,8 +197,18 @@ window.onload = function(){
     //
     // this.his = new FixedXHistogram(style);
     // this.his.x = 60;
-    // this.his.y = 65;
+    // this.his.y = 350;
     // stage.addChild(this.his);
+    // this.his.clear();
+
+    // setInterval( () => {
+    //
+    //     this.currentB = this.currentB.map(function(a){
+    //         return  (a*Math.random() * 2)|0;
+    //     });
+    //     this.his.updata([{value: this.currentB, id: 'A'}])
+    //
+    // },5000);
 
     // setInterval( () => {
     //
@@ -211,13 +226,10 @@ window.onload = function(){
     //
     //     var warn = parseInt(Math.random() * 100) + '';
     //
-    //     a.updata([{value: currentA, id: 'A'}, {value: historyA, id: 'B'}])
+    //     a.updata([{value: currentA, id: 'A'}, {value: historyA, id: 'B'}]);
+    //
     // },5000);
 
-    //let a = new Histogram(styleO);
-    //a.x = 40;
-    //a.y = 15;
-    //stage.addChild(a);
 
     // let a = new PiPingDraw(50,30,false,[{name:'S1',value:[780,420,780,490,300,490],color:'#44a50a'},
     //     {name:'S2',value:[300,490,100,490,100,200],color:'#ff0000'}]);
@@ -248,63 +260,75 @@ window.onload = function(){
     // stage.addChild(this.pie1);
 
 
-    //
-    //setInterval( () =>{
-    //
-    //    var obj = {};
-    //    obj.time = currentT + 1000 * 60+'';
-    //    obj.value = parseInt(100 + Math.random() * 300) + '';
-    //    currentA.push(obj);
-    //    currentT = parseFloat(obj.time);
-    //
-    //    var obj1  ={};
-    //    obj1.time = historyT  + 1000 * 60 +'';
-    //    obj1.value = parseInt(100 + Math.random() * 100) + '';
-    //    historyA.push(obj1);
-    //    historyT = parseFloat(obj1.time);
-    //
-    //    var warn = 300 + parseInt(Math.random() * 100)+'';
-    //
-    //    a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'},{value:A,id:'E'},{value:150+100*Math.random(),id:'C'}]);
-    //
-    //    console.log(historyA.length);
-    //
-    //},5000)
+
+    // this.bar = new ProgressBar({
+    //     barWidth:500,
+    //     barHeight:50,
+    //     // prgColor:"rgb(69,161,169)",//如果此属性存在 则用纯色填充 否则则用渐变填充效果
+    //     bgColor:"rgb(31,31,31)",
+    //     shadowLinearGradientColors:["rgb(55,164,174)","#000","rgb(55,164,174)"],
+    //     shadowLinearGradientRatios:[0,0.5,1],
+    //     shadowLinearGradientDir:"#0f0",
+    //     borderThickness:3,
+    //     flagTrgColor:"rgb(69,69,69)",
+    //     curTrgColor:"rgb(254,171,39)",
+    //     boardColor:"#6c6c6c",//"#685420",
+    //     flagTrgHalfLength:8,//长度的一半
+    //     flagTrgHeight:20,//高度
+    //     flagTrgBarGap:8,
+    //     curTrgBarGap:8,
+    //     barRound:10,
+    //     barMaginLeft:0,
+    //     curPos:0,
+    //     tweenDuring:2000,
+    //     txtArr:[
+    //         {value:'年度指标:',id:'mainTitle',size:24,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'},
+    //         {value:'6000',id:'mainValue',size:32,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:-7,autoSize:'left'},
+    //         {value:'万',id:'mainTitleEM',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:5,autoSize:'left'},
+    //         {value:'目标完成度:',id:'secTitle',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:10,autoSize:'left'},
+    //         {value:'20.13%',id:'secValue',size:35,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'}
+    //     ]
+    // });
+    // // this.bar.setFlagRatio(0.4,2000);
+    // this.bar.updata([{id:'total',value:'3030'},{id:'history',value:0.2},{id:'current',value:0.6}])
+    // // this.bar.setCurrentRatio(0.5,1000);
+    // stage.addChild(this.bar);
+    // this.bar.y = 100;
 
 
-    this.bar = new ProgressBar({
-        barWidth:500,
-        barHeight:50,
-        // prgColor:"rgb(69,161,169)",//如果此属性存在 则用纯色填充 否则则用渐变填充效果
-        bgColor:"rgb(31,31,31)",
-        shadowLinearGradientColors:["rgb(55,164,174)","#000","rgb(55,164,174)"],
-        shadowLinearGradientRatios:[0,0.5,1],
-        shadowLinearGradientDir:"#0f0",
-        borderThickness:3,
-        flagTrgColor:"rgb(69,69,69)",
-        curTrgColor:"rgb(254,171,39)",
-        boardColor:"#6c6c6c",//"#685420",
-        flagTrgHalfLength:8,//长度的一半
-        flagTrgHeight:20,//高度
-        flagTrgBarGap:8,
-        curTrgBarGap:8,
-        barRound:10,
-        barMaginLeft:0,
-        curPos:0,
-        tweenDuring:2000,
-        txtArr:[
-            {value:'年度指标:',id:'mainTitle',size:24,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'},
-            {value:'6000',id:'mainValue',size:32,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:-7,autoSize:'left'},
-            {value:'万',id:'mainTitleEM',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:5,autoSize:'left'},
-            {value:'目标完成度:',id:'secTitle',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:10,autoSize:'left'},
-            {value:'20.13%',id:'secValue',size:35,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'}
-        ]
-    });
-    // this.bar.setFlagRatio(0.4,2000);
-    this.bar.updata([{id:'total',value:'3030'},{id:'history',value:0.2},{id:'current',value:0.6}])
-    // this.bar.setCurrentRatio(0.5,1000);
-    stage.addChild(this.bar);
-    this.bar.y = 100;
+    let jdpp = {
+
+        w:360,
+        h:120,
+        maxAuto:true,
+        pageNum:0,
+        oneNum:2,
+        dataVis:true,
+        yVis:false,
+        sort:true,
+        dataArr:{
+            value:[{name:'NOGARA',value:20},{name:'INDIOS',value:40},{name:'SIMPLE LIFE',value:60}],
+            color:'rgb(109,120,149)',
+            font:'Microsoft YaHei',
+            txtColor:'#fff',
+            size:20,
+            zw:18,
+            zr:0
+        },
+        yArr:{
+            color:'#ccc',
+            font:'Microsoft YaHei',
+            size:16
+        }
+    };
+
+
+    this.horHis = new HorHistogram(jdpp);
+    this.horHis.y = 100;
+    stage.addChild(this.horHis);
+
+    Timer.add(()=>{this.horHis.updata([{name:'NOGARA',value:20}])},2000,1);
+    // this.horHis.updata([{'1Hao ':100},{'2好':100}]);
     createjs.Ticker.addEventListener('tick',stage);
 
 

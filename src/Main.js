@@ -239,26 +239,28 @@ window.onload = function(){
     //name:this.arrRed[i].name,color:colorD
 
 
-    // let pieStyle = {
-    //     a:90,
-    //     b:50,
-    //     h:20,
-    //     open:true,
-    //     colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"],
-    //     dataList:[50,50,50,150],
-    //     nameList:['w','h','ww','ee'],
-    //     txtColor:'#fff',
-    //     lineColor:'#fff',
-    //     txtSize:16,
-    //     txtFont:'微软雅黑',
-    // }
-    //
-    // this.pie1 = new ChatPie(pieStyle);
-    // this.pie1.createView();
-    // this.pie1.x = 200;
-    // this.pie1.y = 210;
-    // stage.addChild(this.pie1);
+    let pieStyle = {
+        a:90,
+        b:50,
+        h:20,
+        open:true,
+        colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"],
+        dataList:[50,50,50,150],
+        nameList:['w','h','ww','ee'],
+        txtColor:'#fff',
+        lineColor:'#fff',
+        txtSize:16,
+        txtFont:'微软雅黑',
+    }
 
+    this.pie1 = new ChatPie(pieStyle);
+    this.pie1.createView();
+    this.pie1.x = 200;
+    this.pie1.y = 210;
+    stage.addChild(this.pie1);
+    Timer.add(()=>{this.pie1.updata(['1','2'],[100,200])},2000,1);
+
+    // this.pie1.clear();
 
 
     // this.bar = new ProgressBar({
@@ -289,46 +291,51 @@ window.onload = function(){
     //         {value:'20.13%',id:'secValue',size:35,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'}
     //     ]
     // });
-    // // this.bar.setFlagRatio(0.4,2000);
+    // this.bar.setFlagRatio(0.4,2000);
     // this.bar.updata([{id:'total',value:'3030'},{id:'history',value:0.2},{id:'current',value:0.6}])
-    // // this.bar.setCurrentRatio(0.5,1000);
+    // this.bar.setCurrentRatio(0.5,1000);
+    // Timer.add(()=>{this.bar.clear()},2000,1);
+    //
     // stage.addChild(this.bar);
     // this.bar.y = 100;
 
 
-    let jdpp = {
+    // let jdpp = {
+    //
+    //     w:360,
+    //     h:120,
+    //     maxAuto:true,
+    //     pageNum:0,
+    //     oneNum:2,
+    //     dataVis:true,
+    //     yVis:false,
+    //     sort:true,
+    //     dataArr:{
+    //         value:[{name:'NOGARA',value:20},{name:'INDIOS',value:40},{name:'SIMPLE LIFE',value:60}],
+    //         color:'rgb(109,120,149)',
+    //         font:'Microsoft YaHei',
+    //         txtColor:'#fff',
+    //         size:20,
+    //         zw:18,
+    //         zr:0
+    //     },
+    //     yArr:{
+    //         color:'#ccc',
+    //         font:'Microsoft YaHei',
+    //         size:16
+    //     }
+    // };
+    //
+    //
+    // this.horHis = new HorHistogram(jdpp);
+    // this.horHis.y = 100;
+    // stage.addChild(this.horHis);
 
-        w:360,
-        h:120,
-        maxAuto:true,
-        pageNum:0,
-        oneNum:2,
-        dataVis:true,
-        yVis:false,
-        sort:true,
-        dataArr:{
-            value:[{name:'NOGARA',value:20},{name:'INDIOS',value:40},{name:'SIMPLE LIFE',value:60}],
-            color:'rgb(109,120,149)',
-            font:'Microsoft YaHei',
-            txtColor:'#fff',
-            size:20,
-            zw:18,
-            zr:0
-        },
-        yArr:{
-            color:'#ccc',
-            font:'Microsoft YaHei',
-            size:16
-        }
-    };
-
-
-    this.horHis = new HorHistogram(jdpp);
-    this.horHis.y = 100;
-    stage.addChild(this.horHis);
-
-    Timer.add(()=>{this.horHis.updata([{name:'NOGARA',value:20}])},2000,1);
+    // Timer.add(()=>{this.horHis.updata([{name:'NOGARA',value:20}])},2000,1);
     // this.horHis.updata([{'1Hao ':100},{'2好':100}]);
+    // this.horHis.clear();
+    // Timer.add(()=>{this.horHis.clear();},4000,1);
+
     createjs.Ticker.addEventListener('tick',stage);
 
 

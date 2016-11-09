@@ -357,16 +357,7 @@ class FixedXHistogram extends Base{
         }
         this.dataMax = this.dataMax>max?this.dataMax:max;
     }
-
-    //读取属性
-    setStyle(obj){
-
-        for(var str in obj){
-            // console.log(str,obj[str]);
-            this[str] = obj[str];
-        }
-
-    }
+    
 
     reset(){
 
@@ -382,7 +373,7 @@ class FixedXHistogram extends Base{
     //清空
     clear(){
 
-      this.reset();
+      createjs.Tween.removeTweens(this.maskS);
       super.clear();
 
     }

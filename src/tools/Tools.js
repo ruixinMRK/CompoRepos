@@ -1,7 +1,9 @@
 /*
- *  16-10-8
+ *  16-11-8
  *
  */
+
+import Timer from './Timer';
 
 class Tools{
 
@@ -113,15 +115,6 @@ class Tools{
     }
     return temps;
   }
-  //获取dom节点的x,y,w,h
-  static getDOMClient(div){
-    let rect = div.getBoundingClientRect();
-    let x = rect.left|0;
-    let y = rect.top|0;
-    let w = (rect.width||rect.right - x)|0;
-    let h = (rect.height||rect.bottom - y)|0;
-    return {x:x,y:y,w:w,h:h};
-  }
   //设置样式
   static setDivStyle(div,obj){
     for(let attr in obj){
@@ -179,7 +172,22 @@ class Tools{
       }
     }
   }
-
+  //获取dom节点的x,y,w,h
+  //是否加上以滚动的高度
+  static getDOMClient(div,deep){
+    let rect = div.getBoundingClientRect();
+    let top = document.documentElement.clientTop;
+    let left= document.documentElement.clientLeft;
+    let x = rect.left|0;
+    let y = rect.top|0;
+    let w = (rect.width||rect.right - x)|0;
+    let h = (rect.height||rect.bottom - y)|0;
+    if(deep) {
+      x+= Tools.getScroll().left;
+      y+= Tools.getScroll().top;
+    }
+    return {x:x - left,y:y - top,w:w,h:h};
+  }
   //获取网页的总高度
   static getScrollHeight(){
     return Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
@@ -568,11 +576,10 @@ class Tools{
   //*********此方法必须要在最后调用(清除属性)********/
   static clearProp(_this){
     let arr = Object.keys(_this);
-
     for(let i=0;i<arr.length;i++){
       let obj = _this[arr[i]];
       //||typeof obj === 'function'
-      if(!obj||(Tools.replaceArr.indexOf(arr[i])>-1)||Tools.checkGL(obj)||typeof obj === 'function') continue;
+      if(!obj||typeof obj === 'function'||(Tools.replaceArr.indexOf(arr[i])>-1)||Tools.checkGL(obj)||arr[i]==='poolArr') continue;
       if(obj.canvas&&obj.canvas.tagName =='CANVAS') {
         //使用createjs框架时,要把stage挂在this上
 
@@ -599,7 +606,6 @@ class Tools{
         }
       }
 
-      if(_this['poolArr']) continue;
       delete _this[arr[i]];
       _this[arr[i]] = null;
       obj = null;
@@ -610,8 +616,8 @@ class Tools{
 
   //判断字符是否是对象的属性(包括原型链)
   static hasProperty(o,prop){
-    return (prop in o);
-  }
+        return (prop in o);
+      }
   //判断字符是否是存在于对象的原型链中
   static hasPropertyJustInPrototype(o,prop){
     return !o.hasOwnProperty(prop) && (prop in o);
@@ -625,11 +631,11 @@ class Tools{
 
     if(isHex){
       let HexStr = '#';
-    imgData.forEach(a=>{
-      let str = a.toString(16);
-      HexStr += str.length<2?'0'+str:str;
-    });
-    imgData = HexStr;
+      imgData.forEach(a=>{
+        let str = a.toString(16);
+        HexStr += str.length<2?'0'+str:str;
+      });
+      imgData = HexStr;
     }
     return imgData;
   }
@@ -695,10 +701,12 @@ class Tools{
       "S": oDate.getMilliseconds()//毫秒
     };
     if(/(y+)/.test(fmt)) {
+      //首先替换年份的数据
       fmt = fmt.replace(RegExp.$1, (oDate.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
     for (var k in o) {
       if(new RegExp("(" + k + ")").test(fmt)) {
+        //依次判断对应的格式,RegExp.$1.length == 1如果是长度为1时,碰到数据小于10的时候，不进行不自动往数据前加0
         fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
       }
     }
@@ -831,6 +839,24 @@ class Tools{
     }
     return result;
   }
+  /**
+   * 忽略大小写判断字符串是否相同
+   * @param str1
+   * @param str2
+   * @returns {Boolean}
+   */
+  static isEqualsIgnorecase(str1,str2){
+      if(str1.toUpperCase() == str2.toUpperCase())
+      {
+        return true;
+      }
+      return false;
+  }
+  //保留中文
+  static toCN(str) {
+    var regEx = /[^\u4e00-\u9fa5\uf900-\ufa2d]/g;
+    return str.replace(regEx, '');
+  }
   //克隆对象
   static clone(obj){
     let o;
@@ -941,104 +967,120 @@ class Tools{
   }
 
   //ajax请求
-  //{data:{},url:'',mothed:'',callback:function(){},async:true,timeout:6000};
+  //{data:{},url:'',mothed:'post,get',callback:function(){},async:true,timeout:6000};
   static ajax(obj){
 
-    let t = 0;
-    let xmlhttp = null;
-    let createXMLHttp = function(){
+    var xhr = Tools.createAjax();
 
-      if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-      }
-      else
-      {// code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      return xmlhttp;
-    };
-
-    //解析参数
-    let paramsData = function(data){
-
-      if(!data) return '';
-      let arr = [];
-      for(let str in data){
-        arr.push( encodeURIComponent(str) + '=' + encodeURIComponent(data[str]));
-      }
-      return arr.join('&');
-    }
-
-    let callBack = function(){
-
-      if(xhr.status===0) {
-        return;
-      }
-      if(xhr.status == 200){
-
-        let arr = xhr.responseText.split("#");
-        let i = 0;
-        let cacheData = [];
-        for(; i<arr.length;i++){
-          let obj = null;
-          try{
-            obj = JSON.parse(arr[i]);
-          }
-          catch(e){
-            console.log('解析数据错误');
-          }
-          if(obj) cacheData.push(obj);
-        }
-        //Router.instance.dispatcher(arr[i])
-        let returnObj = cacheData.length>1?cacheData:cacheData[0];
-        obj.callback&&obj.callback(returnObj);
-        // Router.instance.dispatcher(returnObj);
-      }
-      else{
-        obj.error&&obj.error();
-      }
-
-      clearTimeout(t);
-      xmlhttp = null;
-    }
-
-    var xhr = createXMLHttp();
-
-    if(obj.async){
-      xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4) callBack();
-      }
-    }
     let url = obj.url;
     let mothed = obj.mothed;
     let timeout = obj.timeout;
+    var keyTimer = '';
 
-    if(mothed === 'get') url += '?r=' + Math.random() + '&' + paramsData(obj.data);
+    //解析参数
+    if(mothed === 'get') url +=  '?' + Tools.paramsData(obj.data);
+    if(url.indexOf('?')>0) url+='&r=' + Math.random();
+    else url+='?r=' + Math.random();
+
+    //判断是否完成
+    if(obj.async){
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+          Timer.clear(keyTimer);
+          Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+        }
+      }
+    }
+
+    //到时间后取消请求
+    if(timeout&&timeout>0){
+      function ajaxTimeOut(){
+        obj.error&&obj.error();
+        xhr.abort();
+      }
+      keyTimer = Timer.add(ajaxTimeOut,timeout,1);
+    }
+
+    //发送请求
     xhr.open(mothed,url,obj.async);
     if(mothed === 'post'){
       xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-      xhr.send(paramsData(obj.data));
+      xhr.send(Tools.paramsData(obj.data));
     }
     else{
       xhr.send(null);
     }
 
-    //到时间后取消请求
-    if(timeout&&timeout>0){
-
-      t = setTimeout( function () {
-        console.log('timeout');
-        obj.error&&obj.error();
-        xhr.abort();
-        clearTimeout(t);
-      },timeout);
-
-    }
     console.log('ajax url is:',url);
     //同步的话
-    if(!obj.async)  callBack();
-    return xhr.abort;
+    if(!obj.async)  Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+    // return xhr.abort;
+  }
+
+  //创建ajax
+  static createAjax(){
+    let i = 0;
+    for(;i<Tools.cacheAjax.length;i++){
+      if(Tools.cacheAjax[i].readyState == 0|| Tools.cacheAjax[i].readyState == 4){
+        return Tools.cacheAjax[i];
+      }
+    }
+
+    let xmlhttp = null;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    Tools.cacheAjax[Tools.cacheAjax.length] = xmlhttp;
+    console.log(Tools.cacheAjax.length);
+    return xmlhttp;
+
+  }
+
+  static paramsData(data,json){
+
+    if(!data) return '';
+    let arr = [];
+    for(let str in data){
+      arr.push( encodeURIComponent(str) + (json?'=':':') + encodeURIComponent(data[str]));
+    }
+    return json?'{'+arr.join(':')+'}':arr.join('&');
+
+  }
+
+  static ajaxCallBack(xhr,success,error){
+
+    if(xhr.status===0) {
+      return;
+    }
+    if(xhr.status == 200){
+
+      let arr = xhr.responseText.split("#");
+      let i = 0;
+      let cacheData = [];
+      for(; i<arr.length;i++){
+        let obj = null;
+        try{
+          obj = JSON.parse(arr[i]);
+        }
+        catch(e){
+          console.log('解析数据错误');
+        }
+        if(obj) cacheData.push(obj);
+      }
+      //Router.instance.dispatcher(arr[i])
+      let returnObj = cacheData.length>1?cacheData:cacheData[0];
+      success&&success(returnObj);
+      // Router.instance.dispatcher(returnObj);
+    }
+    else{
+      error&&error();
+    }
+
   }
 
   //容器自适应
@@ -1111,5 +1153,6 @@ class Tools{
 }
 Tools.addEventId = 0;
 Tools.t = 0;
+Tools.cacheAjax = [];
 
 export default Tools;

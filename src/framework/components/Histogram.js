@@ -411,16 +411,6 @@ class Histogram extends Base{
         let max = (+arr[arr.length - 1]['value']);
         this.dataMax = this.dataMax>max?this.dataMax:max;
     }
-    
-
-    //读取属性
-    setStyle(obj){
-
-        for(var str in obj){
-            this[str] = obj[str];
-        }
-
-    }
 
     //清空
     clear(){

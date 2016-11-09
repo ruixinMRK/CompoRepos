@@ -65,6 +65,8 @@ class ObjectPool {
           //数组不存在时
           if(!poolO[key]) poolO[key] = [];
           let l = poolO[key].length;
+          if(poolO[key].indexOf(obj)>-1) continue;
+            
           poolO[key][l] = obj;
           //重置几个关键数据
           obj.x = obj.y = obj.regX = obj.regY = 0;

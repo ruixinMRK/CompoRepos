@@ -123,17 +123,14 @@ class ChatPie extends Base{
       if(this.style.hasOwnProperty('leg')){
 
         str = ((this.dataList[j]/total) * 100).toFixed(2) + "%";
-        let s = ObjectPool.getObj('shape');
-        this.poolArr.push(s);
-        s.graphics.clear();
-        s.graphics.beginFill(drakColor);
-        s.graphics.drawRect(0,0,this.style.leg.w,this.style.leg.w);
-        s.graphics.endFill();
+
+
+        let s = this.drawRect(this.style.leg.w||5,this.style.leg.w||5,drakColor);
         s.y = j * 30;
 
         let fs = this.style.leg.size|0;
         let legStr = this.nameList[j] + "\t\t" + this.dataList[j];
-        let txtTitle = this.getText(legStr,this.style.leg.color,fs,30,s.y - fs/4,this.style.leg.font);
+        let txtTitle = this.getTxt(legStr,this.style.leg.color,fs,30,s.y - fs/4,this.style.leg.font);
         this.legSp.addChild(s,txtTitle);
 
         this.sSp.addChild(prelabel);
@@ -192,109 +189,26 @@ class ChatPie extends Base{
         let valueW = valueTxt.getMeasuredWidth();
         let valueH = valueTxt.getMeasuredHeight();
 
-        if (middleP >0 && middleP <= 90)
-        {
-          lineS.graphics.lineTo(X + 20,Y+40);
-          lineS.graphics.lineTo(X + 90,Y+40);
-          prelabel.x = X + 90 - txtW - 5;
-          prelabel.y = Y + 40 - txtH - 5;
-          valueTxt.x = X + 90 - valueW - 5;
-          valueTxt.y = Y + 40;
+        let keyObj = {};
 
-        }
-        else if (middleP > 90 && middleP <= 180)
-        {
-          lineS.graphics.lineTo(X - 20,Y+40);
-          lineS.graphics.lineTo(X - 90,Y+40);
-          prelabel.x = X - 90;
-          prelabel.y = Y + 40 - txtH - 5;
-          valueTxt.x = X - 90;
-          valueTxt.y = Y + 40;
-        }
-        else  if(middleP >180 && middleP < 200){
-          lineS.graphics.lineTo(X - 20,Y-40);
-          lineS.graphics.lineTo(X - 90,Y-40);
-          prelabel.x = X - 90;
-          prelabel.y = Y - 40 - txtH - 5;
-          valueTxt.x = X - 90;
-          valueTxt.y = Y + 40;
-        }
-        else if(middleP >= 200 && middleP < 230){
+        //分角度
+        if (middleP >0 && middleP <= 90) keyObj = {p1X:X+20,p1Y:Y+40,p2X:X+90,p2Y:Y+40,pX:X + 85 - txtW,pY:Y + 35 - txtH,vX:X + 85 - valueW,vY:Y + 40};
+        else if (middleP > 90 && middleP <= 180) keyObj = {p1X:X-20,p1Y:Y+40,p2X:X-90,p2Y:Y+40,pX:X - 90,pY:Y + 35 - txtH,vX:X - 90,vY:Y + 40};
+        else if(middleP >180 && middleP < 200) keyObj = {p1X:X-20,p1Y:Y-40,p2X:X-90,p2Y:Y-40,pX:X - 90,pY:Y - 35 - txtH,vX:X - 90,vY:Y + 40};
+        else if(middleP >= 200 && middleP < 230) keyObj = {p1X:X - 60,p1Y:Y - 10,p2X:X-130,p2Y:Y-10,pX:X - 130,pY:Y - 15 - txtH,vX:X - 130,vY:Y - 10};
+        else if(middleP >= 230 && middleP < 245) keyObj = {p1X:X - 50,p1Y:Y,p2X:X-120,p2Y:Y,pX:X - 120,pY:Y - txtH - 5,vX:X - 120,vY:Y};
+        else if(middleP >= 245 && middleP < 255) keyObj = {p1X:X - 40,p1Y:Y -25,p2X:X-110,p2Y:Y-25,pX:X - 110,pY:Y - txtH - 30,vX:X - 110,vY:Y-25};
+        else if(middleP >= 255 && middleP <= 268) keyObj = {p1X:X - 15,p1Y:Y -60,p2X:X-85,p2Y:Y-60,pX:X - 85,pY:Y - txtH - 30,vX:X - 85,vY:Y-60};
+        else if(middleP > 268 && middleP <= 270) keyObj = {p1X:X + 15,p1Y:Y-80,p2X:X+80,p2Y:Y-60,pX:X - 85,pY:Y - txtH - 85,vX:X + 80 - valueW,vY:Y-80};
+        else if (middleP >= -90 && middleP < 0) keyObj = {p1X:X + 20,p1Y:Y-34,p2X:X+90,p2Y:Y-34,pX:X + 85 - txtW,pY:Y - 40 - txtH,vX:X + 85 - valueW,vY:Y-34};
+        else if (middleP == 0) keyObj = {p1X:X + 20,p1Y:Y-40,p2X:X+90,p2Y:Y-40,pX:X + 85 - txtW,pY:Y - 45 - txtH,vX:X + 85 - valueW,vY:Y-40};
 
-          lineS.graphics.lineTo(X - 60,Y - 10);
-          lineS.graphics.lineTo(X - 130,Y-10);
-          prelabel.x = X - 130 - (txtW>>1);
-          prelabel.y = Y  - 10  - (txtH>>1);
-
-          prelabel.x = X - 130;
-          prelabel.y = Y - 10 - txtH - 5;
-          valueTxt.x = X - 130;
-          valueTxt.y = Y - 10;
-
-        }
-        else if(middleP >= 230 && middleP < 245){
-
-          lineS.graphics.lineTo(X - 50,Y);
-          lineS.graphics.lineTo(X -120,Y);
-
-          prelabel.x = X - 120;
-          prelabel.y = Y - txtH - 5;
-          valueTxt.x = X - 120;
-          valueTxt.y = Y;
-
-        }
-        else if(middleP >= 245 && middleP < 255){
-
-          lineS.graphics.lineTo(X - 40,Y -25);
-          lineS.graphics.lineTo(X - 110,Y-25);
-
-          prelabel.x = X - 110;
-          prelabel.y = Y - 25 - txtH - 5;
-          valueTxt.x = X - 110;
-          valueTxt.y = Y - 25;
-
-        }
-        else if(middleP >= 255 && middleP <= 268){
-
-          lineS.graphics.lineTo(X - 15,Y-60);
-          lineS.graphics.lineTo(X - 85,Y-60);
-
-          prelabel.x = X - 85;
-          prelabel.y = Y - 25 - txtH - 5;
-          valueTxt.x = X - 85;
-          valueTxt.y = Y - 60;
-
-        }
-        else if(middleP > 268 && middleP <= 270){
-
-          lineS.graphics.lineTo(X + 15,Y-80);
-          lineS.graphics.lineTo(X + 85,Y-80);
-
-          prelabel.x = X + 85 - txtW - 5;
-          prelabel.y = Y - 80 - txtH - 5;
-          valueTxt.x = X + 85 - valueW - 5;
-          valueTxt.y = Y - 80;
-
-
-        }
-        else if (middleP >= -90 && middleP < 0)
-        {
-          lineS.graphics.lineTo(X+20,Y-34);
-          lineS.graphics.lineTo(X + 90,Y-34);
-          prelabel.x = X + 90 - txtW - 5;
-          prelabel.y = Y - 34 - txtH - 5;
-          valueTxt.x = X + 90 - valueW - 5;
-          valueTxt.y = Y - 34;
-        }
-        else if (middleP == 0)
-        {
-          lineS.graphics.lineTo(X+20,Y-40);
-          lineS.graphics.lineTo(X + 90,Y-40);
-          prelabel.x = X + 90 - txtW - 5;
-          prelabel.y = Y - 40 - txtH - 5;
-          valueTxt.x = X + 90 - valueW - 5;
-          valueTxt.y = Y - 40;
-        }
+        lineS.graphics.lineTo(keyObj.p1X,keyObj.p1Y);
+        lineS.graphics.lineTo(keyObj.p2X,keyObj.p2Y);
+        prelabel.x = keyObj.pX;
+        prelabel.y = keyObj.pY;
+        valueTxt.x = keyObj.vX;
+        valueTxt.y = keyObj.vY;
       }
 
 
@@ -418,34 +332,6 @@ class ChatPie extends Base{
 
   }
 
-  getText(str,color,size,_x,_y,$font){
-
-    // 黑体：SimHei
-    // 宋体：SimSun
-    // 新宋体：NSimSun
-    // 仿宋：FangSong
-    // 楷体：KaiTi
-    // 仿宋_GB2312：FangSong_GB2312
-    // 楷体_GB2312：KaiTi_GB2312
-    // 微软雅黑体：Microsoft YaHei
-
-    color = color||"#ffffff";
-    size = size||20;
-    _x = _x||0;
-    _y = _y||0;
-    $font = $font||'Microsoft YaHei';
-
-    let txt = ObjectPool.getObj('txt');
-    this.poolArr.push(txt);
-    txt.color = color;
-    txt.font = size + "px " + $font;
-    txt.text = '' + str;
-    txt.x = _x;
-    txt.y = _y;
-
-    return txt;
-  }
-
   pieDepth(){
 
     var depthList=[];
@@ -485,14 +371,6 @@ class ChatPie extends Base{
 
   }
 
-  //读取属性
-  setStyle(obj){
-
-    for(var str in obj){
-      this[str] = obj[str];
-    }
-
-  }
 
   getRPoint(x0,y0,a,b,r) {
     r=r * Math.PI / 180;
@@ -505,9 +383,10 @@ class ChatPie extends Base{
     ObjectPool.returnObj(this.poolArr);
     if(this.allSpArr&&this.angleList) this.allSpArr.length = this.angleList.length = 0;
     else return;
-    this.removeAllChildren();
+    this.removeAllChild();
     let l = this.tweenArr.length;
     let i = 0;
+    this.poolArr = [];
     for(;i<l;i++){
       createjs.Tween.removeTweens(this.tweenArr[i]);
     }
@@ -517,7 +396,7 @@ class ChatPie extends Base{
   //清除
   clear(){
     this.reset();
-    Tools.clearProp(this);
+    super.clear();
   }
 
 }

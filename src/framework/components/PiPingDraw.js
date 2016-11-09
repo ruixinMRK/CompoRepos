@@ -416,11 +416,7 @@ class PiPingDraw extends Base{
 
     clear(){
 
-      while(this.numChildren){
-        this.removeChildAt(0);
-      }
-
-      Tools.clearProp(this);
+      super.clear();
 
     }
 }

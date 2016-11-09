@@ -77,9 +77,7 @@ class HorHistogram extends Base{
     let dataAC = this.data.slice();
     dataAC.sort((a,b)=>{return a - b});
     this.dataMax = dataAC[dataAC.length-1];
-    //if(this.maxAuto)
 
-    //if(this.dataMax == 0) return;
       //x轴的绘图数据
     this.xDataArr = Tools.drawY(this.dataMax,0,5);
     // console.log(this.xDataArr);
@@ -113,29 +111,26 @@ class HorHistogram extends Base{
 
       let w = arr[i]/this.xDataMax * (this.xSpace * 5);
 
-      // let zz = new createjs.Shape();
-      let zz = ObjectPool.getObj('shape');
-      zz.graphics.clear();
-      if(this.waring&&arr[i]<(+this.waring.value)) zz.graphics.beginFill(this.waring.zzColor);
-      else zz.graphics.beginFill(this.dataArr.color);
+      let color = '#fff';
+      if(this.waring&&arr[i]<(+this.waring.value)) color = this.waring.zzColor;
+      else color = this.dataArr.color;
       if(w<=2) w =2;
-      // console.log(+this.waring.value,arr[i]);
-      zz.graphics.drawRoundRectComplex(0,0,w,this.dataArr.zw,0,this.dataArr.zr||0,this.dataArr.zr||0,0);
-      zz.y = this.ySpace * i - (this.dataArr.zw - this.yArr.size)/2 + 2;
-      zz.x = this.txtMaxL ;
-      zz.scaleX = 0;
 
+      //柱体
+      let rect = this.drawRect(w,this.dataArr.zw,color,0,this.dataArr.zr||0,this.dataArr.zr||0,0);
+      rect.y = this.ySpace * i - (this.dataArr.zw - this.yArr.size)/2 + 2;
+      rect.x = this.txtMaxL ;
+      rect.scaleX = 0;
 
-      this.poolArr.push(zz);
 
       let dataTxt = null;
       //柱子后的文字
       if(this.dataVis) {
-        dataTxt = this.getTxt(arr[i],this.dataArr.txtColor,this.dataArr.size,this.txtMaxL + w + 10,zz.y,'',this.dataArr.font);
+        dataTxt = this.getTxt(arr[i],this.dataArr.txtColor,this.dataArr.size,this.txtMaxL + w + 10,rect.y,'',this.dataArr.font);
         dataTxt.alpha = 0;
       }
-      this.addChild(zz,dataTxt);
-      this.tweenArr.push(zz,dataTxt);
+      this.addChild(rect,dataTxt);
+      this.tweenArr.push(rect,dataTxt);
 
     }
     this.tweenNext();
@@ -203,22 +198,13 @@ class HorHistogram extends Base{
     this.txtMaxL+=15;
   }
 
-  //读取属性
-  setStyle(obj){
 
-    for(var str in obj){
-      // console.log(str,obj[str]);
-      this[str] = obj[str];
-    }
-
-  }
 
   //重置
   reset(){
 
-    this.tweenArr.forEach( a =>{
-        createjs.Tween.removeTweens(a);
-    })
+    this.tweenArr.forEach( a =>{createjs.Tween.removeTweens(a);})
+
     this.removeAllChildren();
 
     ObjectPool.returnObj(this.poolArr);

@@ -1,5 +1,5 @@
 /*
- *  16-11-8
+ *  16-11-24
  *
  */
 
@@ -484,6 +484,8 @@ class Tools{
     let corstep = 0;
     let tmpstep = 0;
     let tmpnumber = 0;
+    let tempCormin = false;
+    if(cormin>=0) tempCormin = true;
     // console.log(cormax,cormin,cornumber,'---');
     if(cormax<=cormin)
       return null ;
@@ -532,12 +534,15 @@ class Tools{
     cornumber = tmpnumber;
 
     let arrValue = [];
-    let size = parseInt(cormax/cornumber);
+    let size = parseInt((cormax-cormin)/cornumber);
+
+    console.log(cormin,cormax);
     if(cormax <5) arrValue = [0,1,2,3,4,5];
     else{
 
+      tempCormin&&(cormin = 0);
       for(let i = 0;i<cornumber+1;i++){
-        arrValue.push(i*size);
+        arrValue.push(cormin + i*size);
       }
     }
 
@@ -565,7 +570,7 @@ class Tools{
     return value;
   }
   //,'compositeOperation'
-  static replaceArr = ['refs','componentWillUnmount','componentDidMount','componentWillUpdate','componentDidUpdate','_debugID','isMounted','enqueueCallback','enqueueCallbackInternal','enqueueForceUpdate','enqueueReplaceState','enqueueSetState','enqueueElementInternal','validateCallback'];
+  static replaceArr = ['props','refs','componentWillUnmount','componentDidMount','componentWillUpdate','componentDidUpdate','_debugID','isMounted','enqueueCallback','enqueueCallbackInternal','enqueueForceUpdate','enqueueReplaceState','enqueueSetState','enqueueElementInternal','validateCallback'];
   static checkGL(a){
 
     for(let t = 0;t<Tools.replaceArr.length;t++){
@@ -689,8 +694,12 @@ class Tools{
 
   }
 
+
   //获取格式化时间 例子：dateFormat(new Date(), "yyyy-MM-dd hh:mm:ss")
-  static dateFormat(oDate, fmt) {
+  static dateFormat(oDate = new Date(), fmt = "yyyy-MM-dd hh:mm:ss") {
+
+    if(typeof oDate === 'number') oDate = new Date(oDate);
+    
     var o = {
       "M+": oDate.getMonth() + 1, //月份
       "d+": oDate.getDate(), //日
@@ -919,24 +928,6 @@ class Tools{
     for (let i = 0; i < 3; i++) if (hexs[i].length == 1) hexs[i] = "0" + hexs[i];
     return "#" + hexs.join("");
   }
-  //转换对象(类似于call和apply与bind)
-  static delegate(c,a){
-    let b=a||window;
-    if(arguments.length>2)
-    {
-      let d=Array.prototype.slice.call(arguments,2);
-      return function()
-      {
-        let e=Array.prototype.slice.call(arguments);
-        Array.prototype.unshift.apply(e,d);
-        return c.apply(b,e);
-      }
-    }else
-      return function()
-      {
-        return c.apply(b,arguments);
-      }
-  }
 
   //操作cookie
   static cookie(key,value,time){
@@ -1005,7 +996,7 @@ class Tools{
     xhr.open(mothed,url,obj.async);
     if(mothed === 'post'){
       xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-      xhr.send(Tools.paramsData(obj.data));
+      xhr.send(Tools.paramsData(obj.data,obj.dataType));
     }
     else{
       xhr.send(null);
@@ -1044,11 +1035,12 @@ class Tools{
   static paramsData(data,json){
 
     if(!data) return '';
+    if(json) return JSON.stringify(json);
     let arr = [];
     for(let str in data){
-      arr.push( encodeURIComponent(str) + (json?'=':':') + encodeURIComponent(data[str]));
+      arr.push( encodeURIComponent(str) + '=' + encodeURIComponent(data[str]));
     }
-    return json?'{'+arr.join(':')+'}':arr.join('&');
+    return arr.join('&');
 
   }
 

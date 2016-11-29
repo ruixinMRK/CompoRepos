@@ -3,8 +3,8 @@
  */
 
 
-import Base from  './Base.js';
-import Tools from '../../tools/Tools.js';
+import Base from './Base.js';
+import Tools from '../../tools/Tools';
 import ObjectPool from '../../tools/ObjectPool';
 
 //x轴固定的线图
@@ -17,7 +17,9 @@ class FixedXHistogram extends Base{
         this.h = 300;
 
         this.dataMax = 0;
+        this.dataMin = 100000000;
         this.yDataMax = 0;
+        this.yDataMin = 0;
         this.yDataArr = [];
         this.xTxtArr = [];
         this.yNum = 5;
@@ -42,7 +44,7 @@ class FixedXHistogram extends Base{
 
         //判断是单独的数据还是数据是对象包含time
         this.TimeData = true;
-        this.TimeData = typeof(styleObj.lineArr[0].value[0]) === 'object'?true:false;
+        this.TimeData = this.typeFixed === 'C'?false:true;
 
         this.init(styleObj.lineArr);
 
@@ -52,51 +54,56 @@ class FixedXHistogram extends Base{
     init(data){
 
         // console.log('updata');
-      //画x轴,y轴
-      let yAxis = this.drawLine(ObjectPool.getObj('shape'),[0,0,0,this.h],this.yAxis['lineColor'],this.yAxis['thickness']);
-      let xAxis = this.drawLine(ObjectPool.getObj('shape'),[0,this.h,this.w,this.h],this.xAxis['lineColor'],this.xAxis['thickness']);
-      //画轴三角
-      let yAxisThree = this.drawLine(ObjectPool.getObj('shape'),[-5,0,5,0,0,-12],'rgba(0,0,0,0)',1,true,'#ccc');
-      let xAxisThree = this.drawLine(ObjectPool.getObj('shape'),[this.w,this.h-5,this.w,this.h+5,this.w+12,this.h],'rgba(0,0,0,0)',1,true,'#ccc');
+        //画x轴,y轴
+        let yAxis = this.drawLine(ObjectPool.getObj('shape'),[0,0,0,this.h],this.yAxis['lineColor'],this.yAxis['thickness']);
+        let xAxis = this.drawLine(ObjectPool.getObj('shape'),[0,this.h,this.w,this.h],this.xAxis['lineColor'],this.xAxis['thickness']);
+        //画轴三角
+        let yAxisThree = this.drawLine(ObjectPool.getObj('shape'),[-5,0,5,0,0,-12],'rgba(0,0,0,0)',1,true,'#ccc');
+        let xAxisThree = this.drawLine(ObjectPool.getObj('shape'),[this.w,this.h-5,this.w,this.h+5,this.w+12,this.h],'rgba(0,0,0,0)',1,true,'#ccc');
 
-      //遮罩动画
-      this.maskS = ObjectPool.getObj('shape');
-      this.maskS.graphics.beginFill('#fff');
-      this.maskS.graphics.drawRect(0,0,this.w+10,this.h);
-      this.maskS.graphics.endFill();
-      this.maskS.scaleX = 0;
+        //遮罩动画
+        this.maskS = ObjectPool.getObj('shape');
+        this.maskS.graphics.beginFill('#fff');
+        this.maskS.graphics.drawRect(0,0,this.w+10,this.h);
+        this.maskS.graphics.endFill();
+        this.maskS.scaleX = 0;
 
-      this.dataSp = ObjectPool.getObj('con');
-      this.bgSp = ObjectPool.getObj('con');
-      this.dataSp.mask = this.maskS;
-      let defaultSp = ObjectPool.getObj('con');
+        this.dataSp = ObjectPool.getObj('con');
+        this.bgSp = ObjectPool.getObj('con');
+        this.dataSp.mask = this.maskS;
+        let defaultSp = ObjectPool.getObj('con');
 
-      this.poolArr.push(this.bgSp,this.dataSp,this.maskS,defaultSp);
+        this.poolArr.push(this.bgSp,this.dataSp,this.maskS,defaultSp);
 
-      defaultSp.addChild(yAxis,xAxis,yAxisThree,xAxisThree);
+        defaultSp.addChild(yAxis,xAxis,yAxisThree,xAxisThree);
 
-      this.addChild(defaultSp,this.dataSp,this.bgSp);
+        this.addChild(defaultSp,this.dataSp,this.bgSp);
 
-      this.getAnimTime();
-      this.checkData(data);
-      this.drawXTxt();
-      this.createView();
+        this.getAnimTime();
+        this.checkData(data);
+        this.drawXTxt();
+        this.createView();
 
     }
 
     createView(){
 
         if(this.yMax){
-          //y轴的绘图数据
-          this.yDataArr = [0,20,40,60,80,100];
-          //y轴最大值
-          this.yDataMax = 100;
+            //y轴的绘图数据
+            this.yDataArr = [0,20,40,60,80,100];
+            //y轴最大值
+            this.yDataMax = 100;
         }
         else{
-          //y轴的绘图数据
-          this.yDataArr = Tools.drawY(this.dataMax,0,this.yNum);
-          //y轴最大值
-          this.yDataMax = this.yDataArr[this.yDataArr.length -1];
+            //y轴的绘图数据
+            this.yDataArr = Tools.drawY(this.dataMax,this.dataMin,this.yNum);
+            //y轴最大值
+          // console.log(this.yDataArr,this.dataMax,this.dataMin,this.yNum);
+
+            this.yDataMax = this.yDataArr[this.yDataArr.length -1];
+            this.yDataMin = this.yDataArr[0];
+
+            // console.log(this.dataMax,this.dataMin,this.yDataMax,this.yDataMin,this.yDataArr);
         }
         //y轴间距
         this.ySpace = this.availH/this.yNum;
@@ -112,33 +119,34 @@ class FixedXHistogram extends Base{
 
 
         createjs.Tween.get(this.maskS).to({scaleX:1}, 1000).call(function(){
-          createjs.Tween.removeTweens(this);
+            createjs.Tween.removeTweens(this);
         });
 
     }
 
     getAnimTime(){
 
-      let min = this.xAxis.value[0]|0;
-      let max = this.xAxis.value[this.xAxis.value.length-1]|0;
-      this.minTime = this.getCTime(min);
-      this.maxTime = this.getCTime(max);
-      //console.log(min,max,this.minTime,this.maxTime);
+
+        let min = this.xAxis.value[0]|0;
+        let max = this.xAxis.value[this.xAxis.value.length-1]|0;
+        this.minTime = this.getCTime(min);
+        this.maxTime = this.getCTime(max);
+        // console.log(min,max,this.minTime,this.maxTime);
 
     }
 
     getCTime(h){
-      if(this.TimeData) return 1;
-      let date1 = new Date();
-      let date = new Date();
-      date.setFullYear(date1.getFullYear());
-      date.setMonth(date1.getMonth());
-      date.setDate(date1.getDate());
-      date.setHours(h);
-      date.setMinutes('0');
-      date.setSeconds('0');
-      //console.log(date);
-      return date.getTime();
+        if(!this.TimeData) return 1;
+        let date1 = new Date();
+        let date = new Date();
+        date.setFullYear(date1.getFullYear());
+        date.setMonth(date1.getMonth());
+        date.setDate(date1.getDate());
+        date.setHours(h|0);
+        date.setMinutes('0');
+        date.setSeconds('0');
+        // console.log(date);
+        return date.getTime();
     }
 
     drawYTxt(){
@@ -190,7 +198,7 @@ class FixedXHistogram extends Base{
 
         //画其他折线
         let l = this[objA.id + 'Data'].length;
-        console.log(l);
+        // console.log(l);
         if(!l) return;
 
         let pointArr = [];
@@ -206,74 +214,56 @@ class FixedXHistogram extends Base{
             bl = bl<=0.01?0:bl;
             bl = bl >= 0.99?1:bl;
             let x1 = bl * this.availW;
-            let y1 = this.h - (+obj.value)/this.yDataMax * this.availH;
-            if(!this.TimeData) y1 = this.h - (+obj)/this.yDataMax * this.availH;
+            let totalValue = this.yDataMax-this.yDataMin;
+            // let currentValue = parseFloat(obj.value)>0?parseFloat(obj.value)-this.yDataMin:-obj.value;
+            // console.log(obj,totalValue);
+            let y1 = this.h - (parseFloat(obj.value)>0?parseFloat(obj.value)-this.yDataMin:Math.abs(this.yDataMin-obj.value))/(totalValue) * this.availH;
+            if(!this.TimeData) y1 = this.h - (parseFloat(obj)>0?parseFloat(obj)-this.yDataMin:Math.abs(this.yDataMin-obj))/(totalValue) * this.availH;
             pointArr.push(x1,y1);
 
             ballX = x1;
             ballY = y1;
 
             if(obj.bg==1&&style['lineType'] ==='a') {
-              let txt = this.getTxt(this.getTime(obj.time), style['valueColor'], style['valueSize'], 0, 0, '', style['valueFont']);
-              txt.x = ballX - txt.getMeasuredWidth() / 2;
-              txt.y = ballY - txt.getMeasuredHeight() - 10;
-              this.dataSp.addChild(txt);
+                let txt = this.getTxt(this.getTime(obj.time), style['valueColor'], style['valueSize'], 0, 0, '', style['valueFont']);
+                txt.x = ballX - txt.getMeasuredWidth() / 2;
+                txt.y = ballY - txt.getMeasuredHeight() - 10;
+                this.dataSp.addChild(txt);
             }
             //填充效果
             if (style['lineType'] === 'b') {
-              let copy = Array.prototype.slice.call(pointArr);
-              copy.unshift(pointArr[0], this.h);
-              copy.push(pointArr[pointArr.length - 2], this.h);
-                
-              if(i==l-1) this.dataSp.addChild(this.drawLine(ObjectPool.getObj('shape'), copy, style['lineColor'], 1, true, style['fillColor']));
+                let copy = Array.prototype.slice.call(pointArr);
+                copy.unshift(pointArr[0], this.h);
+                copy.push(pointArr[pointArr.length - 2], this.h);
+
+                if(i==l-1) this.dataSp.addChild(this.drawLine(ObjectPool.getObj('shape'), copy, style['lineColor'], 1, true, style['fillColor']));
 
             }
             //球(圆点)
-          if(style['ballR']){
-            let ball = this.drawCircle(0, 0, style['ballR'], style['ballColor']);
-            ball.x = ballX;
-            ball.y = ballY;
-            this.dataSp.addChild(ball);
-          }
+            if(style['ballR']){
+                let ball = this.drawCircle(0, 0, style['ballR'], style['ballColor']);
+                ball.x = ballX;
+                ball.y = ballY;
+                this.dataSp.addChild(ball);
+            }
             if(style['isTitle']&&i == l-1){
-              //在最后一个点上显示值
-              let txt = this.getTxt(style['titleValue']||obj, style['titleColor'], style['titleSize'], 0, 0, '', style['titleFont']);
-              txt.x = ballX - txt.getMeasuredWidth() / 2;
-              txt.y = ballY - txt.getMeasuredHeight() - 10;
-              this.dataSp.addChild(txt);
+                //在最后一个点上显示值
+                let txt = this.getTxt(style['titleValue']||obj, style['titleColor'], style['titleSize'], 0, 0, '', style['titleFont']);
+                txt.x = ballX - txt.getMeasuredWidth() / 2;
+                txt.y = ballY - txt.getMeasuredHeight() - 10;
+                this.dataSp.addChild(txt);
 
             }
         }
         this.dataSp.addChild(this.drawLine(ObjectPool.getObj('shape'),pointArr,style['lineColor'],1));
-         // if(!objA.s.parent) this.dataSp.addChild(objA.s);
+        // if(!objA.s.parent) this.dataSp.addChild(objA.s);
 
 
     }
 
 
     getTime(t){
-        let date = new Date(t);
-        let dateTime;
-        if (date.getHours() < 10)
-        {
-            if (date.getUTCMinutes() < 10)
-            {
-                dateTime = "0"+date.getHours() + ":0"+date.getMinutes();
-            }else
-            {
-                dateTime = "0"+date.getHours() + ":"+date.getMinutes();
-            }
-        }else
-        {
-            if (date.getUTCMinutes() < 10)
-            {
-                dateTime = date.getHours() +":0"+date.getMinutes();
-            }else
-            {
-                dateTime = date.getHours() +":"+ date.getMinutes();
-            }
-        }
-        return dateTime;
+        return Tools.dateFormat(new Date(t),'hh:mm');
     }
 
     //更新数据
@@ -287,6 +277,9 @@ class FixedXHistogram extends Base{
     checkData(arr){
 
         let Len = arr.length;
+
+        // console.log(arr,Len,this.minTime);
+
         if(!Len||!this.minTime) return;
 
 
@@ -316,65 +309,68 @@ class FixedXHistogram extends Base{
             // console.log(this[obj.id + 'Data']);
             if(!currLen) continue;
 
-          //this[obj.id + 'Data'] = dataArr;
-          //console.log(this.minTime,dataArr[0].time);
-          //下面的1000*60 时  正式版必须要去掉
-          if(this.TimeData){
+            // this[obj.id + 'Data'] = dataArr;
+            //console.log(this.minTime,dataArr[0].time);
+            //下面的1000*60 时  正式版必须要去掉
+            if(this.TimeData){
 
-            this[obj.id + 'Data'] = dataArr.filter(a => {
-              return (a['time']>=this.minTime - 1000 * 60&&a['time']<=this.maxTime);
-            });
+                this[obj.id + 'Data'] = dataArr.filter(a => {
+                    // console.log(a['time'],this.minTime - 1000 * 60,a['time']<=this.maxTime);
+                    return (a['time']>=this.minTime - 1000 * 60&&a['time']<=this.maxTime);
+                });
 
-          }
-          else{
-            //单纯的数据时
-            // this[obj.id + 'Data'] = dataArr.sort((a,b) => {
-            //   return (a|0)-(b|0);
-            // });
-            this[obj.id + 'Data'] = dataArr;
-          }
-
-          this.getMax(this[obj.id + 'Data']);
+            }
+            else{
+                //单纯的数据时
+                // this[obj.id + 'Data'] = dataArr.sort((a,b) => {
+                //   return (a|0)-(b|0);
+                // });
+                this[obj.id + 'Data'] = dataArr;
+            }
+            console.log(this.TimeData,this[obj.id + 'Data']);
+            this.getMax(this[obj.id + 'Data']);
 
         }
     }
 
     //获取数据最大值
     getMax(arr1){
-      // console.log(arr1);
+        console.log(arr1);
         if (!arr1 || !arr1.length) return;
         let arr = Tools.clone(arr1);
 
         let max = 0;
+        let min = 0;
         if(this.TimeData){
-          arr.sort((a,b)=>{return a.value-b.value});
-          max = (+arr[arr.length - 1]['value']);
+            arr.sort((a,b)=>{return a.value-b.value});
+            max = (+arr[arr.length - 1]['value']);
+            min = (+arr[0]['value']);
         }
         else{
 
-          arr.sort((a,b) => {return (a|0)-(b|0);});
-          max = arr.pop();
+            arr.sort((a,b) => {return (a|0)-(b|0);});
+            max = arr.pop();
+            min = arr.shift();
         }
         this.dataMax = this.dataMax>max?this.dataMax:max;
+        this.dataMin = this.dataMin>min?min:this.dataMin;
+
     }
-    
+
 
     reset(){
 
-      this.bgSp.removeAllChildren();
-      this.dataSp.removeAllChildren();
-      createjs.Tween.removeTweens(this.maskS);
-      this.removeAllChildren();
-
-      ObjectPool.returnObj(this.poolArr);
-      this.poolArr = [];
+        this.removeAllChild();
+        createjs.Tween.removeTweens(this.maskS);
+        ObjectPool.returnObj(this.poolArr);
+        this.poolArr = [];
     }
     // this.clear(this);
     //清空
     clear(){
 
-      createjs.Tween.removeTweens(this.maskS);
-      super.clear();
+        createjs.Tween.removeTweens(this.maskS);
+        super.clear();
 
     }
 }

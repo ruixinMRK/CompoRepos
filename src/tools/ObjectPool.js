@@ -74,6 +74,7 @@ class ObjectPool {
           obj.mask = null;
           if(obj instanceof createjs.Container) obj.removeAllChildren();
           if(obj instanceof createjs.Shape) obj.graphics.clear();
+            obj&&obj.parent&&obj.parent.removeChild(obj);
           // console.log('已经回收',key);
         }
       }

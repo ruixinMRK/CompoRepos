@@ -71,12 +71,24 @@ class Timer {
       Timer.ID = window.requestAnimationFrame(Timer.progress)
     }
 
-    static clear(str){
+    static clear(...args){
+
+      if(!args[0]) return;
 
       let v = -1;
       for(let i =0;i<Timer.timerArr.length;i++){
         let obj = Timer.timerArr[i];
-        if(obj.id === str) v = i;
+        if(args.indexOf(obj.id)>-1){
+
+          for(let o in obj){
+            if(obj.hasOwnProperty(o)){
+              delete obj[o];
+            }
+          }
+          Timer.timerArr.splice(v,1);
+          continue;
+        }
+        // if(obj.id === str) v = i;
       }
 
       // if(Array.prototype.findIndex){
@@ -91,15 +103,15 @@ class Timer {
       //   }
       // }
 
-      if(v>-1){
-        let obj = Timer.timerArr[v];
-        for(let o in obj){
-          if(obj.hasOwnProperty(o)){
-            delete obj[o];
-          }
-        }
-        Timer.timerArr.splice(v,1);
-      }
+      // if(v>-1){
+      //   let obj = Timer.timerArr[v];
+      //   for(let o in obj){
+      //     if(obj.hasOwnProperty(o)){
+      //       delete obj[o];
+      //     }
+      //   }
+      //   Timer.timerArr.splice(v,1);
+      // }
       if(Timer.timerArr.length ==0 ){
         Timer.isStart = false;
         window.cancelAnimationFrame(Timer.ID);
@@ -109,6 +121,8 @@ class Timer {
 
     static clearAll(){
       Timer.timerArr.length=0;
+      Timer.isStart = false;
+      window.cancelAnimationFrame(Timer.ID);
     }
 
     static getAnimation(){

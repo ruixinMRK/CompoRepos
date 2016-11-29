@@ -16,10 +16,11 @@ class ChatPie extends Base{
     this.b = 0;
     this.h = 0;
     this.dataList = [];
-    this.colorList = [];
+    this.colorList = ["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"];
     this.nameList = [];
     this.txtColor = '';//饼图上文字颜色
     this.lineColor = '';//饼图上延伸线颜色
+    this.R = 50;//起始位置
 
     //解析样式
     this.setStyle(styleObj);
@@ -39,7 +40,7 @@ class ChatPie extends Base{
 
   init(){
 
-    this._pie = {};
+    this._pie = [];
     this.sSp = ObjectPool.getObj('con');
     this.allSp = ObjectPool.getObj('con');
     this.legSp = ObjectPool.getObj('con');
@@ -49,11 +50,12 @@ class ChatPie extends Base{
 
     this.addChild(this.allSp,this.legSp);
     this.allSp.addChild(this.sSp);
-    this.allSpArr =[];
-    this.poolArr = [this.sSp,this.allSp,this.legSp];
+
+    this.poolArr.push(this.sSp,this.allSp,this.legSp);
     this.angleList = [];
     this.totalData = 0;
-    this.R = -90;
+
+    this.RG = this.R + 360;//结束位置
     this.isLeg = false;
 
   }
@@ -64,6 +66,7 @@ class ChatPie extends Base{
 
   }
 
+  //计算饼块 起始到结尾
   angleCreat(){
 
     var len = this.dataList.length;
@@ -72,13 +75,10 @@ class ChatPie extends Base{
 
     }
     for (var j=0; j < len; j++) {
-      if (j == len - 1) { this.angleList.push([this.R, 270]); }
-      else {
-        var r = Math.floor(this.dataList[j] / this.totalData * 360);
-        var posR = this.R + r;
-        this.angleList.push([this.R,posR]);
-        this.R=posR;
-      }
+      var r = Math.floor(this.dataList[j] / this.totalData * 360);
+      var posR = this.R + r;
+      this.angleList.push([this.R,j==len-1?this.RG:posR]);
+      this.R=posR;
     }
 
   }
@@ -92,133 +92,108 @@ class ChatPie extends Base{
     var step = 1;
     let itemSp =ObjectPool.getObj('con');
 
-
-    //console.log(_isT);
     for (var j=0; j < len; j++) {
 
-
-      this.txtColor = "#fff";
-      this.lineColor = "#fff";
-
-      //console.log(angleList[j][0] + "---"+angleList[j][1]);
-      //画饼图线
+      //饼块中间值
       var middleP = (this.angleList[j][0] + this.angleList[j][1])>>1;
-      if(middleP < -88.5) middleP = -88.5;
+      // if(middleP < -88.5) middleP = -88.5;
       var X = this.getRPoint(0,0, this.a,this.b, middleP).x;
       var Y = this.getRPoint(0,0, this.a,this.b, middleP).y;
 
-      let lineS = ObjectPool.getObj('shape');
-      this.poolArr.push(lineS);
-      lineS.graphics.clear();
-      lineS.graphics.beginStroke(this.lineColor);
-      lineS.graphics.setStrokeStyle("2");
-
       let drakColor = Tools.getDarkColor(this.colorList[j],0.2);//深色
       let prelabel = ObjectPool.getObj('txt');//名字
-      let valueTxt = ObjectPool.getObj('txt');//数值
 
-      this.poolArr.push(prelabel,valueTxt);
+
+      this.poolArr.push(prelabel);
 
       var str = '';
-      if(this.style.hasOwnProperty('leg')){
-
-        str = ((this.dataList[j]/total) * 100).toFixed(2) + "%";
-
-
-        let s = this.drawRect(this.style.leg.w||5,this.style.leg.w||5,drakColor);
-        s.y = j * 30;
-
-        let fs = this.style.leg.size|0;
-        let legStr = this.nameList[j] + "\t\t" + this.dataList[j];
-        let txtTitle = this.getTxt(legStr,this.style.leg.color,fs,30,s.y - fs/4,this.style.leg.font);
-        this.legSp.addChild(s,txtTitle);
-
-        this.sSp.addChild(prelabel);
-        this.allSpArr.push(prelabel);
-        this.isLeg = true;
-      }
-      else{
-        str = this.nameList[j];
-
-        let valueStr = ((this.dataList[j]/total) * 100).toFixed(2) + "%";
-        valueTxt.color = this.txtColor;
-        valueTxt.text = valueStr;
-        valueTxt.font = this.txtSize + 'px ' + this.txtFont;
-
-        itemSp.addChild(lineS,prelabel,valueTxt);
-        this.allSpArr.push(lineS,prelabel,valueTxt);
-        itemSp.alpha = 0;
-      }
-
-      prelabel.color = this.txtColor;
-      prelabel.text = str;
+      prelabel.color = this.txtColor||"#fff";
       prelabel.font = this.txtSize + 'px ' + this.txtFont;
       prelabel.name = 'pre_l';
 
-      // console.log(middleP);
-      lineS.graphics.moveTo(X,Y);
+      //水平线为0时的  弧度一半的角度值
+      let resetMidPon = middleP%360>0?(middleP%360):(middleP%360 + 360);
+      let resetMidCos = Math.cos(resetMidPon * Math.PI /180);
+      let resetMidSin = Math.sin(resetMidPon * Math.PI /180);
+      // console.log(resetMidPon,resetMidCos,resetMidSin);
 
-      var txtW = prelabel.getMeasuredWidth();
-      var txtH = prelabel.getMeasuredHeight();
-      let f = 1;
-      let tempM = middleP<0?middleP+360:middleP;
-      let tempY = 0;
-      if(0<=tempM&&tempM<=90){
-        f = 0;
-      }
-      if(90<tempM&&tempM<=180) {
-        f = -1;
-        tempY = txtH;
-      }
-      if(180<tempM&&tempM<=270) f = -1;
-      if(270<tempM&&tempM<360) {
-        f = 0;
-        tempY = -txtH;
-      }
+      var txtW = 0;
 
-      //console.log(f,tempM,Math.cos(middleP));
+      //判断是否有图例,处理不同的情况
+      if(this.style.hasOwnProperty('leg')){
 
-      if(this.isLeg){
-        prelabel.x = X + f * txtW;
-        prelabel.y = Y + f * txtH + tempY;
-        if ((middleP > 0 && middleP <= 90)||(middleP > 90 && middleP < 180)) prelabel.y = Y + f * txtH + tempY + this.h/2;
+        str = ((this.dataList[j]/total) * 100).toFixed(2) + "%";
+        prelabel.text = str;
+
+        txtW = prelabel.getMeasuredWidth();
+        let w = this.style.leg.w||5;
+
+        let s = this.drawRect(w,this.style.leg.w||5,drakColor);
+        s.y = j * 30;
+
+        //图例
+        let legStr = this.nameList[j] + "\t\t" + this.dataList[j];
+        let txtTitle = this.getTxt(legStr,this.style.leg.color,this.style.leg.size|0,30,s.y- w/2,this.style.leg.font);
+        this.legSp.addChild(s,txtTitle);
+
+        this.sSp.addChild(prelabel);
+
+        let txtH = prelabel.getMeasuredHeight();
+        prelabel.x = X + (resetMidCos<0?-txtW:5);
+        prelabel.y = Y + resetMidSin * txtH + (resetMidSin>0?3:-2);
 
       }
       else{
+        str = this.nameList[j];
+        prelabel.text = str;
 
+        txtW = prelabel.getMeasuredWidth();
+        //线条
+        let lineS = ObjectPool.getObj('shape');
+        lineS.graphics.beginStroke(this.lineColor||"#fff");
+        lineS.graphics.setStrokeStyle("1");
+        this.poolArr.push(lineS);
+
+        lineS.graphics.moveTo(X,Y);
+
+        //数据百分比
+        let valueStr = ((this.dataList[j]/total) * 100).toFixed(2) + "%";
+        let valueTxt = ObjectPool.getObj('txt');//数值
+        valueTxt.color = this.txtColor||"#fff";
+        valueTxt.text = valueStr;
+        valueTxt.font = this.txtSize + 'px ' + this.txtFont;
+        this.poolArr.push(valueTxt);
+
+        itemSp.addChild(lineS,prelabel,valueTxt);
+        itemSp.alpha = 0;
+
+        //计算线上文字数据的位置和画线的算法
         let valueW = valueTxt.getMeasuredWidth();
         let valueH = valueTxt.getMeasuredHeight();
 
-        let keyObj = {};
+        let space = this.h * 1.9;
+        lineS.graphics.lineTo(X + resetMidCos * space,Y + resetMidSin * space);
+        lineS.graphics.lineTo(X + resetMidCos * space + (resetMidCos>0?15:-15),Y + resetMidSin * space);
 
-        //分角度
-        if (middleP >0 && middleP <= 90) keyObj = {p1X:X+20,p1Y:Y+40,p2X:X+90,p2Y:Y+40,pX:X + 85 - txtW,pY:Y + 35 - txtH,vX:X + 85 - valueW,vY:Y + 40};
-        else if (middleP > 90 && middleP <= 180) keyObj = {p1X:X-20,p1Y:Y+40,p2X:X-90,p2Y:Y+40,pX:X - 90,pY:Y + 35 - txtH,vX:X - 90,vY:Y + 40};
-        else if(middleP >180 && middleP < 200) keyObj = {p1X:X-20,p1Y:Y-40,p2X:X-90,p2Y:Y-40,pX:X - 90,pY:Y - 35 - txtH,vX:X - 90,vY:Y + 40};
-        else if(middleP >= 200 && middleP < 230) keyObj = {p1X:X - 60,p1Y:Y - 10,p2X:X-130,p2Y:Y-10,pX:X - 130,pY:Y - 15 - txtH,vX:X - 130,vY:Y - 10};
-        else if(middleP >= 230 && middleP < 245) keyObj = {p1X:X - 50,p1Y:Y,p2X:X-120,p2Y:Y,pX:X - 120,pY:Y - txtH - 5,vX:X - 120,vY:Y};
-        else if(middleP >= 245 && middleP < 255) keyObj = {p1X:X - 40,p1Y:Y -25,p2X:X-110,p2Y:Y-25,pX:X - 110,pY:Y - txtH - 30,vX:X - 110,vY:Y-25};
-        else if(middleP >= 255 && middleP <= 268) keyObj = {p1X:X - 15,p1Y:Y -60,p2X:X-85,p2Y:Y-60,pX:X - 85,pY:Y - txtH - 30,vX:X - 85,vY:Y-60};
-        else if(middleP > 268 && middleP <= 270) keyObj = {p1X:X + 15,p1Y:Y-80,p2X:X+80,p2Y:Y-60,pX:X - 85,pY:Y - txtH - 85,vX:X + 80 - valueW,vY:Y-80};
-        else if (middleP >= -90 && middleP < 0) keyObj = {p1X:X + 20,p1Y:Y-34,p2X:X+90,p2Y:Y-34,pX:X + 85 - txtW,pY:Y - 40 - txtH,vX:X + 85 - valueW,vY:Y-34};
-        else if (middleP == 0) keyObj = {p1X:X + 20,p1Y:Y-40,p2X:X+90,p2Y:Y-40,pX:X + 85 - txtW,pY:Y - 45 - txtH,vX:X + 85 - valueW,vY:Y-40};
+        prelabel.text += ':';
+        prelabel.x = X + resetMidCos * space + (resetMidCos>0?15 + 5:-20 - valueW - txtW);
+        prelabel.y = Y + resetMidSin * space - valueH/2;
+        valueTxt.x = prelabel.x + (resetMidCos>0?txtW + 5:txtW+5);
+        valueTxt.y = Y + resetMidSin * space - valueH/2;
 
-        lineS.graphics.lineTo(keyObj.p1X,keyObj.p1Y);
-        lineS.graphics.lineTo(keyObj.p2X,keyObj.p2Y);
-        prelabel.x = keyObj.pX;
-        prelabel.y = keyObj.pY;
-        valueTxt.x = keyObj.vX;
-        valueTxt.y = keyObj.vY;
       }
-
 
       //画饼图具体内容
       var s = ObjectPool.getObj('shape');
       this.poolArr.push(s);
-      s.graphics.clear();
-      this._pie["shape"+j]=s;
+
+      let obj = {};
+      obj.target = s;
+      obj.mid = resetMidPon;
+      this._pie[j]=obj;
+
       var g = s.graphics;
-  //				if (_line) { g.setStrokeStyle(1); }
+
       //先画底
       //内弧
       g.beginFill(this.colorList[j]);
@@ -282,19 +257,17 @@ class ChatPie extends Base{
 
 
       this.sSp.addChild(s);
-      this.allSpArr.push(s);
       this.allSp.addChild(itemSp);
+
       if(this.open) {
         this.tweenArr.push(s,prelabel,itemSp);
-        this.setOut(s,this.style.hasOwnProperty('leg')?prelabel:itemSp,this.getRPoint(0, 0, 15, 15, middleP).x, this.getRPoint(0, 0, 15, 15, middleP).y);
+        let space = this.h/4 * 2.5;
+        this.setOut(s,this.style.hasOwnProperty('leg')?prelabel:itemSp,this.getRPoint(0, 0, space, space, middleP).x, this.getRPoint(0, 0, space, space, middleP).y);
       }
 
 
     }
 
-
-    // this.allSp.addChild(this.sSp);
-    // this.allSpArr.push(this.sSp);
     this.pieDepth();
 
 
@@ -334,39 +307,47 @@ class ChatPie extends Base{
 
   pieDepth(){
 
-    var depthList=[];
-    var indexList = [];//取得原来位置的索引
-    var temp = [];
+    this.right = [];
+    this.left = [];
 
-    var len = this.angleList.length;
-    for (var j=0; j < len; j++) {
-      var minJ=this.angleList[j][0];
-      var maxJ=this.angleList[j][1];
+    let n = 0;
+    let N = this._pie.length;
 
+    let rt,rb,lb,lt;
+    rt = [];
+    rb = [];
+    lb = [];
+    lt = [];
 
-      switch (true) {
-        case minJ >= -90 && minJ <= 90 && maxJ<=90 :
-          depthList[j]=minJ;
-          break;
-        default :
-          depthList[j]=1000-minJ;
-      }
+    for(;n<N;n++){
+      let item = this._pie[n];
+      if(item.mid>0&&item.mid<=90) rb.push(item);
+      else if(item.mid>90&&item.mid<=180) lb.push(item);
+      else if(item.mid>180&&item.mid<=270) lt.push(item);
+      else if(item.mid>270&&item.mid<=360) rt.push(item);
     }
 
-    temp = depthList.slice();
-    depthList.sort(function s(a,b){return a - b});
+    rb.sort((a,b)=>{return a.mid - b.mid});
+    lb.sort((a,b)=>{return a.mid - b.mid});
+    lt.sort((a,b)=>{return a.mid - b.mid});
+    rt.sort((a,b)=>{return a.mid - b.mid});
 
-    depthList.forEach(function getIndex(a){
+    this.right.push(...rt,...rb);
+    this.left.push(...lb,...lt);
 
-      if(temp.indexOf(a)>-1){
-        indexList.push(temp.indexOf(a));
-      }
+    let i = 0;
+    let L = this.left.length;
+    for(;i<L;i++){
+      let t  = this.left[i];
+      t?(this.sSp.removeChild(t.target),this.sSp.addChildAt(t.target,0)):'';
+    }
 
-    })
+    let j = 0;
+    let M = this.right.length;
 
-    for (var i=0; i<len; i++) {
-
-      this.sSp.setChildIndex(this._pie["shape"+indexList[i]],i);
+    for(;j<M;j++){
+      let t  = this.right[j];
+      t?(this.sSp.removeChild(t.target),this.sSp.addChild(t.target)):'';
     }
 
   }
@@ -381,7 +362,7 @@ class ChatPie extends Base{
   reset(){
 
     ObjectPool.returnObj(this.poolArr);
-    if(this.allSpArr&&this.angleList) this.allSpArr.length = this.angleList.length = 0;
+    if(this.angleList) this.angleList.length = 0;
     else return;
     this.removeAllChild();
     let l = this.tweenArr.length;

@@ -131,13 +131,13 @@ window.onload = function(){
     //     this.currentA.push((300*Math.random())|0);
     // }
     //
-    // this.currentB = [];
-    //
+    // this.currentB = [0,40,200,90];
+
     // for(var i = 0;i<5;i++){
     //
     //     this.currentB.push((300*Math.random())|0);
     // }
-    //
+
     // let style = {
     //     w:540,
     //     h:265,
@@ -244,21 +244,46 @@ window.onload = function(){
         b:50,
         h:20,
         open:true,
-        colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"],
-        dataList:[50,50,50,150],
-        nameList:['w','h','ww','ee'],
+        R:180,
+        colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd"],
+        dataList:[10,9,8,7,6,5,4,3,2,1],
+        nameList:['w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee'],
         txtColor:'#fff',
+        leg:{w:10},
         lineColor:'#fff',
-        txtSize:16,
+        txtSize:10,
         txtFont:'微软雅黑',
     }
 
-    this.pie1 = new ChatPie(pieStyle);
-    this.pie1.createView();
-    this.pie1.x = 200;
-    this.pie1.y = 210;
-    stage.addChild(this.pie1);
-    Timer.add(()=>{this.pie1.updata(['1','2'],[100,200])},2000,1);
+    // this.pie1 = new ChatPie(pieStyle);
+    // this.pie1.createView();
+    // this.pie1.x = 200;
+    // this.pie1.y = 210;
+    // stage.addChild(this.pie1);
+
+
+    let pieStyle1 = {
+        a:90,
+        b:50,
+        h:20,
+        open:true,
+        R:180,
+        colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd"],
+        dataList:[50,20,20,20,20,20,20,20,20,20,20,20,20,20,20],
+        nameList:['w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee'],
+        txtColor:'#fff',
+        lineColor:'#fff',
+        txtSize:10,
+        txtFont:'微软雅黑',
+    }
+
+    // this.pie2 = new ChatPie(pieStyle1);
+    // this.pie2.createView();
+    // this.pie2.x = 700;
+    // this.pie2.y = 200;
+    // stage.addChild(this.pie2);
+    //
+    // Timer.add(()=>{this.pie1.updata(['1','2'],[100,200])},2000,1);
 
     // this.pie1.clear();
 
@@ -300,38 +325,38 @@ window.onload = function(){
     // this.bar.y = 100;
 
 
-    // let jdpp = {
-    //
-    //     w:360,
-    //     h:120,
-    //     maxAuto:true,
-    //     pageNum:0,
-    //     oneNum:2,
-    //     dataVis:true,
-    //     yVis:false,
-    //     sort:true,
-    //     dataArr:{
-    //         value:[{name:'NOGARA',value:20},{name:'INDIOS',value:40},{name:'SIMPLE LIFE',value:60}],
-    //         color:'rgb(109,120,149)',
-    //         font:'Microsoft YaHei',
-    //         txtColor:'#fff',
-    //         size:20,
-    //         zw:18,
-    //         zr:0
-    //     },
-    //     yArr:{
-    //         color:'#ccc',
-    //         font:'Microsoft YaHei',
-    //         size:16
-    //     }
-    // };
-    //
-    //
-    // this.horHis = new HorHistogram(jdpp);
-    // this.horHis.y = 100;
-    // stage.addChild(this.horHis);
+    let jdpp = {
 
-    // Timer.add(()=>{this.horHis.updata([{name:'NOGARA',value:20}])},2000,1);
+        w:360,
+        h:120,
+        maxAuto:true,
+        oneNum:2,
+        dataVis:true,
+        yVis:false,
+        sort:true,
+        turnTime:5000,
+        dataArr:{
+            value:[{name:'NOGARA',value:20},{name:'INDIOS',value:40},{name:'SIMPLE LIFE',value:60}],
+            color:'rgb(109,120,149)',
+            font:'Microsoft YaHei',
+            txtColor:'#fff',
+            size:20,
+            zw:18,
+            zr:0
+        },
+        yArr:{
+            color:'#ccc',
+            font:'Microsoft YaHei',
+            size:16
+        }
+    };
+
+
+    this.horHis = new HorHistogram(jdpp);
+    this.horHis.y = 100;
+    stage.addChild(this.horHis);
+
+    Timer.add(()=>{this.horHis.updata([{name:'NOGARA',value:20}])},2000,1);
     // this.horHis.updata([{'1Hao ':100},{'2好':100}]);
     // this.horHis.clear();
     // Timer.add(()=>{this.horHis.clear();},4000,1);

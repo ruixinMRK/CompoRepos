@@ -126,7 +126,7 @@ class Histogram extends Base{
 
             let dis = this.xSpace * i;
             let t = this.minTime + i * this.xTime * 1000 * 60;
-            let dateTime = this.getTime(t);
+            let dateTime = Tools.dateFormat(t,'hh:mm');
 
             if(xTxtLen){
                 this.xTxtArr[i].text = dateTime;
@@ -273,31 +273,6 @@ class Histogram extends Base{
         }
 
 
-    }
-
-    getTime(t){
-        let date = new Date(t);
-        let dateTime;
-        if (date.getHours() < 10)
-        {
-            if (date.getUTCMinutes() < 10)
-            {
-                dateTime = "0"+date.getHours() + ":0"+date.getMinutes();
-            }else
-            {
-                dateTime = "0"+date.getHours() + ":"+date.getMinutes();
-            }
-        }else
-        {
-            if (date.getUTCMinutes() < 10)
-            {
-                dateTime = date.getHours() +":0"+date.getMinutes();
-            }else
-            {
-                dateTime = date.getHours() +":"+ date.getMinutes();
-            }
-        }
-        return dateTime;
     }
 
     //更新数据

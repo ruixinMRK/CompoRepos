@@ -2,6 +2,7 @@
 import Base from './Base.js';
 import Tools from '../../tools/Tools';
 import ObjectPool from '../../tools/ObjectPool';
+import Timer from '../../tools/Timer';
 
 class HorHistogram extends Base{
 
@@ -10,7 +11,6 @@ class HorHistogram extends Base{
 
     this.w = 400;
     this.h = 300;
-    // this.pageNum = 0;//是否分页显示
     this.oneNum = 0;//每页显示个数(限制每页的显示个数，由外界传参,如果不传按顺序排下)
     this.dataVis = false;
     this.sort = false;
@@ -21,47 +21,75 @@ class HorHistogram extends Base{
 
     //存储动画显示对象
     this.tweenArr = [];
+    // this.pageNum = 1;//页数
 
-    if(this.oneNum!=0) this.ySpace = this.h/this.dataArr.value.length;
-    else this.ySpace = this.h/this.oneNum;
-
+    if(this.oneNum) this.ySpace = this.h/this.oneNum;
+    else this.ySpace = this.h/this.dataArr.value.length;
 
     //分别存储数据和y轴
     this.yData = [];
-    this.data = [];
+    this.grapData = [];
 
+    //算出总页数
 
-    this.parseData(this.dataArr.value);
+    this.turnTimer = '';
+    this.allData = this.dataArr.value;
+    this.resetPageProp();
+    this.totalNum>1?this.turnTimer = Timer.add(this.turnPage,this.turnTime||5000,0,true):this.updata(this.allData);
 
-    this.init();
+  }
+
+  turnPage = a => {
+
+    ++this.currentId>this.totalNum-1?this.currentId=0:'';
+    this.updata();
+
+  }
+
+  //重置柱子属性
+  resetPageProp = a=>{
+
+    this.currentId = -1;
+    this.totalNum =  this.oneNum!=0?Math.ceil(this.allData.length/this.oneNum):1;
+
   }
 
   updata(arr){
 
-    // console.log(this.yTxtSp.numChildren);
+    console.log(arr,this.totalNum);
+
+    //如果是外部传参,且页数大于1时,将数据隐藏
+    if(arr&&this.totalNum>1){
+      this.allData = arr;
+      this.resetPageProp();
+      this.totalNum==1?(this.updata(this.allData),Timer.clear(this.turnTimer)):'';
+      return;
+    }
+
     this.reset();
-
-    this.parseData(arr);
-
+    //截取数据
+    console.log(this.currentId);;
+    this.parseData(this.totalNum===1?arr:(Tools.clone(this.allData).splice(this.currentId*this.oneNum,this.currentId*(this.oneNum+1)>this.allData.length-1?this.allData.length-this.currentId*this.oneNum:this.oneNum)));
     this.init();
+
 
   }
 
   parseData(arr){
 
-    let arr1 = arr;
+    console.log(arr);
     //数组排序
     if(this.sort) {
-      arr1.sort((a,b)=>{
+      arr.sort((a,b)=>{
         return b['value'] - a['value']
       })
     }
 
-    arr1.forEach(obj=>{
+    arr.forEach(obj=>{
 
       for(var a in obj){
         if(a == 'name') this.yData.push(obj[a]);
-        if(a == 'value') this.data.push(obj[a]);
+        if(a == 'value') this.grapData.push(obj[a]);
       }
 
     })
@@ -73,10 +101,13 @@ class HorHistogram extends Base{
 
     this.drawYTxt(this.yData);
 
-    //console.log(this.data);
-    let dataAC = this.data.slice();
+    //console.log(this.grapData);
+    let dataAC = this.grapData.slice();
     dataAC.sort((a,b)=>{return a - b});
-    this.dataMax = dataAC[dataAC.length-1];
+
+    this.dataMax = 1;
+    dataAC.length&&(dataAC[dataAC.length-1]>0)&&(this.dataMax = dataAC[dataAC.length-1]);
+
 
       //x轴的绘图数据
     this.xDataArr = Tools.drawY(this.dataMax,0,5);
@@ -94,7 +125,7 @@ class HorHistogram extends Base{
 
     if(this.xArr) this.drawXTxt(this.xDataArr);
 
-    this.drawPost(this.data);
+    this.drawPost(this.grapData);
 
   }
 
@@ -209,7 +240,7 @@ class HorHistogram extends Base{
 
     ObjectPool.returnObj(this.poolArr);
 
-    this.poolArr.length = this.tweenArr.length = this.yData.length = this.data.length = 0;
+    this.poolArr.length = this.tweenArr.length = this.yData.length = this.grapData.length = 0;
 
   }
 

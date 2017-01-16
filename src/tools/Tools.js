@@ -777,44 +777,44 @@ class Tools{
     return n;
   }
   //比较两个对象是否相等
-  static equalObj(objA, objB) {
-    if (typeof arguments[0] != typeof arguments[1])
+  static equalObj(...args) {
+    if (typeof args[0] != typeof args[1])
       return false;
 
     //数组
-    if (arguments[0] instanceof Array)
+    if (args[0] instanceof Array)
     {
-      if (arguments[0].length != arguments[1].length)
+      if (args[0].length != args[1].length)
         return false;
 
       let allElementsEqual = true;
-      for (let i = 0; i < arguments[0].length; ++i)
+      for (let i = 0; i < args[0].length; ++i)
       {
-        if (typeof arguments[0][i] != typeof arguments[1][i])
+        if (typeof args[0][i] != typeof args[1][i])
           return false;
 
-        if (typeof arguments[0][i] == 'number' && typeof arguments[1][i] == 'number')
-          allElementsEqual = (arguments[0][i] == arguments[1][i]);
+        if (typeof args[0][i] == 'number' && typeof args[1][i] == 'number')
+          allElementsEqual = (args[0][i] == args[1][i]);
         else
-          allElementsEqual = arguments.callee(arguments[0][i], arguments[1][i]);            //递归判断对象是否相等
+          allElementsEqual = args.callee(args[0][i], args[1][i]);            //递归判断对象是否相等
       }
       return allElementsEqual;
     }
 
     //对象
-    if (arguments[0] instanceof Object && arguments[1] instanceof Object)
+    if (args[0] instanceof Object && args[1] instanceof Object)
     {
       let result = true;
       let attributeLengthA = 0, attributeLengthB = 0;
-      for (let o in arguments[0])
+      for (let o in args[0])
       {
         //判断两个对象的同名属性是否相同（数字或字符串）
-        if (typeof arguments[0][o] == 'number' || typeof arguments[0][o] == 'string')
-          result = eval("arguments[0]['" + o + "'] == arguments[1]['" + o + "']");
+        if (typeof args[0][o] == 'number' || typeof args[0][o] == 'string')
+          result = args[0][o] === args[1][o];
         else {
           //如果对象的属性也是对象，则递归判断两个对象的同名属性
-          //if (!arguments.callee(arguments[0][o], arguments[1][o]))
-          if (!arguments.callee(eval("arguments[0]['" + o + "']"), eval("arguments[1]['" + o + "']")))
+          //if (!args.callee(args[0][o], args[1][o]))
+          if (Tools.equalObj(args[0][o],args[1][o]))
           {
             result = false;
             return result;
@@ -823,7 +823,7 @@ class Tools{
         ++attributeLengthA;
       }
 
-      for (let o in arguments[1]) {
+      for (let o in args[1]) {
         ++attributeLengthB;
       }
       //如果两个对象的属性数目不等，则两个对象也不等
@@ -831,7 +831,7 @@ class Tools{
         result = false;
       return result;
     }
-    return arguments[0] == arguments[1];
+    return args[0] == args[1];
   }
   //删除左后空格
   static trim(str) {
@@ -931,7 +931,7 @@ class Tools{
 
   //操作cookie
   static cookie(key,value,time){
-    let l = arguments.length;
+    let l = args.length;
 
     let getCookie = function(a){
       let arr,reg=new RegExp("(^| )"+a+"=([^;]*)(;|$)");

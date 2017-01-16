@@ -277,6 +277,7 @@ class Histogram extends Base{
 
     //更新数据
     updata(arr){
+        this.dataMax = 0;//修复
         this.checkData(arr);
         if(!this.currentTime) return;
         this.init();

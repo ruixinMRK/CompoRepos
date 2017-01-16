@@ -56,7 +56,6 @@ class ChatPie extends Base{
     this.totalData = 0;
 
     this.RG = this.R + 360;//结束位置
-    this.isLeg = false;
 
   }
   createView(){
@@ -96,7 +95,7 @@ class ChatPie extends Base{
 
       //饼块中间值
       var middleP = (this.angleList[j][0] + this.angleList[j][1])>>1;
-      // if(middleP < -88.5) middleP = -88.5;
+
       var X = this.getRPoint(0,0, this.a,this.b, middleP).x;
       var Y = this.getRPoint(0,0, this.a,this.b, middleP).y;
 
@@ -111,10 +110,12 @@ class ChatPie extends Base{
       prelabel.font = this.txtSize + 'px ' + this.txtFont;
       prelabel.name = 'pre_l';
 
-      //水平线为0时的  弧度一半的角度值
+      //水平线为0时的,作为基准点
       let resetMidPon = middleP%360>0?(middleP%360):(middleP%360 + 360);
+      let resetStartPon = this.angleList[j][0]%360>0?(this.angleList[j][0]%360):(this.angleList[j][0]%360 + 360);
       let resetMidCos = Math.cos(resetMidPon * Math.PI /180);
       let resetMidSin = Math.sin(resetMidPon * Math.PI /180);
+
       // console.log(resetMidPon,resetMidCos,resetMidSin);
 
       var txtW = 0;
@@ -190,6 +191,7 @@ class ChatPie extends Base{
       let obj = {};
       obj.target = s;
       obj.mid = resetMidPon;
+      obj.start = resetStartPon;
       this._pie[j]=obj;
 
       var g = s.graphics;
@@ -294,8 +296,6 @@ class ChatPie extends Base{
       });
     }
     else{
-      posX = mc1.x;
-      posY = mc1.y;
       createjs.Tween.get(mc1).wait(900).to({alpha:1}, 800).call(function(){
         createjs.Tween.removeTweens(this);
       });
@@ -322,22 +322,26 @@ class ChatPie extends Base{
     for(;n<N;n++){
       let item = this._pie[n];
       if(item.mid>0&&item.mid<=90) rb.push(item);
-      else if(item.mid>90&&item.mid<=180) lb.push(item);
+      else if(item.mid>90&&item.mid<=180){
+        item.start<=90?rb.push(item):lb.push(item);
+      }
       else if(item.mid>180&&item.mid<=270) lt.push(item);
-      else if(item.mid>270&&item.mid<=360) rt.push(item);
+      else if(item.mid>270&&item.mid<=360){
+        item.start<=270?lt.push(item):rt.push(item);
+      }
     }
 
-    rb.sort((a,b)=>{return a.mid - b.mid});
-    lb.sort((a,b)=>{return a.mid - b.mid});
-    lt.sort((a,b)=>{return a.mid - b.mid});
-    rt.sort((a,b)=>{return a.mid - b.mid});
+    rb.sort(this.sortArr);
+    lb.sort(this.sortArr);
+    lt.sort(this.sortArr);
+    rt.sort(this.sortArr);
 
     this.right.push(...rt,...rb);
     this.left.push(...lb,...lt);
 
-    let i = 0;
-    let L = this.left.length;
-    for(;i<L;i++){
+    // let i = 0;
+    // let L = this.left.length;
+    for(let i=0,L =this.left.length;i<L;i++){
       let t  = this.left[i];
       t?(this.sSp.removeChild(t.target),this.sSp.addChildAt(t.target,0)):'';
     }
@@ -352,6 +356,9 @@ class ChatPie extends Base{
 
   }
 
+  sortArr = (a,b)=>{
+    return a.mid - b.mid;
+  }
 
   getRPoint(x0,y0,a,b,r) {
     r=r * Math.PI / 180;
@@ -372,6 +379,13 @@ class ChatPie extends Base{
       createjs.Tween.removeTweens(this.tweenArr[i]);
     }
 
+    for(let i=0;i<this._pie.length;i++){
+      let obj = this._pie[i];
+      for(let str in obj){
+        delete obj[str];
+      }
+    }
+    this._pie = [];
   }
 
   //清除

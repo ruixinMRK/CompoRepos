@@ -23,7 +23,7 @@ class FixedXHistogram extends Base{
         this.yDataArr = [];
         this.xTxtArr = [];
         this.yNum = 5;
-
+        this.mouseEvent = true;
         //解析样式
         this.setStyle(styleObj);
 
@@ -45,17 +45,30 @@ class FixedXHistogram extends Base{
         //判断是单独的数据还是数据是对象包含time
         this.TimeData = true;
         this.TimeData = this.typeFixed === 'C'?false:true;
-
+        this.tipsHash = [];//存储线图tips的映射
+        this.wTips = 0;//tips的宽度
         this.init(styleObj.lineArr);
 
+        styleObj.lineArr.forEach(a=>{
 
+            this.tipsHash.push({id:a.id,name:a.name});
+
+        })
+
+
+
+        // this.addEventListener('click',this.overPannel);
     }
 
     init(data){
 
-        // console.log('updata');
         //画x轴,y轴
         let yAxis = this.drawLine(ObjectPool.getObj('shape'),[0,0,0,this.h],this.yAxis['lineColor'],this.yAxis['thickness']);
+
+
+        this.yEventAxis = this.drawLine(ObjectPool.getObj('shape'),[0,0,0,this.h],this.yAxis['lineColor'],0.5);
+
+
         let xAxis = this.drawLine(ObjectPool.getObj('shape'),[0,this.h,this.w,this.h],this.xAxis['lineColor'],this.xAxis['thickness']);
         //画轴三角
         let yAxisThree = this.drawLine(ObjectPool.getObj('shape'),[-5,0,5,0,0,-12],'rgba(0,0,0,0)',1,true,'#ccc');
@@ -72,18 +85,76 @@ class FixedXHistogram extends Base{
         this.bgSp = ObjectPool.getObj('con');
         this.dataSp.mask = this.maskS;
         let defaultSp = ObjectPool.getObj('con');
+        this.tipsCon = ObjectPool.getObj('con');
+        this.tipsCon.alpha = 0;
 
-        this.poolArr.push(this.bgSp,this.dataSp,this.maskS,defaultSp);
 
-        defaultSp.addChild(yAxis,xAxis,yAxisThree,xAxisThree);
+        this.tipsHash.reduce((prev,curr,index)=>{
+            // console.log(prev,curr.name,'-----gggg');
 
-        this.addChild(defaultSp,this.dataSp,this.bgSp);
+            let txt = this.getTxt(curr.name,'#fff',16,prev.x,prev.y);
+            let txtVlaue = this.getTxt(data[0]['value'][0],'#fff',16,prev.x + txt.getMeasuredWidth() + 5,prev.y);
+            txtVlaue.name = curr.id;
+            this.tipsCon.addChild(txt,txtVlaue);
+
+            let w = txtVlaue.x+txtVlaue.getMeasuredWidth()+10;
+            let h = txt.y + txt.getMeasuredHeight() + 15;
+
+            if(index == this.tipsHash.length-1){
+                this.tips = this.drawRect(w>prev.w?w:prev.w,h,'rgba(40,40,40,0.6)',10,10,10,10);
+                this.tips.mouseEnabled = false;
+                this.tipsCon.addChildAt(this.tips,0);
+                this.wTips = w>prev.w?w:prev.w;
+            }
+            return {x:prev.x,y:txt.y + txt.getMeasuredHeight() + 15,w:w,h:h};
+
+        },{x:5,y:10,w:0,h:0});
+
+        this.poolArr.push(this.tipsCon,this.bgSp,this.dataSp,this.maskS,defaultSp);
+
+        defaultSp.addChild(this.tipsCon,this.yEventAxis,yAxis,xAxis,yAxisThree,xAxisThree);
+
+        //放一个背景作为接受事件
+
+        this.addChild(this.dataSp,this.bgSp,defaultSp);
+
+        if(this.typeFixed){
+            this.addEventListener('mouseover',this.overPannel);
+            this.addEventListener('rollout',this.outPannel);
+        }
 
         this.getAnimTime();
         this.checkData(data);
         this.drawXTxt();
         this.createView();
 
+    }
+
+    overPannel = e =>{
+
+        // console.log(e.stageX - this.x,(e.stageX-this.x)/this.xSpace);
+
+        this.tipsCon.alpha?'':this.tipsCon.alpha = 1;
+        let num = Math.ceil((e.stageX-this.x)/this.xSpace);
+        this.yEventAxis.x = num * this.xSpace;
+        let inLeft = num > this.xCounts/2?false:true;
+
+        this.dataObjArr.forEach(item => {
+            this.tipsCon.getChildByName(item.id).text = this[item.id + 'Data'][num];
+        });
+
+
+        createjs.Tween.removeTweens(this.tipsCon);
+        createjs.Tween.get(this.tipsCon).to({x:inLeft?this.yEventAxis.x + 10:this.yEventAxis.x - 10 - this.wTips,y:this.h/2,y:e.stageY-this.y}, 200,Ease.linear).call(function(){
+            createjs.Tween.removeTweens(this);
+        });
+
+    }
+
+    outPannel = e =>{
+        this.yEventAxis.x = 0;
+        this.tipsCon.alpha = 0;
+        // console.log('out');
     }
 
     createView(){
@@ -98,7 +169,7 @@ class FixedXHistogram extends Base{
             //y轴的绘图数据
             this.yDataArr = Tools.drawY(this.dataMax,this.dataMin,this.yNum);
             //y轴最大值
-          // console.log(this.yDataArr,this.dataMax,this.dataMin,this.yNum);
+            // console.log(this.yDataArr,this.dataMax,this.dataMin,this.yNum);
 
             this.yDataMax = this.yDataArr[this.yDataArr.length -1];
             this.yDataMin = this.yDataArr[0];
@@ -187,6 +258,15 @@ class FixedXHistogram extends Base{
                 this.dataSp.addChild(yS);
             }
 
+            //背景触发事件
+            if(i!=len-1){
+                let hitBG = this.drawRect(this.xSpace,this.h,'#fff');
+                hitBG.x = dis;
+                hitBG.alpha = 0.01;
+                this.bgSp.addChild(hitBG);
+            }
+
+            // console.log(this.x,dis,this.h,Tools.randomColor());
             this.xTxtArr.push(txt);
             this.bgSp.addChild(txt);
         }
@@ -364,6 +444,12 @@ class FixedXHistogram extends Base{
         createjs.Tween.removeTweens(this.maskS);
         ObjectPool.returnObj(this.poolArr);
         this.poolArr = [];
+
+        if(this.typeFixed){
+            this.removeEventListener('mouseover',this.overPannel);
+            this.removeEventListener('rollout',this.outPannel);
+        }
+
     }
     // this.clear(this);
     //清空

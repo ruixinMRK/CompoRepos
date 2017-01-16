@@ -56,8 +56,6 @@ class HorHistogram extends Base{
 
   updata(arr){
 
-    console.log(arr,this.totalNum);
-
     //如果是外部传参,且页数大于1时,将数据隐藏
     if(arr&&this.totalNum>1){
       this.allData = arr;

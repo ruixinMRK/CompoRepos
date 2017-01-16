@@ -5,6 +5,10 @@
 import '../../libs/createjs.js';
 import ObjectPool from '../../tools/ObjectPool.js';
 
+/**
+ * 我是基类
+ * @extends createjs.Container
+ */
 class Base extends createjs.Container
 {
 

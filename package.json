@@ -19,6 +19,7 @@
     "echarts": "^3.1.9",
     "formsy-material-ui": "^0.4.2",
     "formsy-react": "^0.18.0",
+    "jsdoc": "^3.4.3",
     "material-ui": "^0.15.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",

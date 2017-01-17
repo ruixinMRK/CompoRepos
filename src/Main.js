@@ -584,96 +584,96 @@ window.onload = function(){
 
   //============================测试 UIPageList的代码
 
-  var bgS = new createjs.Shape();
-  var g = bgS.graphics.setStrokeStyle(1).beginStroke("#fff").beginFill("#19233e").moveTo(0,0).lineTo(424,0).lineTo(450,27).lineTo(450,287).lineTo(0,287).lineTo(0,0).endFill();
-  var listTitleP = {
-        itemsStyle:
-            [{valueField:"t1",font:"16px 微软雅黑",color:"#fff",value:"省份",textAlign:"center",x:42},
-                {valueField:"t2",font:"16px 微软雅黑",color:"#fff",value:"指标名称",textAlign:"center",x:151},
-                {valueField:"t3",font:"16px 微软雅黑",color:"#fff",value:"当前值",textAlign:"center",x:261},
-              {valueField:"t4",font:"16px 微软雅黑",color:"#fff",value:"正常值",textAlign:"center",x:316},
-              {valueField:"t5",font:"16px 微软雅黑",color:"#fff",value:"持续告警",textAlign:"center",x:404}]
-    };
-  var listItemP = {
-    itemsStyle:
-        [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:10},
-          {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:42},
-          {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:151},
-          {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:261},
-          {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:316},
-          {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:404}]
-  };
-  var pageItemP = {
-      text:"",
-      width:16,
-      height:16,
-      selected:false,
-      textSelectedFont:"6px 微软雅黑",
-      textSelectedColor:"#ffffff",
-      textSelectedAlpha:1,
-      textUnselectedFont:"6px 微软雅黑",
-      textUnselectedColor:"#395b74",
-      textUnselectedAlpha:1,
-      bgSelectedColor:"#ff0000",
-      bgSelectedAlpha:0.01,
-      bgUnselectedColor:"#00ff00",
-      bgUnselectedAlpha:0.01
-  };
-
-
-  var pageListP = {width:450,height:248,
-      listItemClass:TextString,listItemParam:listItemP,listCount:10,listGap:7,
-      /*pageItemClass:TextDoubleState,*/pageItemParam:pageItemP,pageMarginH:10,pageMarginV:3,
-      listItemTriggle:"click",pageTiggle:"click",
-      pageBLLoop:true,pageLoopTime:2000};
-
-  var p = new UIPageList({titleStr:"当前提醒关注业务",bg:bgS,listTitleParam:listTitleP,pageListParam:pageListP});
-  p.setListTitle({t1:"省份",t2:"指标名称",t3:"当前值",t4:"正常值",t5:"持续告警"});
-  p.setData([
-    {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:13,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:14,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:15,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:16,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:17,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:18,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:19,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:20,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:31,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:32,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:33,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:34,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:35,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:36,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:37,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:38,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:39,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:40,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:51,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:52,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:53,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:54,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:55,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:56,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:57,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:58,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:59,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:60,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:61,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9}
-
-  ]);
-  stage.addChild(p);
+  //var bgS = new createjs.Shape();
+  //var g = bgS.graphics.setStrokeStyle(1).beginStroke("#fff").beginFill("#19233e").moveTo(0,0).lineTo(424,0).lineTo(450,27).lineTo(450,287).lineTo(0,287).lineTo(0,0).endFill();
+  //var listTitleP = {
+  //      itemsStyle:
+  //          [{valueField:"t1",font:"16px 微软雅黑",color:"#fff",value:"省份",textAlign:"center",x:42},
+  //              {valueField:"t2",font:"16px 微软雅黑",color:"#fff",value:"指标名称",textAlign:"center",x:151},
+  //              {valueField:"t3",font:"16px 微软雅黑",color:"#fff",value:"当前值",textAlign:"center",x:261},
+  //            {valueField:"t4",font:"16px 微软雅黑",color:"#fff",value:"正常值",textAlign:"center",x:316},
+  //            {valueField:"t5",font:"16px 微软雅黑",color:"#fff",value:"持续告警",textAlign:"center",x:404}]
+  //  };
+  //var listItemP = {
+  //  itemsStyle:
+  //      [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:10},
+  //        {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:42},
+  //        {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:151},
+  //        {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:261},
+  //        {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:316},
+  //        {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:404}]
+  //};
+  //var pageItemP = {
+  //    text:"",
+  //    width:16,
+  //    height:16,
+  //    selected:false,
+  //    textSelectedFont:"6px 微软雅黑",
+  //    textSelectedColor:"#ffffff",
+  //    textSelectedAlpha:1,
+  //    textUnselectedFont:"6px 微软雅黑",
+  //    textUnselectedColor:"#395b74",
+  //    textUnselectedAlpha:1,
+  //    bgSelectedColor:"#ff0000",
+  //    bgSelectedAlpha:0.01,
+  //    bgUnselectedColor:"#00ff00",
+  //    bgUnselectedAlpha:0.01
+  //};
+  //
+  //
+  //var pageListP = {width:450,height:248,
+  //    listItemClass:TextString,listItemParam:listItemP,listCount:10,listGap:7,
+  //    /*pageItemClass:TextDoubleState,*/pageItemParam:pageItemP,pageMarginH:10,pageMarginV:3,
+  //    listItemTriggle:"click",pageTiggle:"click",
+  //    pageBLLoop:true,pageLoopTime:2000};
+  //
+  //var p = new UIPageList({titleStr:"当前提醒关注业务",bg:bgS,listTitleParam:listTitleP,pageListParam:pageListP});
+  //p.setListTitle({t1:"省份",t2:"指标名称",t3:"当前值",t4:"正常值",t5:"持续告警"});
+  //p.setData([
+  //  {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:13,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:14,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:15,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:16,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:17,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:18,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:19,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:20,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:31,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:32,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:33,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:34,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:35,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:36,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:37,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:38,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:39,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:40,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:51,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:52,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:53,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:54,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:55,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:56,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:57,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:58,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:59,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:60,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:61,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9}
+  //
+  //]);
+  //stage.addChild(p);
 
 
   //============================end 测试 UIPageList的代码

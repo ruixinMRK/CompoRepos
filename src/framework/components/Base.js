@@ -4,6 +4,7 @@
 //父类
 import '../../libs/createjs.js';
 import ObjectPool from '../../tools/ObjectPool.js';
+import Tools from '../../tools/Tools';
 
 /**
  * 我是基类
@@ -14,6 +15,7 @@ class Base extends createjs.Container
 
     constructor(){
         super();
+        this.poolArr = [];
     }
     init(){
 
@@ -24,23 +26,46 @@ class Base extends createjs.Container
     reset(){
 
     }
+
+    //遍历容器,移除元素
+    removeAllChild(sp){
+
+        let tempParent = sp||this;
+        while(tempParent.numChildren){
+            let tsp = tempParent.getChildAt(0);
+            tsp.numChildren&&this.removeAllChild(tsp);
+            tsp&&tsp.parent&&tsp.parent.removeChild(tsp);
+        }
+    }
+
     clear(){
+
+        this.removeAllChild();
+        ObjectPool.returnObj(this.poolArr);
+        if(this.parent) this.parent.removeChild(this);
+        Tools.clearProp(this);
+
+    }
+    //读取属性
+    setStyle(obj){
+        for(var str in obj){this[str] = obj[str];}
     }
     //矩形
-    drawRect(w1,h1,color){
+    drawRect(w1,h1,color,lt,rt,rb,lb){
 
-        let roundObject = new createjs.Shape();
-        roundObject.graphics.beginFill(color);
-        roundObject.graphics.drawRect(0,0,w1,h1);
-        roundObject.graphics.endFill();
-        return roundObject;
+        let a = ObjectPool.getObj('shape');
+        a.graphics.beginFill(color);
+        (typeof lt !=='undefined'&&lt>0)?(a.graphics.drawRoundRectComplex(0,0,w1,h1,lt,rt,rb,lb)):a.graphics.drawRect(0,0,w1,h1);
+        a.graphics.endFill();
+        this.poolArr.push(a);
+        return a;
     }
 
     //画立体柱子
     drawCylinder(w1,h1,r,colorArr)
     {
         r = r||6;
-        let roundObject = new createjs.Shape();
+        let roundObject = ObjectPool.getObj('shape');
         let colors = colorArr||["#00FFFF","#0099FF"];
         let alphas = [1,1];
         let ratios = [0,0xFF];
@@ -59,6 +84,7 @@ class Base extends createjs.Container
         roundObject.graphics.bezierCurveTo(0,-2 *r, w1,-2 * r, w1, 0);
         roundObject.graphics.bezierCurveTo(w1,2 *r,0,2 * r,0,0);
         roundObject.graphics.endFill();
+        this.poolArr.push(roundObject);
         return roundObject;
     }
 
@@ -66,19 +92,20 @@ class Base extends createjs.Container
     //画圆
     drawCircle($x,$y,$radius,$color)
     {
-        let $s = new createjs.Shape();
+        let $s = ObjectPool.getObj('shape');
         $s.graphics.beginFill($color);
         $s.graphics.drawCircle(0,0,$radius);
         $s.graphics.endFill();
         $s.x = $x;
         $s.y = $y;
+        this.poolArr.push($s);
         return $s;
     }
 
 
 
-    //画线
-    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor,$joinType)
+    //画线（shape,数据,颜色,粗细,填充,填充颜色,拐角形状,是否虚线）
+    drawLine($s,$dataArr,$lineColor,$thickness,$isFill,$fillColor,$joinType,$dash)
     {
         let $lC = $lineColor||"#ffffff";
         let $tN = $thickness||2.5;
@@ -86,10 +113,12 @@ class Base extends createjs.Container
         let $fC = $fillColor||"#ffffff";
 
         let $T  = $joinType||0;
+        let $d = typeof $dash === 'boolean'?$dash:false;
+
         if(!$s) return;
         $s.graphics.clear();
         $s.graphics.setStrokeStyle($tN,0,$T);
-
+        $d&&$s.graphics.setStrokeDash([8, 4], 0);
         $s.graphics.beginStroke($lC);
         if($iF) $s.graphics.beginFill($fC);
 
@@ -103,6 +132,8 @@ class Base extends createjs.Container
             }
         }
         $s.graphics.endFill();
+        $s.graphics.endStroke();
+        this.poolArr.push($s);
         return $s;
     }
 
@@ -151,7 +182,7 @@ class Base extends createjs.Container
             txt.x = _x;
             txt.y = _y;
         }
-
+        this.poolArr.push(txt);
         return txt;
     }
 

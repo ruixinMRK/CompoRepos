@@ -1,7 +1,9 @@
 /*
- *  16-10-8
+ *  16-11-24
  *
  */
+
+import Timer from './Timer';
 
 class Tools{
 
@@ -113,16 +115,6 @@ class Tools{
     }
     return temps;
   }
-  //获取dom节点的x,y,w,h
-  static getDOMClient(div){
-    let rect = div.getBoundingClientRect();
-    
-    let x = rect.left|0;
-    let y = rect.top|0;
-    let w = (rect.width||rect.right - x)|0;
-    let h = (rect.height||rect.bottom - y)|0;
-    return {x:x,y:y,w:w,h:h};
-  }
   //设置样式
   static setDivStyle(div,obj){
     for(let attr in obj){
@@ -180,7 +172,22 @@ class Tools{
       }
     }
   }
-
+  //获取dom节点的x,y,w,h
+  //是否加上以滚动的高度
+  static getDOMClient(div,deep){
+    let rect = div.getBoundingClientRect();
+    let top = document.documentElement.clientTop;
+    let left= document.documentElement.clientLeft;
+    let x = rect.left|0;
+    let y = rect.top|0;
+    let w = (rect.width||rect.right - x)|0;
+    let h = (rect.height||rect.bottom - y)|0;
+    if(deep) {
+      x+= Tools.getScroll().left;
+      y+= Tools.getScroll().top;
+    }
+    return {x:x - left,y:y - top,w:w,h:h};
+  }
   //获取网页的总高度
   static getScrollHeight(){
     return Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
@@ -477,6 +484,8 @@ class Tools{
     let corstep = 0;
     let tmpstep = 0;
     let tmpnumber = 0;
+    let tempCormin = false;
+    if(cormin>=0) tempCormin = true;
     // console.log(cormax,cormin,cornumber,'---');
     if(cormax<=cormin)
       return null ;
@@ -525,12 +534,15 @@ class Tools{
     cornumber = tmpnumber;
 
     let arrValue = [];
-    let size = parseInt(cormax/cornumber);
+    let size = parseInt((cormax-cormin)/cornumber);
+
+    console.log(cormin,cormax);
     if(cormax <5) arrValue = [0,1,2,3,4,5];
     else{
 
+      tempCormin&&(cormin = 0);
       for(let i = 0;i<cornumber+1;i++){
-        arrValue.push(i*size);
+        arrValue.push(cormin + i*size);
       }
     }
 
@@ -558,7 +570,7 @@ class Tools{
     return value;
   }
   //,'compositeOperation'
-  static replaceArr = ['refs','componentWillUnmount','componentDidMount','componentWillUpdate','componentDidUpdate','_debugID','isMounted','enqueueCallback','enqueueCallbackInternal','enqueueForceUpdate','enqueueReplaceState','enqueueSetState','enqueueElementInternal','validateCallback'];
+  static replaceArr = ['props','refs','componentWillUnmount','componentDidMount','componentWillUpdate','componentDidUpdate','_debugID','isMounted','enqueueCallback','enqueueCallbackInternal','enqueueForceUpdate','enqueueReplaceState','enqueueSetState','enqueueElementInternal','validateCallback'];
   static checkGL(a){
 
     for(let t = 0;t<Tools.replaceArr.length;t++){
@@ -572,7 +584,7 @@ class Tools{
     for(let i=0;i<arr.length;i++){
       let obj = _this[arr[i]];
       //||typeof obj === 'function'
-      if(!obj||(Tools.replaceArr.indexOf(arr[i])>-1)||Tools.checkGL(obj)) continue;
+      if(!obj||typeof obj === 'function'||(Tools.replaceArr.indexOf(arr[i])>-1)||Tools.checkGL(obj)||arr[i]==='poolArr') continue;
       if(obj.canvas&&obj.canvas.tagName =='CANVAS') {
         //使用createjs框架时,要把stage挂在this上
 
@@ -611,19 +623,19 @@ class Tools{
   static hasProperty(o,prop){
         return (prop in o);
       }
-      //判断字符是否是存在于对象的原型链中
-      static hasPropertyJustInPrototype(o,prop){
-        return !o.hasOwnProperty(prop) && (prop in o);
-      }
-      //取canvas点击处的颜色
-      static getColor(can,x,y,isHex){
-        
-        if(!can) return new Error('is not canvas');
-        let ctx = can.getContext("2d");
-        let imgData = ctx.getImageData(x,y,1,1).data.slice(0,4);
+  //判断字符是否是存在于对象的原型链中
+  static hasPropertyJustInPrototype(o,prop){
+    return !o.hasOwnProperty(prop) && (prop in o);
+  }
+  //取canvas点击处的颜色
+  static getColor(can,x,y,isHex){
 
-        if(isHex){
-          let HexStr = '#';
+    if(!can) return new Error('is not canvas');
+    let ctx = can.getContext("2d");
+    let imgData = ctx.getImageData(x,y,1,1).data.slice(0,4);
+
+    if(isHex){
+      let HexStr = '#';
       imgData.forEach(a=>{
         let str = a.toString(16);
         HexStr += str.length<2?'0'+str:str;
@@ -682,8 +694,12 @@ class Tools{
 
   }
 
+
   //获取格式化时间 例子：dateFormat(new Date(), "yyyy-MM-dd hh:mm:ss")
-  static dateFormat(oDate, fmt) {
+  static dateFormat(oDate = new Date(), fmt = "yyyy-MM-dd hh:mm:ss") {
+
+    if(typeof oDate === 'number') oDate = new Date(oDate);
+    
     var o = {
       "M+": oDate.getMonth() + 1, //月份
       "d+": oDate.getDate(), //日
@@ -694,10 +710,12 @@ class Tools{
       "S": oDate.getMilliseconds()//毫秒
     };
     if(/(y+)/.test(fmt)) {
+      //首先替换年份的数据
       fmt = fmt.replace(RegExp.$1, (oDate.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
     for (var k in o) {
       if(new RegExp("(" + k + ")").test(fmt)) {
+        //依次判断对应的格式,RegExp.$1.length == 1如果是长度为1时,碰到数据小于10的时候，不进行不自动往数据前加0
         fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
       }
     }
@@ -759,44 +777,44 @@ class Tools{
     return n;
   }
   //比较两个对象是否相等
-  static equalObj(objA, objB) {
-    if (typeof arguments[0] != typeof arguments[1])
+  static equalObj(...args) {
+    if (typeof args[0] != typeof args[1])
       return false;
 
     //数组
-    if (arguments[0] instanceof Array)
+    if (args[0] instanceof Array)
     {
-      if (arguments[0].length != arguments[1].length)
+      if (args[0].length != args[1].length)
         return false;
 
       let allElementsEqual = true;
-      for (let i = 0; i < arguments[0].length; ++i)
+      for (let i = 0; i < args[0].length; ++i)
       {
-        if (typeof arguments[0][i] != typeof arguments[1][i])
+        if (typeof args[0][i] != typeof args[1][i])
           return false;
 
-        if (typeof arguments[0][i] == 'number' && typeof arguments[1][i] == 'number')
-          allElementsEqual = (arguments[0][i] == arguments[1][i]);
+        if (typeof args[0][i] == 'number' && typeof args[1][i] == 'number')
+          allElementsEqual = (args[0][i] == args[1][i]);
         else
-          allElementsEqual = arguments.callee(arguments[0][i], arguments[1][i]);            //递归判断对象是否相等
+          allElementsEqual = args.callee(args[0][i], args[1][i]);            //递归判断对象是否相等
       }
       return allElementsEqual;
     }
 
     //对象
-    if (arguments[0] instanceof Object && arguments[1] instanceof Object)
+    if (args[0] instanceof Object && args[1] instanceof Object)
     {
       let result = true;
       let attributeLengthA = 0, attributeLengthB = 0;
-      for (let o in arguments[0])
+      for (let o in args[0])
       {
         //判断两个对象的同名属性是否相同（数字或字符串）
-        if (typeof arguments[0][o] == 'number' || typeof arguments[0][o] == 'string')
-          result = eval("arguments[0]['" + o + "'] == arguments[1]['" + o + "']");
+        if (typeof args[0][o] == 'number' || typeof args[0][o] == 'string')
+          result = args[0][o] === args[1][o];
         else {
           //如果对象的属性也是对象，则递归判断两个对象的同名属性
-          //if (!arguments.callee(arguments[0][o], arguments[1][o]))
-          if (!arguments.callee(eval("arguments[0]['" + o + "']"), eval("arguments[1]['" + o + "']")))
+          //if (!args.callee(args[0][o], args[1][o]))
+          if (Tools.equalObj(args[0][o],args[1][o]))
           {
             result = false;
             return result;
@@ -805,7 +823,7 @@ class Tools{
         ++attributeLengthA;
       }
 
-      for (let o in arguments[1]) {
+      for (let o in args[1]) {
         ++attributeLengthB;
       }
       //如果两个对象的属性数目不等，则两个对象也不等
@@ -813,7 +831,7 @@ class Tools{
         result = false;
       return result;
     }
-    return arguments[0] == arguments[1];
+    return args[0] == args[1];
   }
   //删除左后空格
   static trim(str) {
@@ -829,6 +847,24 @@ class Tools{
       }
     }
     return result;
+  }
+  /**
+   * 忽略大小写判断字符串是否相同
+   * @param str1
+   * @param str2
+   * @returns {Boolean}
+   */
+  static isEqualsIgnorecase(str1,str2){
+      if(str1.toUpperCase() == str2.toUpperCase())
+      {
+        return true;
+      }
+      return false;
+  }
+  //保留中文
+  static toCN(str) {
+    var regEx = /[^\u4e00-\u9fa5\uf900-\ufa2d]/g;
+    return str.replace(regEx, '');
   }
   //克隆对象
   static clone(obj){
@@ -892,28 +928,10 @@ class Tools{
     for (let i = 0; i < 3; i++) if (hexs[i].length == 1) hexs[i] = "0" + hexs[i];
     return "#" + hexs.join("");
   }
-  //转换对象(类似于call和apply与bind)
-  static delegate(c,a){
-    let b=a||window;
-    if(arguments.length>2)
-    {
-      let d=Array.prototype.slice.call(arguments,2);
-      return function()
-      {
-        let e=Array.prototype.slice.call(arguments);
-        Array.prototype.unshift.apply(e,d);
-        return c.apply(b,e);
-      }
-    }else
-      return function()
-      {
-        return c.apply(b,arguments);
-      }
-  }
 
   //操作cookie
   static cookie(key,value,time){
-    let l = arguments.length;
+    let l = args.length;
 
     let getCookie = function(a){
       let arr,reg=new RegExp("(^| )"+a+"=([^;]*)(;|$)");
@@ -940,104 +958,121 @@ class Tools{
   }
 
   //ajax请求
-  //{data:{},url:'',mothed:'',callback:function(){},async:true,timeout:6000};
+  //{data:{},url:'',mothed:'post,get',callback:function(){},async:true,timeout:6000};
   static ajax(obj){
 
-    let t = 0;
-    let xmlhttp = null;
-    let createXMLHttp = function(){
+    var xhr = Tools.createAjax();
 
-      if (window.XMLHttpRequest)
-      {// code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp=new XMLHttpRequest();
-      }
-      else
-      {// code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      return xmlhttp;
-    };
-
-    //解析参数
-    let paramsData = function(data){
-
-      if(!data) return '';
-      let arr = [];
-      for(let str in data){
-        arr.push( encodeURIComponent(str) + '=' + encodeURIComponent(data[str]));
-      }
-      return arr.join('&');
-    }
-
-    let callBack = function(){
-
-      if(xhr.status===0) {
-        return;
-      }
-      if(xhr.status == 200){
-
-        let arr = xhr.responseText.split("#");
-        let i = 0;
-        let cacheData = [];
-        for(; i<arr.length;i++){
-          let obj = null;
-          try{
-            obj = JSON.parse(arr[i]);
-          }
-          catch(e){
-            console.log('解析数据错误');
-          }
-          if(obj) cacheData.push(obj);
-        }
-        //Router.instance.dispatcher(arr[i])
-        let returnObj = cacheData.length>1?cacheData:cacheData[0];
-        obj.callback&&obj.callback(returnObj);
-        // Router.instance.dispatcher(returnObj);
-      }
-      else{
-        obj.error&&obj.error();
-      }
-
-      clearTimeout(t);
-      xmlhttp = null;
-    }
-
-    var xhr = createXMLHttp();
-
-    if(obj.async){
-      xhr.onreadystatechange = function(){
-        if(xhr.readyState == 4) callBack();
-      }
-    }
     let url = obj.url;
     let mothed = obj.mothed;
     let timeout = obj.timeout;
+    var keyTimer = '';
 
-    if(mothed === 'get') url += '?r=' + Math.random() + '&' + paramsData(obj.data);
+    //解析参数
+    if(mothed === 'get') url +=  '?' + Tools.paramsData(obj.data);
+    if(url.indexOf('?')>0) url+='&r=' + Math.random();
+    else url+='?r=' + Math.random();
+
+    //判断是否完成
+    if(obj.async){
+      xhr.onreadystatechange = function(){
+        if(xhr.readyState == 4){
+          Timer.clear(keyTimer);
+          Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+        }
+      }
+    }
+
+    //到时间后取消请求
+    if(timeout&&timeout>0){
+      function ajaxTimeOut(){
+        obj.error&&obj.error();
+        xhr.abort();
+      }
+      keyTimer = Timer.add(ajaxTimeOut,timeout,1);
+    }
+
+    //发送请求
     xhr.open(mothed,url,obj.async);
     if(mothed === 'post'){
       xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-      xhr.send(paramsData(obj.data));
+      xhr.send(Tools.paramsData(obj.data,obj.dataType));
     }
     else{
       xhr.send(null);
     }
 
-    //到时间后取消请求
-    if(timeout&&timeout>0){
-
-      t = setTimeout( function () {
-        console.log('timeout');
-        obj.error&&obj.error();
-        xhr.abort();
-        clearTimeout(t);
-      },timeout);
-
-    }
     console.log('ajax url is:',url);
     //同步的话
-    if(!obj.async)  callBack();
-    return xhr.abort;
+    if(!obj.async)  Tools.ajaxCallBack(xhr,obj.callback,obj.error);
+    // return xhr.abort;
+  }
+
+  //创建ajax
+  static createAjax(){
+    let i = 0;
+    for(;i<Tools.cacheAjax.length;i++){
+      if(Tools.cacheAjax[i].readyState == 0|| Tools.cacheAjax[i].readyState == 4){
+        return Tools.cacheAjax[i];
+      }
+    }
+
+    let xmlhttp = null;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    Tools.cacheAjax[Tools.cacheAjax.length] = xmlhttp;
+    console.log(Tools.cacheAjax.length);
+    return xmlhttp;
+
+  }
+
+  static paramsData(data,json){
+
+    if(!data) return '';
+    if(json) return JSON.stringify(json);
+    let arr = [];
+    for(let str in data){
+      arr.push( encodeURIComponent(str) + '=' + encodeURIComponent(data[str]));
+    }
+    return arr.join('&');
+
+  }
+
+  static ajaxCallBack(xhr,success,error){
+
+    if(xhr.status===0) {
+      return;
+    }
+    if(xhr.status == 200){
+
+      let arr = xhr.responseText.split("#");
+      let i = 0;
+      let cacheData = [];
+      for(; i<arr.length;i++){
+        let obj = null;
+        try{
+          obj = JSON.parse(arr[i]);
+        }
+        catch(e){
+          console.log('解析数据错误');
+        }
+        if(obj) cacheData.push(obj);
+      }
+      //Router.instance.dispatcher(arr[i])
+      let returnObj = cacheData.length>1?cacheData:cacheData[0];
+      success&&success(returnObj);
+      // Router.instance.dispatcher(returnObj);
+    }
+    else{
+      error&&error();
+    }
+
   }
 
   //容器自适应
@@ -1110,5 +1145,6 @@ class Tools{
 }
 Tools.addEventId = 0;
 Tools.t = 0;
+Tools.cacheAjax = [];
 
 export default Tools;

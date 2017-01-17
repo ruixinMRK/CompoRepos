@@ -4,21 +4,19 @@
 import '../../libs/createjs.js';
 import Tools from '../../tools//Tools.js';
 import ObjectPool from '../../tools/ObjectPool';
+import Base from './Base.js';
 
-class ProgressBar extends createjs.Container{
+class ProgressBar extends Base{
   constructor(styleData) {
     super();
 
     this.setDefaultData();
     this.setStyleData(styleData==null?{}:styleData);
 
-    this.objPool = [];
+    this.poolArr = [];
     this.txtEmDis = 0;
 
-    this._shadowLinearGradientRatiosX0 = 0;
-    this._shadowLinearGradientRatiosY0 = 0;
-    this._shadowLinearGradientRatiosX1 = 0;
-    this._shadowLinearGradientRatiosY1 = 0;
+    this._shadowLinearGradientRatiosX0 = this._shadowLinearGradientRatiosY0 = this._shadowLinearGradientRatiosX1 = this._shadowLinearGradientRatiosY1 = 0;
 
     //渐变的方向
     switch (this._shadowLinearGradientDir){
@@ -140,7 +138,7 @@ class ProgressBar extends createjs.Container{
     this.curTagCon = ObjectPool.getObj('con');
     this.curTagCon.addChild(this.curTrg);
 
-    this.objPool.push(this.barCon,this.bg,this.prg,this.doneRect,this.flagLine,this.flagLineMask,this.board,this.flagTrg,this.curTrg);
+    this.poolArr.push(this.barCon,this.bg,this.prg,this.doneRect,this.flagLine,this.flagLineMask,this.board,this.flagTrg,this.curTrg);
     this.addChild(this.barCon,this.flagTrg,this.curTagCon);
 
     // alert(this._txtArr);
@@ -156,7 +154,7 @@ class ProgressBar extends createjs.Container{
         this['txt_'+obj.id].color = obj.color||'#fff';
         this['txt_'+obj.id].textAlign  = obj.autoSize||'left';
         this['txt_'+obj.id].text = obj.value;
-        this.objPool.push(this['txt_'+obj.id]);
+        this.poolArr.push(this['txt_'+obj.id]);
 
         this['txt_'+obj.id].x = obj.offsetX;
         this['txt_'+obj.id].y = obj.offsetY;
@@ -239,11 +237,9 @@ class ProgressBar extends createjs.Container{
 
     createjs.Tween.removeTweens(this.flagLine);
     createjs.Tween.removeTweens(this.flagTrg);
-    this.removeAllChildren();
-    this.curTagCon.removeAllChildren();
-    ObjectPool.returnObj(this.objPool);
-    this.objPool = [];
-    Tools.clearProp(this);
+
+    super.clear();
+
   }
 }
 

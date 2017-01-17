@@ -8,6 +8,11 @@ import PiPingDraw from  './framework/components/PiPingDraw.js';
 import FixedXHistogram from  './framework/components/FixedXHistogram.js';
 import ChatPie from  './framework/components/ChatPie.js';
 import ProgressBar from './framework/components/ProgressBar';
+import Tools from './tools/Tools';
+import HorHistogram from './framework/components/HorHistogram';
+import Timer from './tools/Timer';
+import ObjectPool from './tools/ObjectPool';
+import ListMap from './framework/components/ListMap.js';
 
 import TextString from './framework/components/TextString';
 import TextDoubleState from './framework/components/TextDoubleState';
@@ -28,121 +33,123 @@ window.onload = function(){
 
     let stage = new createjs.Stage('name');
 
-    // var currentA = [];
-    // var historyA = [];
-    // var currentT = 0;
-    // var historyT = 0;
-    // var A = [];
-    //
-    // for(var i = 0;i<100;i++){
-    //
-    //     var obj  ={};
-    //     obj.time = 1470109099942 + 1000 * 60 * i;
-    //     obj.value = parseInt(Math.random() * 100);
-    //     currentA.push(obj);
-    //     currentT = obj.time;
-    // }
-    //
-    // for(var j = 0;j<400;j++){
-    //
-    //     var obj  ={};
-    //     obj.time = 1470109099942 + + 1000 * 60 * j;
-    //     obj.value = parseInt(Math.random() * 100);
-    //     historyA.push(obj);
-    //     historyT = obj.time;
-    // }
-    //
-    //
-    // for(var n = 0;n<200;n++){
-    //
-    //     var obj  ={};
-    //     obj.time = 1470109099942 + + 1000 * 60 * n;
-    //     obj.value = parseInt(Math.random() * 100);
-    //     A.push(obj);
-    // }
+    var currentA = [];
+    var historyA = [];
+    var currentT = 0;
+    var historyT = 0;
+    var A = [];
 
-    // let styleO = {
-    //
-    //     w:900,
-    //     h:300,
-    //     xTime:30,
-    //     beforeHour:2,
-    //     afterHour:1,
-    //     sortData:false,
-    //     yNum:5,
-    //     title:{
-    //         txtStr:'总体交易率(笔/秒)',
-    //         txtColor:'#fff',
-    //         txtSize:12,
-    //         txtFont:'Microsoft YaHei',
-    //         x:10,
-    //         y:0
-    //     },
-    //     xAxis:{
-    //         lineColor:'#ccc',
-    //         thickness:2,
-    //         txtColor:'#ccc',
-    //         txtSize:20,
-    //         txtFont:'黑体',
-    //         mark:true
-    //     },
-    //     yAxis:{
-    //         lineColor:'#ccc',
-    //         thickness:2,
-    //         txtColor:'#ccc',
-    //         txtSize:20,
-    //         txtFont:'黑体',
-    //         mark:true
-    //     },
-    //     lineArr:[
-    //         {
-    //             lineType:'a',
-    //             id:'A',
-    //             value:currentA,
-    //             lineColor:'#A00',
-    //             thickness:2,
-    //             valueColor:'#0f0',
-    //             valueSize:30,
-    //             valueFont:'黑体',
-    //             unitStr:'万',
-    //             unitColor:'#ccc',
-    //             unitSize:10,
-    //             unitFont:'Microsoft YaHei',
-    //             titleStr:'当前销售额',
-    //             titleColor:'#ccc',
-    //             titleSize:15,
-    //             titleFont:'Microsoft YaHei',
-    //             ballR:4,
-    //             ballColor:'#f00',
-    //             shadowColor:'#fff',
-    //             shadowSize:10
-    //         },
-    //         {
-    //             lineType:'b',
-    //             id:'B',
-    //             value:historyA,
-    //             lineColor:'rgba(126,126,126,0)',
-    //             thickness:2,
-    //             fillColor:'rgba(126,126,126,0.5)'
-    //         }
-    //
-    //     ]
-    //
-    //
-    // }
-    //
+    for(var i = 0;i<100;i++){
+
+        var obj  ={};
+        obj.time = 1470109099942 + 1000 * 60 * i;
+        obj.value = parseInt(Math.random() * 100);
+        currentA.push(obj);
+        currentT = obj.time;
+    }
+
+    for(var j = 0;j<400;j++){
+
+        var obj  ={};
+        obj.time = 1470109099942 + + 1000 * 60 * j;
+        obj.value = parseInt(Math.random() * 100);
+        historyA.push(obj);
+        historyT = obj.time;
+    }
+
+
+    for(var n = 0;n<200;n++){
+
+        var obj  ={};
+        obj.time = 1470109099942 + + 1000 * 60 * n;
+        obj.value = parseInt(Math.random() * 100);
+        A.push(obj);
+    }
+
+    let styleO = {
+
+        w:900,
+        h:300,
+        xTime:30,
+        beforeHour:2,
+        afterHour:1,
+        sortData:false,
+        yNum:5,
+        title:{
+            txtStr:'总体交易率(笔/秒)',
+            txtColor:'#fff',
+            txtSize:12,
+            txtFont:'Microsoft YaHei',
+            x:10,
+            y:0
+        },
+        xAxis:{
+            lineColor:'#ccc',
+            thickness:2,
+            txtColor:'#ccc',
+            txtSize:20,
+            txtFont:'黑体',
+            mark:true
+        },
+        yAxis:{
+            lineColor:'#ccc',
+            thickness:2,
+            txtColor:'#ccc',
+            txtSize:20,
+            txtFont:'黑体',
+            mark:true
+        },
+        lineArr:[
+            {
+                lineType:'a',
+                id:'A',
+                value:currentA,
+                lineColor:'#A00',
+                thickness:2,
+                valueColor:'#0f0',
+                valueSize:30,
+                valueFont:'黑体',
+                unitStr:'万',
+                unitColor:'#ccc',
+                unitSize:10,
+                unitFont:'Microsoft YaHei',
+                titleStr:'当前销售额',
+                titleColor:'#ccc',
+                titleSize:15,
+                titleFont:'Microsoft YaHei',
+                ballR:4,
+                ballColor:'#f00',
+                shadowColor:'#fff',
+                shadowSize:10
+            },
+            {
+                lineType:'b',
+                id:'B',
+                value:historyA,
+                lineColor:'rgba(126,126,126,0)',
+                thickness:2,
+                fillColor:'rgba(126,126,126,0.5)'
+            }
+
+        ]
+
+
+    }
+
     // let a = new Histogram(styleO);
     // a.x = 40;
     // a.y = 15;
     // stage.addChild(a);
+
+    // a.clear();
 
     // this.currentA = [];
     // for(var i = 0;i<12;i++){
     //     this.currentA.push((300*Math.random())|0);
     // }
     //
-    // this.currentB = [];
-    //
+    // this.currentB = [0,40,200,90];
+
     // for(var i = 0;i<5;i++){
     //
     //     this.currentB.push((300*Math.random())|0);
@@ -207,32 +214,39 @@ window.onload = function(){
     //
     // this.his = new FixedXHistogram(style);
     // this.his.x = 60;
-    // this.his.y = 65;
+    // this.his.y = 350;
     // stage.addChild(this.his);
+    // this.his.clear();
+
+    // setInterval( () => {
+    //
+    //     this.currentB = this.currentB.map(function(a){
+    //         return  (a*Math.random() * 2)|0;
+    //     });
+    //     this.his.updata([{value: this.currentB, id: 'A'}])
+    //
+    // },5000);
 
     // setInterval( () => {
     //
     //     var obj = {};
     //     obj.time = currentT + 1000 * 60 + '';
-    //     obj.value = parseInt(Math.random() * 300) + '';
+    //     obj.value = parseInt(Math.random() * 50) + '';
     //     currentA.push(obj);
     //     currentT = parseFloat(obj.time);
     //
-    //     var obj1 = {};
-    //     obj1.time = historyT + 1000 * 60 + '';
-    //     obj1.value = parseInt(Math.random() * 100) + '';
-    //     historyA.push(obj1);
-    //     historyT = parseFloat(obj1.time);
+    //     // var obj1 = {};
+    //     // obj1.time = historyT + 1000 * 60 + '';
+    //     // obj1.value = parseInt(Math.random() * 20) + '';
+    //     // historyA.push(obj1);
+    //     // historyT = parseFloat(obj1.time);
+    //     //
+    //     // var warn = parseInt(Math.random() * 100) + '';
     //
-    //     var warn = parseInt(Math.random() * 100) + '';
+    //     a.updata([{value: currentA, id: 'A'}]);
     //
-    //     a.updata([{value: currentA, id: 'A'}, {value: historyA, id: 'B'}])
-    // },5000);
+    // },500);
 
-    //let a = new Histogram(styleO);
-    //a.x = 40;
-    //a.y = 15;
-    //stage.addChild(a);
 
     // let a = new PiPingDraw(50,30,false,[{name:'S1',value:[780,420,780,490,300,490],color:'#44a50a'},
     //     {name:'S2',value:[300,490,100,490,100,200],color:'#ff0000'}]);
@@ -247,13 +261,14 @@ window.onload = function(){
     //     b:50,
     //     h:20,
     //     open:true,
-    //     colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa"],
-    //     dataList:[50,50,50,150],
-    //     nameList:['w','h','ww','ee'],
+    //     R:0,
+    //     colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd"],
+    //     dataList:[10,5,10,20,19,20,15,14,13],
+    //     nameList:['w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee'],
     //     txtColor:'#fff',
     //     lineColor:'#fff',
-    //     txtSize:16,
-    //     txtFont:'微软雅黑',
+    //     txtSize:15,
+    //     txtFont:'微软雅黑'
     // }
     //
     // this.pie1 = new ChatPie(pieStyle);
@@ -263,26 +278,119 @@ window.onload = function(){
     // stage.addChild(this.pie1);
 
 
+    // let pieStyle1 = {
+    //     a:90,
+    //     b:50,
+    //     h:20,
+    //     open:true,
+    //     R:180,
+    //     colorList:["#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd","#a0c1d4","#c8dfec","#d8e5ee","#f8f8fa","#5c7fa2","#6f8ba7","#8ba4bd"],
+    //     dataList:[50,20,20,20,20,20,20,20,20,20,20,20,20,20,20],
+    //     nameList:['w','h','ww','ee','w','h','ww','ee','w','h','ww','ee','w','h','ww','ee'],
+    //     txtColor:'#fff',
+    //     lineColor:'#fff',
+    //     txtSize:10,
+    //     txtFont:'微软雅黑',
+    // }
+
+    // this.pie2 = new ChatPie(pieStyle1);
+    // this.pie2.createView();
+    // this.pie2.x = 700;
+    // this.pie2.y = 200;
+    // stage.addChild(this.pie2);
     //
-    //setInterval( () =>{
+    // Timer.add(()=>{this.pie1.updata(['1','2'],[100,200])},2000,1);
+
+    // this.pie1.clear();
+
+
+    // this.bar = new ProgressBar({
+    //     barWidth:500,
+    //     barHeight:50,
+    //     // prgColor:"rgb(69,161,169)",//如果此属性存在 则用纯色填充 否则则用渐变填充效果
+    //     bgColor:"rgb(31,31,31)",
+    //     shadowLinearGradientColors:["rgb(55,164,174)","#000","rgb(55,164,174)"],
+    //     shadowLinearGradientRatios:[0,0.5,1],
+    //     shadowLinearGradientDir:"#0f0",
+    //     borderThickness:3,
+    //     flagTrgColor:"rgb(69,69,69)",
+    //     curTrgColor:"rgb(254,171,39)",
+    //     boardColor:"#6c6c6c",//"#685420",
+    //     flagTrgHalfLength:8,//长度的一半
+    //     flagTrgHeight:20,//高度
+    //     flagTrgBarGap:8,
+    //     curTrgBarGap:8,
+    //     barRound:10,
+    //     barMaginLeft:0,
+    //     curPos:0,
+    //     tweenDuring:2000,
+    //     txtArr:[
+    //         {value:'年度指标:',id:'mainTitle',size:24,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'},
+    //         {value:'6000',id:'mainValue',size:32,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:-7,autoSize:'left'},
+    //         {value:'万',id:'mainTitleEM',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:5,autoSize:'left'},
+    //         {value:'目标完成度:',id:'secTitle',size:20,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:10,autoSize:'left'},
+    //         {value:'20.13%',id:'secValue',size:35,color:'#fff',font:'Microsoft YaHei',offsetX:0,offsetY:0,autoSize:'left'}
+    //     ]
+    // });
+    // this.bar.setFlagRatio(0.4,2000);
+    // this.bar.updata([{id:'total',value:'3030'},{id:'history',value:0.2},{id:'current',value:0.6}])
+    // this.bar.setCurrentRatio(0.5,1000);
+    // Timer.add(()=>{this.bar.clear()},2000,1);
     //
-    //    var obj = {};
-    //    obj.time = currentT + 1000 * 60+'';
-    //    obj.value = parseInt(100 + Math.random() * 300) + '';
-    //    currentA.push(obj);
-    //    currentT = parseFloat(obj.time);
+    // stage.addChild(this.bar);
+    // this.bar.y = 100;
+
+
+    // let jdpp = {
     //
-    //    var obj1  ={};
-    //    obj1.time = historyT  + 1000 * 60 +'';
-    //    obj1.value = parseInt(100 + Math.random() * 100) + '';
-    //    historyA.push(obj1);
-    //    historyT = parseFloat(obj1.time);
+    //     w:360,
+    //     h:120,
+    //     maxAuto:true,
+    //     oneNum:2,
+    //     dataVis:true,
+    //     yVis:false,
+    //     sort:true,
+    //     turnTime:5000,
+    //     dataArr:{
+    //         value:[{name:'NOGARA',value:20},{name:'INDIOS',value:40},{name:'SIMPLE LIFE',value:60}],
+    //         color:'rgb(109,120,149)',
+    //         font:'Microsoft YaHei',
+    //         txtColor:'#fff',
+    //         size:20,
+    //         zw:18,
+    //         zr:0
+    //     },
+    //     yArr:{
+    //         color:'#ccc',
+    //         font:'Microsoft YaHei',
+    //         size:16
+    //     }
+    // };
     //
-    //    var warn = 300 + parseInt(Math.random() * 100)+'';
     //
-    //    a.updata([{value:currentA,id:'A'},{value:historyA,id:'B'},{value:A,id:'E'},{value:150+100*Math.random(),id:'C'}]);
+    // this.horHis = new HorHistogram(jdpp);
+    // this.horHis.y = 100;
+    // stage.addChild(this.horHis);
+
+    // Timer.add(()=>{this.horHis.updata([{name:'NOGARA',value:20}])},2000,1);
+    // this.horHis.updata([{'1Hao ':100},{'2好':100}]);
+    // this.horHis.clear();
+    // Timer.add(()=>{this.horHis.clear();},4000,1);
+
+
+    // function onclick(){
+    //     alert(1);
+    // }
+    // this.s = ObjectPool.getObj('shape');
+    // this.s.graphics.beginFill('rgb(f,f,f)');
+    // this.s.graphics.drawRect(0,0,100,200);
+    // this.s.graphics.endFill();
+    // this.s.alpha = 0.01;
+    // // this.s.visible = false;
     //
-    //    console.log(historyA.length);
+    // this.testBit = new createjs.Bitmap();
+    // this.testBit.x = 300;
+    // this.testBit.draw(this.s);
     //
     //},5000)
 
@@ -569,6 +677,81 @@ window.onload = function(){
 
 
   //============================end 测试 UIPageList的代码
+    // this.s.addEventListener('click',onclick);
+    // stage.addChild(this.s);
+
+
+    function loadImg(url){
+        let pro = new Promise((resolve,reject)=>{
+            let img = new Image();
+            img.onload = function() {
+                resolve(this);
+            };
+
+            img.onerror = function() {
+                reject(new Error('img error is' + url));
+            };
+            img.src = url;
+        })
+        return pro;
+    }
+    //拓扑图
+    /**
+     * @name    名字
+     * @x       x
+     * @y       y
+     * @spl     与下一个节点间连线是否分割
+     * @target  节点
+     * @size    0为默认大小 1为中等大小 2为最大
+     * @fristCornR  两条连线时第一条是否有是直角
+     * @target  节点
+     * @infoItemPos 悬浮框的位置
+     * null 元素代表换下一组
+     */
+
+
+    
+    this.ListMapData = [{name:'A',title:'柜面',x:235,y:112,spl:false,target:null},{name:'B',title:'图形前端',x:703,y:112,spl:true,target:null},{name:'C',title:'交易网关',x:1173,y:112,spl:true,target:null},{name:'D',title:'CTG',x:1644,y:184,spl:true,target:null,size:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,size:1,infoItemPos:0},{name:'EE',title:'加密平台',x:2149,y:543,spl:false,target:null,size:1,infoItemPos:3},
+        null,{name:'F',title:'银联',x:235,y:202,spl:true,target:null},{name:'G',title:'银联AFE',x:702,y:235,spl:false,target:null},{name:'H',title:'卡AFA',x:1172,y:292,spl:true,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null,size:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,infoItemPos:0},
+        null,{name:'J',title:'银联数据',x:236,y:271,spl:true,target:null},{name:'G',title:'银联AFE',x:702,y:235,spl:true,target:null},
+        null,{name:'K',title:'ATM',x:236,y:337,spl:true,target:null},{name:'L',title:'ATMAFE',x:702,y:337,spl:true,target:null},{name:'H',title:'卡AFA',x:1172,y:292,spl:true,target:null},
+        null,{name:'M',title:'POS',x:236,y:406,spl:true,target:null},{name:'N',title:'POSP',x:702,y:406,spl:true,target:null},
+        null,{name:'O',title:'人行',x:236,y:496,spl:true,target:null},{name:'P',title:'人行AFE',x:702,y:496,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:false,target:null},
+        null,{name:'R',title:'超级网银',x:236,y:565,spl:true,target:null},{name:'S',title:'超级AFE',x:702,y:565,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:false,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null},
+        null,{name:'T',title:'农信银',x:236,y:634,spl:true,target:null},{name:'U',title:'农信银AFE',x:702,y:634,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:true,target:null},
+        null,{name:'UU',title:'苏南接入',x:236,y:727,spl:true,target:null},{name:'V',title:'苏南AFE',x:702,y:727,spl:true,target:null},{name:'W',title:'AFA',x:1172,y:727,spl:true,target:null},
+        null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'Y',title:'个人网银(WAS)',x:702,y:817,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null},
+        null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'A1',title:'企业网银(WAS)',x:702,y:885,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null},
+        null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'A2',title:'手机网银(WAS)',x:702,y:952,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null}
+    ];
+
+    var ww = 352;var hh = 261;
+    var b2 = {name:'B2',title:'图形前端（浦口）',x:703,y:421,spl:true,target:null,type:1};
+    var ff = {name:'FF',title:'ESB(河西)',x:1644,y:421,spl:false,target:null,type:1,size:2};
+    var gg = {name:'GG',title:'ESB(浦口)',x:1644,y:730,spl:false,target:null,type:1,size:2};
+    this.ListMapData2 = [{name:'A',title:'柜面',x:235,y:112,spl:true,target:null,type:1,fristCornR:true},{name:'B',title:'图形前端（河西）',x:703,y:112,spl:true,target:null,type:1},{name:'C',title:'交易网关',x:1173,y:112,spl:false,target:null,type:1},{name:'D',title:'CTG',x:1644,y:112,spl:true,target:null,type:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,type:0,size:1,infoItemPos:0},{name:'EE',title:'加密平台',x:2149,y:543,spl:false,target:null,type:0,size:1,infoItemPos:3},
+        null,{name:'A',title:'柜面',x:235,y:112,spl:true,target:null,type:1,fristCornR:true},b2,{name:'C2',title:'交易网关（浦口）',x:1173,y:421,spl:true,target:null,type:1},{name:'D',title:'CTG',x:1644,y:112,spl:true,target:null,type:1},
+        null,ff,
+        null,gg
+    ];
+    this.ListMapData2Apply = [{name:'B2GG',color:'rgb(38,140,178)',value:[b2.x + ww/2,b2.y+hh,b2.x+ww/2,gg.y+hh/2,gg.x,gg.y+hh/2]},
+        {name:'B2FF',color:'rgb(38,140,178)',value:[b2.x + ww/2,b2.y+hh,b2.x+ww/2,gg.y+hh/2,gg.x-30,gg.y+hh/2,ff.x-30,ff.y+hh/2+20,ff.x,ff.y+hh/2+20]}
+    ];
+
+    Promise.all([loadImg('../assets/box.png'),loadImg('../assets/popBg.png')]).then(arr=>{
+
+        this.lisMap = new ListMap(arr);
+        this.lisMap.scaleX= this.lisMap.scaleY = 0.3;
+        this.lisMap.updata(this.ListMapData);
+        stage.addChild(this.lisMap);
+
+
+    });
+    setTimeout(e=>{this.lisMap.getGroup('X-Y-Z-I-E-EE')},5000);
+    //
+    // setTimeout(e=>{this.lisMap.clear();this.lisMap.updata(this.ListMapData2,this.ListMapData2Apply)},10000);
+    //
+    // setTimeout(e=>{this.lisMap.getGroup('A-B-C-D-E-EE')},15000);
 
     createjs.Ticker.addEventListener('tick',stage);
 

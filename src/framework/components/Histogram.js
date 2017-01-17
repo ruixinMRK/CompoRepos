@@ -5,6 +5,7 @@
 
 import Base from  './Base.js';
 import Tools from '../../tools/Tools';
+import ObjectPool from '../../tools/ObjectPool';
 
 class Histogram extends Base{
 
@@ -23,11 +24,12 @@ class Histogram extends Base{
         this.yTxtArr = [];
         this.xTxtArr = [];
         this.currentTime = 0;
-        this.dataSp = new createjs.Container();
+        this.dataSp = ObjectPool.getObj('con');
         this.yNum = 5;
 
         //解析样式
         this.setStyle(styleObj);
+        this.poolArr.push(this.dataSp);
 
         //记录id和lineType的匹配,为后面的重绘
         this.dataObjArr = [];
@@ -36,11 +38,11 @@ class Histogram extends Base{
 
         //以下为不会更新数据
         //画x轴,y轴
-        let yAxis = this.drawLine(new createjs.Shape(),[0,0,0,this.h],this.yAxis['lineColor'],this.yAxis['thickness']);
-        let xAxis = this.drawLine(new createjs.Shape(),[0,this.h,this.w,this.h],this.xAxis['lineColor'],this.xAxis['thickness']);
+        let yAxis = this.drawLine(ObjectPool.getObj('shape'),[0,0,0,this.h],this.yAxis['lineColor'],this.yAxis['thickness']);
+        let xAxis = this.drawLine(ObjectPool.getObj('shape'),[0,this.h,this.w,this.h],this.xAxis['lineColor'],this.xAxis['thickness']);
         //画轴三角
-        let yAxisThree = this.drawLine(new createjs.Shape(),[-5,0,5,0,0,-12],'rgba(0,0,0,0)',1,true,'#ccc');
-        let xAxisThree = this.drawLine(new createjs.Shape(),[this.w,this.h-5,this.w,this.h+5,this.w+12,this.h],'rgba(0,0,0,0)',1,true,'#ccc');
+        let yAxisThree = this.drawLine(ObjectPool.getObj('shape'),[-5,0,5,0,0,-12],'rgba(0,0,0,0)',1,true,'#ccc');
+        let xAxisThree = this.drawLine(ObjectPool.getObj('shape'),[this.w,this.h-5,this.w,this.h+5,this.w+12,this.h],'rgba(0,0,0,0)',1,true,'#ccc');
         //可以画的宽和高
         this.availW = this.w/20*19;
         this.availH = this.h/20*19;
@@ -52,13 +54,14 @@ class Histogram extends Base{
         //y轴标题
         let titleTxt = this.getTxt(this.title['txtStr'],this.title['txtColor'],this.title['txtSize'],this.title['x'],this.title['y'],'',this.title['txtFont']);
 
-        let defaultSp = new createjs.Container();
+        let defaultSp = ObjectPool.getObj('con');
         defaultSp.addChild(yAxis,xAxis,yAxisThree,xAxisThree,titleTxt);
         this.addChild(defaultSp);
         this.addChild(this.dataSp);
 
         //警告的容器
-        this.waringSp = new createjs.Container();
+        this.waringSp = ObjectPool.getObj('con');
+        this.poolArr.push(this.waringSp,defaultSp);
         this.addChild(this.waringSp);
 
         this.checkData(styleObj.lineArr);
@@ -104,7 +107,7 @@ class Histogram extends Base{
 
             if(i ===1) console.log(txt.getMeasuredWidth())
             if(this.yAxis['mark']) {
-                let yS = this.drawLine(new createjs.Shape(),[-5,dis,5,dis],'#ccc',1);
+                let yS = this.drawLine(ObjectPool.getObj('shape'),[-5,dis,5,dis],'#ccc',1);
                 this.dataSp.addChild(yS);
             }
             this.yTxtArr.push(txt);
@@ -123,7 +126,7 @@ class Histogram extends Base{
 
             let dis = this.xSpace * i;
             let t = this.minTime + i * this.xTime * 1000 * 60;
-            let dateTime = this.getTime(t);
+            let dateTime = Tools.dateFormat(t,'hh:mm');
 
             if(xTxtLen){
                 this.xTxtArr[i].text = dateTime;
@@ -134,7 +137,7 @@ class Histogram extends Base{
             if(txt.getMeasuredWidth()>this.xSpace&&i%(Math.ceil(txt.getMeasuredWidth()/this.xSpace)+1)) txt.alpha = 0;
             console.log(txt.getMeasuredWidth(),this.xSpace)
             if(this.xAxis['mark']&&i) {
-                let yS = this.drawLine(new createjs.Shape(),[dis,this.h-5,dis,this.h+5],'#ccc',1);
+                let yS = this.drawLine(ObjectPool.getObj('shape'),[dis,this.h-5,dis,this.h+5],'#ccc',1);
                 if(!txt.alpha) yS.alpha = 0;
                 this.dataSp.addChild(yS);
             }
@@ -272,33 +275,9 @@ class Histogram extends Base{
 
     }
 
-    getTime(t){
-        let date = new Date(t);
-        let dateTime;
-        if (date.getHours() < 10)
-        {
-            if (date.getUTCMinutes() < 10)
-            {
-                dateTime = "0"+date.getHours() + ":0"+date.getMinutes();
-            }else
-            {
-                dateTime = "0"+date.getHours() + ":"+date.getMinutes();
-            }
-        }else
-        {
-            if (date.getUTCMinutes() < 10)
-            {
-                dateTime = date.getHours() +":0"+date.getMinutes();
-            }else
-            {
-                dateTime = date.getHours() +":"+ date.getMinutes();
-            }
-        }
-        return dateTime;
-    }
-
     //更新数据
     updata(arr){
+        this.dataMax = 0;//修复
         this.checkData(arr);
         if(!this.currentTime) return;
         this.init();
@@ -359,8 +338,9 @@ class Histogram extends Base{
             let idObj = {};
             idObj.id = obj.id;
             idObj.lineType = obj.lineType;
-            idObj.s = new createjs.Shape();
-            if(obj.lineType == 'b') idObj.sf = new createjs.Shape();
+            idObj.s = ObjectPool.getObj('shape');
+            this.poolArr.push(idObj.s)
+            if(obj.lineType == 'b') idObj.sf = ObjectPool.getObj('shape'),this.poolArr.push(idObj.sf);
             if(obj.shadowColor) idObj.shad =  new createjs.Shadow(obj.shadowColor, 0, 0, obj.shadowSize);
             let isV = this.dataObjArr.some( a => {
                 return a.id === obj.id;
@@ -408,31 +388,9 @@ class Histogram extends Base{
         this.dataMax = this.dataMax>max?this.dataMax:max;
     }
 
-
-
-    //读取属性
-    setStyle(obj){
-
-        for(var str in obj){
-            // console.log(str,obj[str]);
-            this[str] = obj[str];
-        }
-
-    }
-
-    // this.clear(this);
     //清空
     clear(){
-
-       for(let str in this){
-            let obj = this[str];
-            if(!super[str]&&Array.isArray(this[str])){
-                obj.length = 0;
-            }
-       }
-        this.removeAllChildren();
-        if(this.parent) this.parent.removeChild(this);
-
+       super.clear();
     }
 }
 

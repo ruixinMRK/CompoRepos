@@ -6,6 +6,10 @@ import '../../libs/createjs.js';
 import ObjectPool from '../../tools/ObjectPool.js';
 import Tools from '../../tools/Tools';
 
+/**
+ * 我是基类
+ * @extends createjs.Container
+ */
 class Base extends createjs.Container
 {
 

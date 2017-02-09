@@ -1,0 +1,37 @@
+// 使用时请删除所有注释
+{
+    "tags": {
+        "allowUnknownTags": true //允许输出位置标签
+    },
+    "source": { // 指定读取的源文件
+        "include": ["src"], // 包含文件列表
+        "exclude": [], // 不包含文件列表
+        "includePattern": ".+\\.js(doc)?$", // 正则方式
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": [], // 启用插件列表，可在 JSDoc 目录下找到所有的插件
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": { // 命令行操作参数配置，详细内容请查看 http://usejsdoc.org/about-commandline.html
+        //"template": "templates/default",  // same as -t templates/default
+        "encoding": "utf8",               // same as -e utf8
+        "destination": "./out/",          // same as -d ./out/
+        "recurse": true                  // same as -r
+        //"tutorials": "path/to/tutorials", // same as -u path/to/tutorials, default "" (no tutorials)
+        //"query": "value",                 // same as -q value, default "" (no query)
+        //"private": true,                  // same as -p
+        //"lenient": true,                  // same as -l
+        // these can also be included, though you probably wouldn't bother
+        // putting these in conf.json rather than the command line as they cause
+        // JSDoc not to produce documentation. 
+        //"version": true,                  // same as --version or -v
+        //"explain": true,                  // same as -X
+        //"test": true,                     // same as -T
+        //"help": true,                     // same as --help or -h
+        //"verbose": true,                  // same as --verbose, only relevant to tests.
+        //"match": "value",                 // same as --match value, only relevant to tests.
+        //"nocolor": true                   // same as --nocolor, only relevant to tests
+    }
+}

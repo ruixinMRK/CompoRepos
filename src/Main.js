@@ -584,96 +584,96 @@ window.onload = function(){
 
   //============================测试 UIPageList的代码
 
-  //var bgS = new createjs.Shape();
-  //var g = bgS.graphics.setStrokeStyle(1).beginStroke("#fff").beginFill("#19233e").moveTo(0,0).lineTo(424,0).lineTo(450,27).lineTo(450,287).lineTo(0,287).lineTo(0,0).endFill();
-  //var listTitleP = {
-  //      itemsStyle:
-  //          [{valueField:"t1",font:"16px 微软雅黑",color:"#fff",value:"省份",textAlign:"center",x:42},
-  //              {valueField:"t2",font:"16px 微软雅黑",color:"#fff",value:"指标名称",textAlign:"center",x:151},
-  //              {valueField:"t3",font:"16px 微软雅黑",color:"#fff",value:"当前值",textAlign:"center",x:261},
-  //            {valueField:"t4",font:"16px 微软雅黑",color:"#fff",value:"正常值",textAlign:"center",x:316},
-  //            {valueField:"t5",font:"16px 微软雅黑",color:"#fff",value:"持续告警",textAlign:"center",x:404}]
-  //  };
-  //var listItemP = {
-  //  itemsStyle:
-  //      [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:10},
-  //        {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:42},
-  //        {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:151},
-  //        {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:261},
-  //        {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:316},
-  //        {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:404}]
-  //};
-  //var pageItemP = {
-  //    text:"",
-  //    width:16,
-  //    height:16,
-  //    selected:false,
-  //    textSelectedFont:"6px 微软雅黑",
-  //    textSelectedColor:"#ffffff",
-  //    textSelectedAlpha:1,
-  //    textUnselectedFont:"6px 微软雅黑",
-  //    textUnselectedColor:"#395b74",
-  //    textUnselectedAlpha:1,
-  //    bgSelectedColor:"#ff0000",
-  //    bgSelectedAlpha:0.01,
-  //    bgUnselectedColor:"#00ff00",
-  //    bgUnselectedAlpha:0.01
-  //};
-  //
-  //
-  //var pageListP = {width:450,height:248,
-  //    listItemClass:TextString,listItemParam:listItemP,listCount:10,listGap:7,
-  //    /*pageItemClass:TextDoubleState,*/pageItemParam:pageItemP,pageMarginH:10,pageMarginV:3,
-  //    listItemTriggle:"click",pageTiggle:"click",
-  //    pageBLLoop:true,pageLoopTime:2000};
-  //
-  //var p = new UIPageList({titleStr:"当前提醒关注业务",bg:bgS,listTitleParam:listTitleP,pageListParam:pageListP});
-  //p.setListTitle({t1:"省份",t2:"指标名称",t3:"当前值",t4:"正常值",t5:"持续告警"});
-  //p.setData([
-  //  {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:13,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:14,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:15,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:16,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:17,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:18,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:19,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //  {v0:20,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:31,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:32,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:33,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:34,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:35,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:36,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:37,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:38,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:39,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:40,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:51,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:52,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:53,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:54,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:55,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:56,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:57,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:58,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:59,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:60,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-  //    {v0:61,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9}
-  //
-  //]);
-  //stage.addChild(p);
+  var bgS = new createjs.Shape();
+  var g = bgS.graphics.setStrokeStyle(1).beginStroke("#fff").beginFill("#19233e").moveTo(0,0).lineTo(424,0).lineTo(450,27).lineTo(450,287).lineTo(0,287).lineTo(0,0).endFill();
+  var listTitleP = {
+        itemsStyle:
+            [{valueField:"t1",font:"16px 微软雅黑",color:"#fff",value:"省份",textAlign:"center",x:42},
+                {valueField:"t2",font:"16px 微软雅黑",color:"#fff",value:"指标名称",textAlign:"center",x:151},
+                {valueField:"t3",font:"16px 微软雅黑",color:"#fff",value:"当前值",textAlign:"center",x:261},
+              {valueField:"t4",font:"16px 微软雅黑",color:"#fff",value:"正常值",textAlign:"center",x:316},
+              {valueField:"t5",font:"16px 微软雅黑",color:"#fff",value:"持续告警",textAlign:"center",x:404}]
+    };
+  var listItemP = {
+    itemsStyle:
+        [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:10},
+          {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:42},
+          {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:151},
+          {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:261},
+          {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:316},
+          {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:404}]
+  };
+  var pageItemP = {
+      text:"",
+      width:16,
+      height:16,
+      selected:false,
+      textSelectedFont:"6px 微软雅黑",
+      textSelectedColor:"#ffffff",
+      textSelectedAlpha:1,
+      textUnselectedFont:"6px 微软雅黑",
+      textUnselectedColor:"#395b74",
+      textUnselectedAlpha:1,
+      bgSelectedColor:"#ff0000",
+      bgSelectedAlpha:0.01,
+      bgUnselectedColor:"#00ff00",
+      bgUnselectedAlpha:0.01
+  };
+
+
+  var pageListP = {width:450,height:248,
+      listItemClass:TextString,listItemParam:listItemP,listCount:10,listGap:7,
+      /*pageItemClass:TextDoubleState,*/pageItemParam:pageItemP,pageMarginH:10,pageMarginV:3,
+      listItemTriggle:"click",pageTiggle:"click",
+      pageBLLoop:true,pageLoopTime:2000};
+
+  var p = new UIPageList({titleStr:"当前提醒关注业务",bg:bgS,listTitleParam:listTitleP,pageListParam:pageListP});
+  p.setListTitle({t1:"省份",t2:"指标名称",t3:"当前值",t4:"正常值",t5:"持续告警"});
+  p.setData([
+    {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:13,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:14,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:15,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:16,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:17,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:18,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:19,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+    {v0:20,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:31,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:32,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:33,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:34,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:35,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:36,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:37,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:38,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:39,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:40,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:51,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:52,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:53,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:54,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:55,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:56,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:57,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:58,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:59,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:60,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+      {v0:61,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9}
+
+  ]);
+  stage.addChild(p);
 
 
   //============================end 测试 UIPageList的代码
@@ -681,78 +681,78 @@ window.onload = function(){
     // stage.addChild(this.s);
 
 
-    function loadImg(url){
-        let pro = new Promise((resolve,reject)=>{
-            let img = new Image();
-            img.onload = function() {
-                resolve(this);
-            };
-
-            img.onerror = function() {
-                reject(new Error('img error is' + url));
-            };
-            img.src = url;
-        })
-        return pro;
-    }
-    //拓扑图
-    /**
-     * @name    名字
-     * @x       x
-     * @y       y
-     * @spl     与下一个节点间连线是否分割
-     * @target  节点
-     * @size    0为默认大小 1为中等大小 2为最大
-     * @fristCornR  两条连线时第一条是否有是直角
-     * @target  节点
-     * @infoItemPos 悬浮框的位置
-     * null 元素代表换下一组
-     */
-
-
-    
-    this.ListMapData = [{name:'A',title:'柜面',x:235,y:112,spl:false,target:null},{name:'B',title:'图形前端',x:703,y:112,spl:true,target:null},{name:'C',title:'交易网关',x:1173,y:112,spl:true,target:null},{name:'D',title:'CTG',x:1644,y:184,spl:true,target:null,size:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,size:1,infoItemPos:0},{name:'EE',title:'加密平台',x:2149,y:543,spl:false,target:null,size:1,infoItemPos:3},
-        null,{name:'F',title:'银联',x:235,y:202,spl:true,target:null},{name:'G',title:'银联AFE',x:702,y:235,spl:false,target:null},{name:'H',title:'卡AFA',x:1172,y:292,spl:true,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null,size:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,infoItemPos:0},
-        null,{name:'J',title:'银联数据',x:236,y:271,spl:true,target:null},{name:'G',title:'银联AFE',x:702,y:235,spl:true,target:null},
-        null,{name:'K',title:'ATM',x:236,y:337,spl:true,target:null},{name:'L',title:'ATMAFE',x:702,y:337,spl:true,target:null},{name:'H',title:'卡AFA',x:1172,y:292,spl:true,target:null},
-        null,{name:'M',title:'POS',x:236,y:406,spl:true,target:null},{name:'N',title:'POSP',x:702,y:406,spl:true,target:null},
-        null,{name:'O',title:'人行',x:236,y:496,spl:true,target:null},{name:'P',title:'人行AFE',x:702,y:496,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:false,target:null},
-        null,{name:'R',title:'超级网银',x:236,y:565,spl:true,target:null},{name:'S',title:'超级AFE',x:702,y:565,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:false,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null},
-        null,{name:'T',title:'农信银',x:236,y:634,spl:true,target:null},{name:'U',title:'农信银AFE',x:702,y:634,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:true,target:null},
-        null,{name:'UU',title:'苏南接入',x:236,y:727,spl:true,target:null},{name:'V',title:'苏南AFE',x:702,y:727,spl:true,target:null},{name:'W',title:'AFA',x:1172,y:727,spl:true,target:null},
-        null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'Y',title:'个人网银(WAS)',x:702,y:817,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null},
-        null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'A1',title:'企业网银(WAS)',x:702,y:885,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null},
-        null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'A2',title:'手机网银(WAS)',x:702,y:952,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null}
-    ];
-
-    var ww = 352;var hh = 261;
-    var b2 = {name:'B2',title:'图形前端（浦口）',x:703,y:421,spl:true,target:null,type:1};
-    var ff = {name:'FF',title:'ESB(河西)',x:1644,y:421,spl:false,target:null,type:1,size:2};
-    var gg = {name:'GG',title:'ESB(浦口)',x:1644,y:730,spl:false,target:null,type:1,size:2};
-    this.ListMapData2 = [{name:'A',title:'柜面',x:235,y:112,spl:true,target:null,type:1,fristCornR:true},{name:'B',title:'图形前端（河西）',x:703,y:112,spl:true,target:null,type:1},{name:'C',title:'交易网关',x:1173,y:112,spl:false,target:null,type:1},{name:'D',title:'CTG',x:1644,y:112,spl:true,target:null,type:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,type:0,size:1,infoItemPos:0},{name:'EE',title:'加密平台',x:2149,y:543,spl:false,target:null,type:0,size:1,infoItemPos:3},
-        null,{name:'A',title:'柜面',x:235,y:112,spl:true,target:null,type:1,fristCornR:true},b2,{name:'C2',title:'交易网关（浦口）',x:1173,y:421,spl:true,target:null,type:1},{name:'D',title:'CTG',x:1644,y:112,spl:true,target:null,type:1},
-        null,ff,
-        null,gg
-    ];
-    this.ListMapData2Apply = [{name:'B2GG',color:'rgb(38,140,178)',value:[b2.x + ww/2,b2.y+hh,b2.x+ww/2,gg.y+hh/2,gg.x,gg.y+hh/2]},
-        {name:'B2FF',color:'rgb(38,140,178)',value:[b2.x + ww/2,b2.y+hh,b2.x+ww/2,gg.y+hh/2,gg.x-30,gg.y+hh/2,ff.x-30,ff.y+hh/2+20,ff.x,ff.y+hh/2+20]}
-    ];
-
-    Promise.all([loadImg('../assets/box.png'),loadImg('../assets/popBg.png')]).then(arr=>{
-
-        this.lisMap = new ListMap(arr);
-        this.lisMap.scaleX= this.lisMap.scaleY = 0.3;
-        this.lisMap.updata(this.ListMapData);
-        stage.addChild(this.lisMap);
-
-
-    });
-    setTimeout(e=>{this.lisMap.getGroup('X-Y-Z-I-E-EE')},5000);
+    //function loadImg(url){
+    //    let pro = new Promise((resolve,reject)=>{
+    //        let img = new Image();
+    //        img.onload = function() {
+    //            resolve(this);
+    //        };
     //
-    // setTimeout(e=>{this.lisMap.clear();this.lisMap.updata(this.ListMapData2,this.ListMapData2Apply)},10000);
+    //        img.onerror = function() {
+    //            reject(new Error('img error is' + url));
+    //        };
+    //        img.src = url;
+    //    })
+    //    return pro;
+    //}
+    ////拓扑图
+    ///**
+    // * @name    名字
+    // * @x       x
+    // * @y       y
+    // * @spl     与下一个节点间连线是否分割
+    // * @target  节点
+    // * @size    0为默认大小 1为中等大小 2为最大
+    // * @fristCornR  两条连线时第一条是否有是直角
+    // * @target  节点
+    // * @infoItemPos 悬浮框的位置
+    // * null 元素代表换下一组
+    // */
     //
-    // setTimeout(e=>{this.lisMap.getGroup('A-B-C-D-E-EE')},15000);
-
+    //
+    //
+    //this.ListMapData = [{name:'A',title:'柜面',x:235,y:112,spl:false,target:null},{name:'B',title:'图形前端',x:703,y:112,spl:true,target:null},{name:'C',title:'交易网关',x:1173,y:112,spl:true,target:null},{name:'D',title:'CTG',x:1644,y:184,spl:true,target:null,size:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,size:1,infoItemPos:0},{name:'EE',title:'加密平台',x:2149,y:543,spl:false,target:null,size:1,infoItemPos:3},
+    //    null,{name:'F',title:'银联',x:235,y:202,spl:true,target:null},{name:'G',title:'银联AFE',x:702,y:235,spl:false,target:null},{name:'H',title:'卡AFA',x:1172,y:292,spl:true,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null,size:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,infoItemPos:0},
+    //    null,{name:'J',title:'银联数据',x:236,y:271,spl:true,target:null},{name:'G',title:'银联AFE',x:702,y:235,spl:true,target:null},
+    //    null,{name:'K',title:'ATM',x:236,y:337,spl:true,target:null},{name:'L',title:'ATMAFE',x:702,y:337,spl:true,target:null},{name:'H',title:'卡AFA',x:1172,y:292,spl:true,target:null},
+    //    null,{name:'M',title:'POS',x:236,y:406,spl:true,target:null},{name:'N',title:'POSP',x:702,y:406,spl:true,target:null},
+    //    null,{name:'O',title:'人行',x:236,y:496,spl:true,target:null},{name:'P',title:'人行AFE',x:702,y:496,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:false,target:null},
+    //    null,{name:'R',title:'超级网银',x:236,y:565,spl:true,target:null},{name:'S',title:'超级AFE',x:702,y:565,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:false,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null},
+    //    null,{name:'T',title:'农信银',x:236,y:634,spl:true,target:null},{name:'U',title:'农信银AFE',x:702,y:634,spl:true,target:null},{name:'Q',title:'支付AFA',x:1172,y:565,spl:true,target:null},
+    //    null,{name:'UU',title:'苏南接入',x:236,y:727,spl:true,target:null},{name:'V',title:'苏南AFE',x:702,y:727,spl:true,target:null},{name:'W',title:'AFA',x:1172,y:727,spl:true,target:null},
+    //    null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'Y',title:'个人网银(WAS)',x:702,y:817,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null},
+    //    null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'A1',title:'企业网银(WAS)',x:702,y:885,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null},{name:'I',title:'ESB',x:1644,y:543,spl:true,target:null},
+    //    null,{name:'X',title:'网银',x:236,y:885,spl:true,target:null,fristCornR:true},{name:'A2',title:'手机网银(WAS)',x:702,y:952,spl:true,target:null},{name:'Z',title:'MCA',x:1172,y:885,spl:true,target:null}
+    //];
+    //
+    //var ww = 352;var hh = 261;
+    //var b2 = {name:'B2',title:'图形前端（浦口）',x:703,y:421,spl:true,target:null,type:1};
+    //var ff = {name:'FF',title:'ESB(河西)',x:1644,y:421,spl:false,target:null,type:1,size:2};
+    //var gg = {name:'GG',title:'ESB(浦口)',x:1644,y:730,spl:false,target:null,type:1,size:2};
+    //this.ListMapData2 = [{name:'A',title:'柜面',x:235,y:112,spl:true,target:null,type:1,fristCornR:true},{name:'B',title:'图形前端（河西）',x:703,y:112,spl:true,target:null,type:1},{name:'C',title:'交易网关',x:1173,y:112,spl:false,target:null,type:1},{name:'D',title:'CTG',x:1644,y:112,spl:true,target:null,type:1},{name:'E',title:'CBOD',x:2149,y:364,spl:false,target:null,type:0,size:1,infoItemPos:0},{name:'EE',title:'加密平台',x:2149,y:543,spl:false,target:null,type:0,size:1,infoItemPos:3},
+    //    null,{name:'A',title:'柜面',x:235,y:112,spl:true,target:null,type:1,fristCornR:true},b2,{name:'C2',title:'交易网关（浦口）',x:1173,y:421,spl:true,target:null,type:1},{name:'D',title:'CTG',x:1644,y:112,spl:true,target:null,type:1},
+    //    null,ff,
+    //    null,gg
+    //];
+    //this.ListMapData2Apply = [{name:'B2GG',color:'rgb(38,140,178)',value:[b2.x + ww/2,b2.y+hh,b2.x+ww/2,gg.y+hh/2,gg.x,gg.y+hh/2]},
+    //    {name:'B2FF',color:'rgb(38,140,178)',value:[b2.x + ww/2,b2.y+hh,b2.x+ww/2,gg.y+hh/2,gg.x-30,gg.y+hh/2,ff.x-30,ff.y+hh/2+20,ff.x,ff.y+hh/2+20]}
+    //];
+    //
+    //Promise.all([loadImg('../assets/box.png'),loadImg('../assets/popBg.png')]).then(arr=>{
+    //
+    //    this.lisMap = new ListMap(arr);
+    //    this.lisMap.scaleX= this.lisMap.scaleY = 0.3;
+    //    this.lisMap.updata(this.ListMapData);
+    //    stage.addChild(this.lisMap);
+    //
+    //
+    //});
+    //setTimeout(e=>{this.lisMap.getGroup('X-Y-Z-I-E-EE')},5000);
+    ////
+    //// setTimeout(e=>{this.lisMap.clear();this.lisMap.updata(this.ListMapData2,this.ListMapData2Apply)},10000);
+    ////
+    //// setTimeout(e=>{this.lisMap.getGroup('A-B-C-D-E-EE')},15000);
+    //
     createjs.Ticker.addEventListener('tick',stage);
 
 

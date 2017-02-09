@@ -14,6 +14,7 @@ class TextDoubleState extends createjs.Container{
      *      text:"",
      *      width:100,
      *      height:30,
+     *      textAlign:"center",
      *      selected:false,
      *      textSelectedFont:"15px 微软雅黑",
      *      textSelectedColor:"#ffffff",
@@ -44,6 +45,7 @@ class TextDoubleState extends createjs.Container{
         this._text = "";
         this._width = 100;
         this._height = 30;
+        this._textAlign = "center";
         this._selected = false;
         this._textSelectedFont = "15px 微软雅黑";
         this._textSelectedColor = "#ffffff";
@@ -76,6 +78,7 @@ class TextDoubleState extends createjs.Container{
         //this.height = this.title.getMeasuredHeight();
         this.setTextStyle();
         this.setBgStyle();
+        this.setTextPos();
 
         this.addChild(this.eventShape,this.title);
     }
@@ -87,6 +90,16 @@ class TextDoubleState extends createjs.Container{
             this.eventShape.graphics.clear().beginFill(this._bgUnselectedColor).drawRect(0, 0, this._width, this._height).endFill();
             this.eventShape.alpha = this._bgUnselectedAlpha;
         }
+    }
+    setTextPos(){
+        if(this._textAlign == "center"){
+            this.title.x = (this._width-this.title.getMeasuredWidth())/2;
+        }else if(this._textAlign == "right"){
+            this.title.x = this._width-this.title.getMeasuredWidth();
+        }else{
+            this.title.x = 0;
+        }
+        this.title.y = (this._height-this.title.getMeasuredHeight())/2;
     }
     setTextStyle(){
         if(this._selected){
@@ -109,6 +122,7 @@ class TextDoubleState extends createjs.Container{
             //this.width = this.title.getMeasuredWidth();
             //this.height = this.title.getMeasuredHeight();
             this.setBgStyle();
+            this.setTextPos();
         }
     }
     get text(){

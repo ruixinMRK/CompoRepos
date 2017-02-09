@@ -430,25 +430,25 @@ window.onload = function(){
     //this.bar.y = 100;
 
 //============================ 测试TextString
-    //var ts = new TextString({
-    //    left:10,
-    //    top:10,
-    //    gapH:10,
-    //    gapV:10,
-    //    dir:"h",
-    //    itemW:100,
-    //    itemH:30,
-    //    font:"15px 微软雅黑",
-    //    color:"#000000",
-    //    textAlign:"left",
-    //    value:"",
-    //    itemsStyle:
-    //        [{valueField:"v1",font:"15px 微软雅黑",color:"#ff0000",value:"text1",textAlign:"left",width:100,height:30},
-    //            {valueField:"v2",font:"15px 微软雅黑",color:"#000000",value:"text2",textAlign:"left",width:100,height:30},
-    //            {valueField:"v3",font:"15px 微软雅黑",color:"#000000",value:"text3",textAlign:"left",width:100,height:30}],
-    //});
-    //ts.setData({v1:1,v2:2,v3:3});
-    //stage.addChild(ts);
+//    var ts = new TextString({
+//        left:10,
+//        top:10,
+//        gapH:10,
+//        gapV:10,
+//        dir:"h",
+//        itemW:100,
+//        itemH:30,
+//        font:"15px 微软雅黑",
+//        color:"#000000",
+//        textAlign:"left",
+//        value:"",
+//        itemsStyle:
+//            [{valueField:"v1",font:"15px 微软雅黑",color:"#ff0000",value:"text1",textAlign:"left",width:100,height:30},
+//                {valueField:"v2",font:"15px 微软雅黑",color:"#000000",value:"text2",textAlign:"left",width:100,height:30},
+//                {valueField:"v3",font:"15px 微软雅黑",color:"#000000",value:"text3",textAlign:"left",width:100,height:30}],
+//    });
+//    ts.setData({v1:"第一个文本",v2:"第二个文本",v3:"第三个文本"});
+//    stage.addChild(ts);
 //============================ end 测试TextString
 
     //============================测试 TextDoubleState的代码
@@ -457,6 +457,7 @@ window.onload = function(){
     //      text:"",
     //      width:100,
     //      height:30,
+    //      textAlign:"center",
     //      selected:false,
     //      textSelectedFont:"15px 微软雅黑",
     //      textSelectedColor:"#ffffff",
@@ -467,12 +468,16 @@ window.onload = function(){
     //      bgSelectedColor:"#333333",
     //      bgSelectedAlpha:0.5,
     //      bgUnselectedColor:"#ffffff",
-    //      bgUnselectedAlpha:0.01
+    //      bgUnselectedAlpha:0.5
     //  }
     //);
-    //tds.setData({a:"aaa",b:"bbb"},"b");
-    ////tds.text = "bbb";
-    //tds.selected = true;
+    //tds.setData({key1:"key1_Value",key2:"key2_value"},"key2");
+    //tds.setData("key2_value");
+    //tds.text = "key2_value";
+    //tds.x = 100;tds.y = 100;
+    //tds.selected = false;
+    //
+    //stage.addChild(tds);
 //============================ end 测试 TextDoubleState的代码
 
     //============================测试 Menu 的代码
@@ -514,52 +519,52 @@ window.onload = function(){
 
 
 //============================测试 MenuTile的代码
-    //var o = {
-    //          text:"",
-    //          width:100,
-    //          height:30,
-    //          selected:false,
-    //          textSelectedFont:"15px 微软雅黑",
-    //          textSelectedColor:"#ffffff",
-    //          textSelectedAlpha:1,
-    //          textUnselectedFont:"15px 微软雅黑",
-    //          textUnselectedColor:"#000000",
-    //          textUnselectedAlpha:1,
-    //          bgSelectedColor:"#333333",
-    //          bgSelectedAlpha:0.5,
-    //          bgUnselectedColor:"#ffffff",
-    //          bgUnselectedAlpha:0.01
-    //      };
-    //var arr = [];
-    //var tds0 = new TextDoubleState(o);tds0.text = "relCons";
-    //for(var i=0;i<10;i++){
-    //    var tds = new TextDoubleState(o);tds.text = i+1;
-    //    arr.push(tds);
-    //}
-    //
-    //var m = new MenuTile({
-    //      items:arr,
-    //      dir:"h",
-    //      groupCount:3,
-    //      itemW:100,
-    //      itemH:30,
-    //      gapH:10,
-    //      gapV:10,
-    //      selectedIndex:0,
-    //      trigger:"click",
-    //      blLoop:true,
-    //      loopTime:1000,
-    //      blMouseRelCon:true,
-    //      relCons:[tds0]
-    //});
-    //m.x = 100;m.y = 100;
-    //stage.enableMouseOver(60);
-    //stage.addChild(tds0,m);
+//    var o = {
+//              text:"",
+//              width:100,
+//              height:30,
+//              selected:false,
+//              textSelectedFont:"15px 微软雅黑",
+//              textSelectedColor:"#ffffff",
+//              textSelectedAlpha:1,
+//              textUnselectedFont:"15px 微软雅黑",
+//              textUnselectedColor:"#000000",
+//              textUnselectedAlpha:1,
+//              bgSelectedColor:"#333333",
+//              bgSelectedAlpha:0.5,
+//              bgUnselectedColor:"#ffffff",
+//              bgUnselectedAlpha:0.01
+//          };
+//    var arr = [];
+//    var tds0 = new TextDoubleState(o);tds0.text = "relCons";
+//    for(var i=0;i<10;i++){
+//        var tds = new TextDoubleState(o);tds.text = i+1;
+//        arr.push(tds);
+//    }
+//
+//    var m = new MenuTile({
+//          items:arr,
+//          dir:"h",
+//          groupCount:3,
+//          itemW:100,
+//          itemH:30,
+//          gapH:10,
+//          gapV:10,
+//          selectedIndex:0,
+//          trigger:"click",
+//          blLoop:true,
+//          loopTime:1000,
+//          blMouseRelCon:true,
+//          relCons:[tds0]
+//    });
+//    m.x = 100;m.y = 100;
+//    stage.enableMouseOver(60);
+//    stage.addChild(tds0,m);
 //============================end 测试 MenuTile的代码
 
     //============================测试 PageList的代码
 //
-//var p = new PageList({width:400,height:300,listItemClass:ExpItem,listCount:3,listItemTriggle:"click",pageTiggle:"click",pageBLLoop:true,pageLoopTime:2000});
+//var p = new PageList({width:300,height:150,listItemClass:ExpItem,listCount:3,listItemTriggle:"click",pageTiggle:"click",pageBLLoop:true,pageLoopTime:2000});
 //p.setData([{t0:0,t1:1,t2:2,t3:3},
 //  {t0:10,t1:11,t2:2,t3:3},
 //  {t0:20,t1:21,t2:2,t3:3},
@@ -578,8 +583,6 @@ window.onload = function(){
 //  {t0:660,t1:661,t2:2,t3:3},
 //  {t0:770,t1:771,t2:2,t3:3}]);
 //    stage.addChild(p);
-
-
 //============================ end 测试 PageList的代码
 
   //============================测试 UIPageList的代码

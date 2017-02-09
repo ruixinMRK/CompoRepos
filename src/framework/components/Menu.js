@@ -185,12 +185,12 @@ class Menu extends createjs.Container{
         for (var i = 0; i < this._items.length; i++) {
             if (this._items[i] == this._triggerTarget) {
                 this._items[i].selected = true;
-                this._items[i].cursor = "pointer";
+                this._items[i].cursor = null;
                 this._selectedIndex = i;
             }
             else {
                 this._items[i].selected = false;
-                this._items[i].cursor = null;
+                this._items[i].cursor = "pointer";
             }
         }
         if(oldIndex != this._selectedIndex){
@@ -206,11 +206,11 @@ class Menu extends createjs.Container{
                 for (var i = 0; i < this._items.length; i++) {
                     if(i === idx){
                         this._items[i].selected = true;
-                        this._items[i].cursor = "pointer";
+                        this._items[i].cursor = null;
                         this._selectedIndex = i;
                     }else {
                         this._items[i].selected = false;
-                        this._items[i].cursor = null;
+                        this._items[i].cursor = "pointer";
                     }
                 }
                 if(oldIndex != this._selectedIndex){
@@ -226,11 +226,11 @@ class Menu extends createjs.Container{
                 for (var i = 0; i < this._items.length; i++) {
                     if(i == idx){
                         this._items[i].selected = true;
-                        this._items[i].cursor = "pointer";
+                        this._items[i].cursor = null;
                         this._selectedIndex = i;
                     }else {
                         this._items[i].selected = false;
-                        this._items[i].cursor = null;
+                        this._items[i].cursor = "pointer";
                     }
                 }
                 if(idx==-1)this._selectedIndex = -1;

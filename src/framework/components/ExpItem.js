@@ -9,13 +9,13 @@ class ExpItem extends createjs.Container {
         this.initView();
     }
     initView(){
-        this.width = 100;
+        this.width = 200;
         this.height = 30;
         this.arrTxt = [];
         var t;
-        for(var i=0;i<4;i++){
-            t = new createjs.Text("aa","15px 微软雅黑","#ff00ff");
-            t.x = i*30;
+        for(var i=0;i<6;i++){
+            t = new createjs.Text("aa","15px 微软雅黑","#fff");
+            t.x = i*55;
             this.arrTxt.push(t);
             this.addChild(t);
         }

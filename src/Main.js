@@ -430,25 +430,26 @@ window.onload = function(){
     //this.bar.y = 100;
 
 //============================ 测试TextString
-//    var ts = new TextString({
-//        left:10,
-//        top:10,
-//        gapH:10,
-//        gapV:10,
-//        dir:"h",
-//        itemW:100,
-//        itemH:30,
-//        font:"15px 微软雅黑",
-//        color:"#000000",
-//        textAlign:"left",
-//        value:"",
-//        itemsStyle:
-//            [{valueField:"v1",font:"15px 微软雅黑",color:"#ff0000",value:"text1",textAlign:"left",width:100,height:30},
-//                {valueField:"v2",font:"15px 微软雅黑",color:"#000000",value:"text2",textAlign:"left",width:100,height:30},
-//                {valueField:"v3",font:"15px 微软雅黑",color:"#000000",value:"text3",textAlign:"left",width:100,height:30}],
-//    });
-//    ts.setData({v1:"第一个文本",v2:"第二个文本",v3:"第三个文本"});
-//    stage.addChild(ts);
+    var ts = new TextString({
+        left:10,
+        top:10,
+        gapH:10,
+        gapV:10,
+        dir:"h",
+        itemW:100,
+        itemH:30,
+        font:"15px 微软雅黑",
+        color:"#000000",
+        textAlign:"left",
+        value:"",
+        itemsStyle:
+            [{valueField:"v1",font:"15px 微软雅黑",color:"#ffffff",value:"text1",textAlign:"left",width:100,height:30},
+                {valueField:"v2",font:"15px 微软雅黑",color:"#395b74",value:"text2",textAlign:"left",width:100,height:30},
+                {valueField:"v3",font:"15px 微软雅黑",color:"#395b74",value:"text3",textAlign:"left",width:100,height:30}]
+    });
+    ts.setData({v1:"第一个文本",v2:"第二个文本",v3:"第三个文本"});
+    ts.x = 100;ts.y = 100;
+    stage.addChild(ts);
 //============================ end 测试TextString
 
     //============================测试 TextDoubleState的代码
@@ -458,14 +459,14 @@ window.onload = function(){
     //      width:100,
     //      height:30,
     //      textAlign:"center",
-    //      selected:false,
+    //      selected:true,
     //      textSelectedFont:"15px 微软雅黑",
     //      textSelectedColor:"#ffffff",
     //      textSelectedAlpha:1,
     //      textUnselectedFont:"15px 微软雅黑",
     //      textUnselectedColor:"#000000",
     //      textUnselectedAlpha:1,
-    //      bgSelectedColor:"#333333",
+    //      bgSelectedColor:"#395b74",
     //      bgSelectedAlpha:0.5,
     //      bgUnselectedColor:"#ffffff",
     //      bgUnselectedAlpha:0.5
@@ -475,7 +476,7 @@ window.onload = function(){
     //tds.setData("key2_value");
     //tds.text = "key2_value";
     //tds.x = 100;tds.y = 100;
-    //tds.selected = false;
+    //tds.selected = true;
     //
     //stage.addChild(tds);
 //============================ end 测试 TextDoubleState的代码
@@ -492,16 +493,16 @@ window.onload = function(){
     //          textUnselectedFont:"15px 微软雅黑",
     //          textUnselectedColor:"#000000",
     //          textUnselectedAlpha:1,
-    //          bgSelectedColor:"#333333",
+    //          bgSelectedColor:"#395b74",
     //          bgSelectedAlpha:0.5,
     //          bgUnselectedColor:"#ffffff",
-    //          bgUnselectedAlpha:0.01
+    //          bgUnselectedAlpha:0.5
     //      };
     //var tds1 = new TextDoubleState(o);tds1.text = 1;
     //var tds2 = new TextDoubleState(o);tds2.text = 2;
     //var tds3 = new TextDoubleState(o);tds3.text = 3;
     //var tds4 = new TextDoubleState(o);tds4.text = 4;
-    //tds4.x = 100;tds4.y = 100;
+    //tds4.x = 500;tds4.y = 500;
     //var m = new Menu({
     //      items:[tds1,tds2,tds3],
     //      gap:10,
@@ -513,6 +514,7 @@ window.onload = function(){
     //      blMouseRelCon:true,
     //      relCons:[tds4]
     // });
+    //m.x = 100;m.y = 100;
     //stage.enableMouseOver(60);
     //stage.addChild(m,tds4);
 //============================end 测试 Menu的代码
@@ -530,10 +532,10 @@ window.onload = function(){
 //              textUnselectedFont:"15px 微软雅黑",
 //              textUnselectedColor:"#000000",
 //              textUnselectedAlpha:1,
-//              bgSelectedColor:"#333333",
+//              bgSelectedColor:"#395b74",
 //              bgSelectedAlpha:0.5,
 //              bgUnselectedColor:"#ffffff",
-//              bgUnselectedAlpha:0.01
+//              bgUnselectedAlpha:0.5
 //          };
 //    var arr = [];
 //    var tds0 = new TextDoubleState(o);tds0.text = "relCons";
@@ -563,120 +565,139 @@ window.onload = function(){
 //============================end 测试 MenuTile的代码
 
     //============================测试 PageList的代码
+
+//    var pageItemP = {
+//        text:"",
+//        width:16,
+//        height:16,
+//        selected:false,
+//        textSelectedFont:"6px 微软雅黑",
+//        textSelectedColor:"#ffffff",
+//        textSelectedAlpha:1,
+//        textUnselectedFont:"6px 微软雅黑",
+//        textUnselectedColor:"#395b74",
+//        textUnselectedAlpha:1,
+//        bgSelectedColor:"#00ff00",
+//        bgSelectedAlpha:0.5,
+//        bgUnselectedColor:"#eeeeee",
+//        bgUnselectedAlpha:0.8
+//    };
 //
-//var p = new PageList({width:300,height:150,listItemClass:ExpItem,listCount:3,listItemTriggle:"click",pageTiggle:"click",pageBLLoop:true,pageLoopTime:2000});
-//p.setData([{t0:0,t1:1,t2:2,t3:3},
-//  {t0:10,t1:11,t2:2,t3:3},
-//  {t0:20,t1:21,t2:2,t3:3},
-//  {t0:30,t1:31,t2:2,t3:3},
-//  {t0:40,t1:41,t2:2,t3:3},
-//  {t0:50,t1:51,t2:2,t3:3},
-//  {t0:60,t1:61,t2:2,t3:3},
-//  {t0:70,t1:71,t2:2,t3:3},
-//  {t0:80,t1:81,t2:2,t3:3},
-//  {t0:90,t1:91,t2:2,t3:3},
-//  {t0:110,t1:111,t2:2,t3:3},
-//  {t0:220,t1:221,t2:2,t3:3},
-//  {t0:330,t1:331,t2:2,t3:3},
-//  {t0:440,t1:441,t2:2,t3:3},
-//  {t0:550,t1:551,t2:2,t3:3},
-//  {t0:660,t1:661,t2:2,t3:3},
-//  {t0:770,t1:771,t2:2,t3:3}]);
+//var p = new PageList({width:300,height:150,listItemClass:ExpItem,listCount:3,listItemTriggle:"click",pageItemParam:pageItemP,pageTiggle:"click",pageBLLoop:true,pageLoopTime:2000});
+//p.setData([{t0:0,t1:1,t2:2,t3:3,t4:4,t5:5},
+//  {t0:10,t1:11,t2:2,t3:3,t4:4,t5:5},
+//  {t0:20,t1:21,t2:2,t3:3,t4:4,t5:5},
+//  {t0:30,t1:31,t2:2,t3:3,t4:4,t5:5},
+//  {t0:40,t1:41,t2:2,t3:3,t4:4,t5:5},
+//  {t0:50,t1:51,t2:2,t3:3,t4:4,t5:5},
+//  {t0:60,t1:61,t2:2,t3:3,t4:4,t5:5},
+//  {t0:70,t1:71,t2:2,t3:3,t4:4,t5:5},
+//  {t0:80,t1:81,t2:2,t3:3,t4:4,t5:5},
+//  {t0:90,t1:91,t2:2,t3:3,t4:4,t5:5},
+//  {t0:100,t1:101,t2:2,t3:3,t4:4,t5:5},
+//  {t0:110,t1:111,t2:2,t3:3,t4:4,t5:5},
+//  {t0:120,t1:121,t2:2,t3:3,t4:4,t5:5},
+//  {t0:130,t1:131,t2:2,t3:3,t4:4,t5:5},
+//  {t0:140,t1:141,t2:2,t3:3,t4:4,t5:5},
+//  {t0:150,t1:151,t2:2,t3:3,t4:4,t5:5},
+//  {t0:160,t1:161,t2:2,t3:3,t4:4,t5:5}]);
+//    p.x = 100,p.y = 100;
 //    stage.addChild(p);
+
 //============================ end 测试 PageList的代码
 
   //============================测试 UIPageList的代码
 
-  var bgS = new createjs.Shape();
-  var g = bgS.graphics.setStrokeStyle(1).beginStroke("#fff").beginFill("#19233e").moveTo(0,0).lineTo(424,0).lineTo(450,27).lineTo(450,287).lineTo(0,287).lineTo(0,0).endFill();
-  var listTitleP = {
-        itemsStyle:
-            [{valueField:"t1",font:"16px 微软雅黑",color:"#fff",value:"省份",textAlign:"center",x:42},
-                {valueField:"t2",font:"16px 微软雅黑",color:"#fff",value:"指标名称",textAlign:"center",x:151},
-                {valueField:"t3",font:"16px 微软雅黑",color:"#fff",value:"当前值",textAlign:"center",x:261},
-              {valueField:"t4",font:"16px 微软雅黑",color:"#fff",value:"正常值",textAlign:"center",x:316},
-              {valueField:"t5",font:"16px 微软雅黑",color:"#fff",value:"持续告警",textAlign:"center",x:404}]
-    };
-  var listItemP = {
-    itemsStyle:
-        [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:10},
-          {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:42},
-          {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:151},
-          {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:261},
-          {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:316},
-          {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:404}]
-  };
-  var pageItemP = {
-      text:"",
-      width:16,
-      height:16,
-      selected:false,
-      textSelectedFont:"6px 微软雅黑",
-      textSelectedColor:"#ffffff",
-      textSelectedAlpha:1,
-      textUnselectedFont:"6px 微软雅黑",
-      textUnselectedColor:"#395b74",
-      textUnselectedAlpha:1,
-      bgSelectedColor:"#ff0000",
-      bgSelectedAlpha:0.01,
-      bgUnselectedColor:"#00ff00",
-      bgUnselectedAlpha:0.01
-  };
-
-
-  var pageListP = {width:450,height:248,
-      listItemClass:TextString,listItemParam:listItemP,listCount:10,listGap:7,
-      /*pageItemClass:TextDoubleState,*/pageItemParam:pageItemP,pageMarginH:10,pageMarginV:3,
-      listItemTriggle:"click",pageTiggle:"click",
-      pageBLLoop:true,pageLoopTime:2000};
-
-  var p = new UIPageList({titleStr:"当前提醒关注业务",bg:bgS,listTitleParam:listTitleP,pageListParam:pageListP});
-  p.setListTitle({t1:"省份",t2:"指标名称",t3:"当前值",t4:"正常值",t5:"持续告警"});
-  p.setData([
-    {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:13,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:14,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:15,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:16,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:17,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:18,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:19,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-    {v0:20,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:31,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:32,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:33,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:34,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:35,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:36,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:37,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:38,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:39,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:40,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:51,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:52,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:53,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:54,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:55,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:56,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:57,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:58,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:59,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:60,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
-      {v0:61,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9}
-
-  ]);
-  stage.addChild(p);
+  //var bgS = new createjs.Shape();
+  //var g = bgS.graphics.setStrokeStyle(1).beginStroke("#fff").beginFill("#19233e").moveTo(0,0).lineTo(424,0).lineTo(450,27).lineTo(450,287).lineTo(0,287).lineTo(0,0).endFill();
+  //var listTitleP = {
+  //      itemsStyle:
+  //          [{valueField:"t1",font:"16px 微软雅黑",color:"#fff",value:"省份",textAlign:"center",x:42},
+  //              {valueField:"t2",font:"16px 微软雅黑",color:"#fff",value:"指标名称",textAlign:"center",x:151},
+  //              {valueField:"t3",font:"16px 微软雅黑",color:"#fff",value:"当前值",textAlign:"center",x:261},
+  //            {valueField:"t4",font:"16px 微软雅黑",color:"#fff",value:"正常值",textAlign:"center",x:316},
+  //            {valueField:"t5",font:"16px 微软雅黑",color:"#fff",value:"持续告警",textAlign:"center",x:404}]
+  //  };
+  //var listItemP = {
+  //  itemsStyle:
+  //      [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:10},
+  //        {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:42},
+  //        {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:151},
+  //        {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:261},
+  //        {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:316},
+  //        {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"",textAlign:"center",x:404}]
+  //};
+  //var pageItemP = {
+  //    text:"",
+  //    width:16,
+  //    height:16,
+  //    selected:false,
+  //    textSelectedFont:"6px 微软雅黑",
+  //    textSelectedColor:"#ffffff",
+  //    textSelectedAlpha:1,
+  //    textUnselectedFont:"6px 微软雅黑",
+  //    textUnselectedColor:"#395b74",
+  //    textUnselectedAlpha:1,
+  //    bgSelectedColor:"#ff0000",
+  //    bgSelectedAlpha:0.01,
+  //    bgUnselectedColor:"#00ff00",
+  //    bgUnselectedAlpha:0.01
+  //};
+  //
+  //
+  //var pageListP = {width:450,height:248,
+  //    listItemClass:TextString,listItemParam:listItemP,listCount:10,listGap:7,
+  //    /*pageItemClass:TextDoubleState,*/pageItemParam:pageItemP,pageMarginH:10,pageMarginV:3,
+  //    listItemTriggle:"click",pageTiggle:"click",
+  //    pageBLLoop:true,pageLoopTime:2000};
+  //
+  //var p = new UIPageList({titleStr:"当前提醒关注业务",bg:bgS,listTitleParam:listTitleP,pageListParam:pageListP});
+  //p.setListTitle({t1:"省份",t2:"指标名称",t3:"当前值",t4:"正常值",t5:"持续告警"});
+  //p.setData([
+  //  {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:13,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:14,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:15,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:16,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:17,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:18,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:19,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //  {v0:20,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:31,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:32,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:33,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:34,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:35,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:36,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:37,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:38,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:39,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:40,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:51,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:52,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:53,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:54,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:55,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:56,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:57,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:58,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:59,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:60,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9},
+  //    {v0:61,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:9}
+  //
+  //]);
+  //stage.addChild(p);
 
 
   //============================end 测试 UIPageList的代码

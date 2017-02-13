@@ -13,15 +13,19 @@ class CategoryLegend extends createjs.Container{
      *
      * @param {object} styleData - 格式数据
      *  {
-     *      items:[],
-     *      gap:10,
-     *      dir:"h",
-     *      selectedIndex:0,
-     *      trigger:"click",
-     *      blLoop:false,
-     *      loopTime:1000,
-     *      blMouseRelCon:false,
-     *      relCons:[]
+     *      itemW:50,
+     *      itemH:13,
+     *      itemNameGap:4,
+     *      itemValueGap:4,
+     *      itemTexts:["正常","低","中","高","紧急"],
+     *      itemColors:["#E7E8EB","#B6B9C1","#858997","#FF9000","#FF2400"],
+     *      itemNameFont:"22px 黑体",
+     *      itemValueFont:"22px 黑体",
+     *      blLine:true,
+     *      lineL:33,
+     *      lineW:2,
+     *      lineLinearGradientColors:["rgba(255,255,255,0.2)","rgba(255,255,255,1)"],
+     *      lineLinearGradientRatios:[0,1]
      * }
      * */
     constructor(styleData) {

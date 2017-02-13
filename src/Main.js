@@ -14,6 +14,7 @@ import Timer from './tools/Timer';
 import ObjectPool from './tools/ObjectPool';
 import ListMap from './framework/components/ListMap.js';
 
+import CategoryLegend from './framework/components/CategoryLegend';
 import TextString from './framework/components/TextString';
 import TextDoubleState from './framework/components/TextDoubleState';
 
@@ -429,27 +430,40 @@ window.onload = function(){
     //stage.addChild(this.bar);
     //this.bar.y = 100;
 
+//============================ CategoryLegend
+    var cl = new CategoryLegend({});
+    cl.setData({"正常":3,"低":3,"中":3,"高":3,"紧急":3});
+    cl.setDataByIndex(1,6);
+    cl.setDataByName("中",9);
+
+    cl.setLineVisibleByIdx(5,false);
+    cl.setValueVisibleByIdx(0,false);
+
+
+    cl.x = 100;cl.y = 100;
+    stage.addChild(cl);
+//============================ end 测试 CategoryLegend
 //============================ 测试TextString
-    var ts = new TextString({
-        left:10,
-        top:10,
-        gapH:10,
-        gapV:10,
-        dir:"h",
-        itemW:100,
-        itemH:30,
-        font:"15px 微软雅黑",
-        color:"#000000",
-        textAlign:"left",
-        value:"",
-        itemsStyle:
-            [{valueField:"v1",font:"15px 微软雅黑",color:"#ffffff",value:"text1",textAlign:"left",width:100,height:30},
-                {valueField:"v2",font:"15px 微软雅黑",color:"#395b74",value:"text2",textAlign:"left",width:100,height:30},
-                {valueField:"v3",font:"15px 微软雅黑",color:"#395b74",value:"text3",textAlign:"left",width:100,height:30}]
-    });
-    ts.setData({v1:"第一个文本",v2:"第二个文本",v3:"第三个文本"});
-    ts.x = 100;ts.y = 100;
-    stage.addChild(ts);
+//    var ts = new TextString({
+//        left:10,
+//        top:10,
+//        gapH:10,
+//        gapV:10,
+//        dir:"h",
+//        itemW:100,
+//        itemH:30,
+//        font:"15px 微软雅黑",
+//        color:"#000000",
+//        textAlign:"left",
+//        value:"",
+//        itemsStyle:
+//            [{valueField:"v1",font:"15px 微软雅黑",color:"#ffffff",value:"text1",textAlign:"left",width:100,height:30},
+//                {valueField:"v2",font:"15px 微软雅黑",color:"#395b74",value:"text2",textAlign:"left",width:100,height:30},
+//                {valueField:"v3",font:"15px 微软雅黑",color:"#395b74",value:"text3",textAlign:"left",width:100,height:30}]
+//    });
+//    ts.setData({v1:"第一个文本",v2:"第二个文本",v3:"第三个文本"});
+//    ts.x = 100;ts.y = 100;
+//    stage.addChild(ts);
 //============================ end 测试TextString
 
     //============================测试 TextDoubleState的代码

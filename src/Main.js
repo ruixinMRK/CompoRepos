@@ -17,6 +17,7 @@ import ListMap from './framework/components/ListMap.js';
 import CategoryLegend from './framework/components/CategoryLegend';
 import TextString from './framework/components/TextString';
 import TextDoubleState from './framework/components/TextDoubleState';
+import Roller from './framework/components/Roller';
 
 import Menu from './framework/components/Menu';
 import MenuTile from './framework/components/MenuTile';
@@ -431,20 +432,40 @@ window.onload = function(){
     //this.bar.y = 100;
 
 //============================ CategoryLegend
-    var cl = new CategoryLegend({});
-    cl.setData({"正常":3,"低":3,"中":3,"高":3,"紧急":3});
-    cl.setDataByIndex(1,6);
-    cl.setDataByName("中",9);
-
-    cl.setLineVisibleByIdx(5,false);
-    cl.setValueVisibleByIdx(0,false);
-
-
-    cl.x = 100;cl.y = 100;
-    stage.addChild(cl);
+//    var o = {
+//          itemW:50,
+//          itemH:13,
+//          itemNameGap:4,
+//          itemValueGap:4,
+//          itemTexts:["正常","低","中","高","紧急"],
+//          itemColors:["#E7E8EB","#B6B9C1","#858997","#FF9000","#FF2400"],
+//          itemNameFont:"22px 黑体",
+//          itemValueFont:"22px 黑体",
+//          blLine:true,
+//          lineL:33,
+//          lineW:2,
+//          lineLinearGradientColors:["rgba(255,255,255,0.2)","rgba(255,255,255,1)"],
+//          lineLinearGradientRatios:[0,1]
+//     }
+//    var cl = new CategoryLegend({});
+//    cl.setData({"正常":3,"低":3,"中":3,"高":3,"紧急":3});
+//    cl.setDataByIndex(1,6);
+//    cl.setDataByName("中",9);
+//
+//    cl.setLineVisibleByIdx(5,false);
+//    cl.setValueVisibleByIdx(0,false);
+//
+//
+//    cl.x = 100;cl.y = 100;
+//    stage.addChild(cl);
 //============================ end 测试 CategoryLegend
 //============================ 测试TextString
+//    var s = new createjs.Shape();
+//    s.graphics.setStrokeStyle(2).beginLinearGradientStroke(["rgba(255,255,255,0.2)","rgba(255,255,255,1)","rgba(255,255,255,0.2)"], [0, 0.5,1], 0, 0, 240, 0).moveTo(0,0).lineTo(240, 0).endStroke();
 //    var ts = new TextString({
+//        bgImg:s,
+//        bgImgX:45,
+//        bgImgY:33,
 //        left:10,
 //        top:10,
 //        gapH:10,
@@ -464,6 +485,7 @@ window.onload = function(){
 //    ts.setData({v1:"第一个文本",v2:"第二个文本",v3:"第三个文本"});
 //    ts.x = 100;ts.y = 100;
 //    stage.addChild(ts);
+
 //============================ end 测试TextString
 
     //============================测试 TextDoubleState的代码
@@ -495,6 +517,58 @@ window.onload = function(){
     //stage.addChild(tds);
 //============================ end 测试 TextDoubleState的代码
 
+//============================测试 Roller 的代码
+
+
+    var listItemP = {
+          itemsStyle:
+              [{valueField:"v0",font:"14px 微软雅黑",color:"#fff",value:"1",textAlign:"center",x:10},
+                {valueField:"v1",font:"14px 微软雅黑",color:"#fff",value:"宁夏",textAlign:"center",x:42},
+                {valueField:"v2",font:"14px 微软雅黑",color:"#fff",value:"1分钟缴费复机及时率",textAlign:"center",x:151},
+                {valueField:"v3",font:"14px 微软雅黑",color:"#fff",value:"10.04%",textAlign:"center",x:261},
+                {valueField:"v4",font:"14px 微软雅黑",color:"#fff",value:"85%",textAlign:"center",x:316},
+                {valueField:"v5",font:"14px 微软雅黑",color:"#fff",value:"9",textAlign:"center",x:404}]
+        };
+    var r = new Roller({itemClass:TextString,itemParam:listItemP});
+    r.x = 100;
+    r.y = 100;
+    r.setData([
+        {v0:1,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:2,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:3,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:4,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:5,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:6,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:7,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:8,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:9,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:10,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:11,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+        {v0:12,v1:"宁夏",v2:"1分钟缴费复机及时率",v3:"10.04%",v4:"85%",v5:"9"},
+    ]);
+    stage.addChild(r);
+
+    //var listItemP = {
+    //    itemsStyle:
+    //        [{valueField:"level",font:"22px 微软雅黑",color:"#fff",value:"预警级别",textAlign:"center",x:36,width:124,height:28},
+    //            {valueField:"title",font:"22px 微软雅黑",color:"#fff",value:"预警标题",textAlign:"left",x:124,width:470,height:28}]
+    //};
+    //var r = new Roller({ width:590,height:175,blAlpha:0,showCount:5,skipCount:1,itemClass:TextString,itemParam:listItemP});
+    //r.x = 30;
+    //r.y = 158;
+    //stage.addChild(r);
+    //r.setData([{level:"关注0",title:"空气质量令人满意，基本无空气污染"},
+    //    {level:"关注1",title:"极少数异常敏感人群应减少户外活动"},
+    //    {level:"关注2",title:"儿童、老年人及心脏病、呼吸系统疾病患者应减少户外活动"},
+    //    {level:"关注3",title:"儿童、老年人及病人应停留在室内，避免体力消耗"},
+    //    {level:"关注4",title:"易感人群症状有轻度加剧，健康人群出现刺激症状"},
+    //    {level:"关注5",title:"空气质量令人满意，基本无空气污染"},
+    //    {level:"关注6",title:"极少数异常敏感人群应减少户外活动"},
+    //    {level:"关注7",title:"儿童、老年人及心脏病、呼吸系统疾病患者应减少户外活动"},
+    //    {level:"关注8",title:"儿童、老年人及病人应停留在室内，避免体力消耗"},
+    //    {level:"关注9",title:"易感人群症状有轻度加剧，健康人群出现刺激症状"}]);
+
+//============================ end 测试 Roller 的代码
     //============================测试 Menu 的代码
     //var o = {
     //          text:"",

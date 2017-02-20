@@ -24,6 +24,9 @@ class TextString extends createjs.Container{
      *          [{valueField:"v1",font:"15px 微软雅黑",color:"#000000",value:"text1",textAlign:"left",width:100,height:30},
      *          {valueField:"v2",font:"15px 微软雅黑",color:"#000000",value:"text2",textAlign:"left",width:100,height:30},
      *          {valueField:"v3",font:"15px 微软雅黑",color:"#000000",value:"text3",textAlign:"left",width:100,height:30}],
+     *      bgImg:null,
+     *      bgImgX:0,
+     *      bgImgY:0
      * }
      */
     constructor(styleData){
@@ -54,6 +57,10 @@ class TextString extends createjs.Container{
         this._value = "";
         this._itemsStyle = [];
 
+        this._bgImg = null;
+        this._bgImgX = 0;
+        this._bgImgY = 0;
+
         this._w = 0;
         this._h = 0;
         this.__arrText = [];
@@ -61,11 +68,20 @@ class TextString extends createjs.Container{
     setStyleData = (styleData)=>{
         for(let k in styleData){
             if(("_"+k) in this){
-                this["_"+k] = styleData[k];
+                if(k=="bgImg"){
+                    this["_"+k] = styleData[k].clone();
+                }else {
+                    this["_" + k] = styleData[k];
+                }
             }
         }
     };
     initView(){
+        if(this._bgImg){
+            this._bgImg.x = this._bgImgX;
+            this._bgImg.y = this._bgImgY;
+            this.addChild(this._bgImg);
+        }
         var txt;
         for(let i=0;i<this._itemsStyle.length;i++){
             txt = new createjs.Text("");

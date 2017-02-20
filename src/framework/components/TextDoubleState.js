@@ -6,25 +6,36 @@
  *
  */
 import '../../libs/createjs.js';
+import Tools from '../../tools/Tools.js';
+
 class TextDoubleState extends createjs.Container{
     /**
      *
      * @param styleData
      *  {
      *      text:"",
-     *      width:100,
-     *      height:30,
-     *      textAlign:"center",
+     *      width:66,
+     *      height:28,
      *      selected:false,
-     *      textSelectedFont:"15px 微软雅黑",
+     *      textSelectedOffX:0,
+     *      textSelectedOffY:0,
+     *      textSelectedFont:"20px 微软雅黑",
      *      textSelectedColor:"#ffffff",
      *      textSelectedAlpha:1,
-     *      textUnselectedFont:"15px 微软雅黑",
-     *      textUnselectedColor:"#000000",
+     *      textUnselectedOffX:0,
+     *      textUnselectedOffY:0,
+     *      textUnselectedFont:"20px 微软雅黑",
+     *      textUnselectedColor:"#6a79ac",
      *      textUnselectedAlpha:1,
-     *      bgSelectedColor:"#333333",
-     *      bgSelectedAlpha:0.5,
-     *      bgUnselectedColor:"#ffffff",
+     *      bgSelectedImg:null,
+     *      bgSelectedImgX:0,
+     *      bgSelectedImgY:0,
+     *      bgSelectedColor:"#000000",
+     *      bgSelectedAlpha:0.01,
+     *      bgUnselectedImg:null,
+     *      bgUnselectedImgX:0,
+     *      bgUnselectedImgY:0,
+     *      bgUnselectedColor:"#000000",
      *      bgUnselectedAlpha:0.01
      *  }
      */
@@ -37,26 +48,40 @@ class TextDoubleState extends createjs.Container{
     setStyleData = (styleData)=>{
         for(let k in styleData){
             if(("_"+k) in this){
-                this["_"+k] = styleData[k];
+                if(k=="bgSelectedImg" || k=="bgUnselectedImg"){
+                  this["_"+k] = styleData[k].clone();
+                }else{
+                  this["_"+k] = styleData[k];
+                }
             }
         }
     };
     setDefaultData(){
         this._text = "";
-        this._width = 100;
-        this._height = 30;
-        this._textAlign = "center";
+        this._width = 66;
+        this._height = 28;
         this._selected = false;
-        this._textSelectedFont = "15px 微软雅黑";
+        this._textSelectedOffX = 0;
+        this._textSelectedOffY = 0;
+        this._textSelectedFont = "20px 微软雅黑";
         this._textSelectedColor = "#ffffff";
         this._textSelectedAlpha = 1;
-        this._textUnselectedFont = "15px 微软雅黑";
-        this._textUnselectedColor = "#000000";
+        this._textUnselectedOffX = 0;
+        this._textUnselectedOffY = 0;
+        this._textUnselectedFont = "20px 微软雅黑";
+        this._textUnselectedColor = "#6a79ac";
         this._textUnselectedAlpha = 1;
-        this._bgSelectedColor = "#333333";
-        this._bgSelectedAlpha = 0.5;
-        this._bgUnselectedColor = "#ffffff";
+        this._bgSelectedImg = null;
+        this._bgSelectedImgX = 0;
+        this._bgSelectedImgY = 0;
+        this._bgSelectedColor = "#000000";
+        this._bgSelectedAlpha = 0.01;
+        this._bgUnselectedImg = null;
+        this._bgUnselectedImgX = 0;
+        this._bgUnselectedImgY = 0;
+        this._bgUnselectedColor = "#000000";
         this._bgUnselectedAlpha = 0.01;
+        this._rectRadius = 0;
     }
     get width(){
         return this._width;
@@ -78,28 +103,38 @@ class TextDoubleState extends createjs.Container{
         //this.height = this.title.getMeasuredHeight();
         this.setTextStyle();
         this.setBgStyle();
-        this.setTextPos();
 
-        this.addChild(this.eventShape,this.title);
+        this.addChild(this.eventShape);
+        if(this._bgSelectedImg){
+          this._bgSelectedImg.x = this._bgSelectedImgX;
+          this._bgSelectedImg.y = this._bgSelectedImgY;
+          this.addChild(this._bgSelectedImg);
+        }
+        if(this._bgUnselectedImg){
+          this._bgUnselectedImg.x = this._bgUnselectedImgX;
+          this._bgUnselectedImg.y = this._bgUnselectedImgY;
+          this.addChild(this._bgUnselectedImg);
+        }
+        this.addChild(this.title);
     }
     setBgStyle(){
         if(this._selected){
-            this.eventShape.graphics.clear().beginFill(this._bgSelectedColor).drawRect(0, 0, this._width, this._height).endFill();
+            this.eventShape.graphics.clear().beginFill(this._bgSelectedColor).drawRoundRectComplex (0, 0, this._width, this._height,this._rectRadius,this._rectRadius,this._rectRadius,this._rectRadius).endFill();
             this.eventShape.alpha = this._bgSelectedAlpha;
+            this.title.x = (this._width - this.title.getMeasuredWidth())/2 + this._textSelectedOffX;
+            this.title.y = (this._height - this.title.getMeasuredHeight())/2 + this._textSelectedOffY;
         }else{
-            this.eventShape.graphics.clear().beginFill(this._bgUnselectedColor).drawRect(0, 0, this._width, this._height).endFill();
+            this.eventShape.graphics.clear().beginFill(this._bgUnselectedColor).drawRoundRectComplex (0, 0, this._width, this._height,this._rectRadius,this._rectRadius,this._rectRadius,this._rectRadius).endFill();
             this.eventShape.alpha = this._bgUnselectedAlpha;
+            this.title.x = (this._width - this.title.getMeasuredWidth())/2 + this._textUnselectedOffX;
+            this.title.y = (this._height - this.title.getMeasuredHeight())/2 + this._textUnselectedOffY;
         }
-    }
-    setTextPos(){
-        if(this._textAlign == "center"){
-            this.title.x = (this._width-this.title.getMeasuredWidth())/2;
-        }else if(this._textAlign == "right"){
-            this.title.x = this._width-this.title.getMeasuredWidth();
-        }else{
-            this.title.x = 0;
+        if(this._bgSelectedImg){
+          this._bgSelectedImg.visible = this._selected;
         }
-        this.title.y = (this._height-this.title.getMeasuredHeight())/2;
+        if(this._bgUnselectedImg){
+          this._bgUnselectedImg.visible = !this._selected;
+        }
     }
     setTextStyle(){
         if(this._selected){
@@ -112,6 +147,12 @@ class TextDoubleState extends createjs.Container{
             this.title.alpha = this._textUnselectedAlpha;
         }
     }
+    getMeasuredWidth(){
+      return this.title.getMeasuredWidth();
+    }
+    getMeasuredHeight(){
+      return this.title.getMeasuredHeight();
+    }
     set text(txt) {
         if(txt == null){
             txt = "";
@@ -122,7 +163,6 @@ class TextDoubleState extends createjs.Container{
             //this.width = this.title.getMeasuredWidth();
             //this.height = this.title.getMeasuredHeight();
             this.setBgStyle();
-            this.setTextPos();
         }
     }
     get text(){
@@ -134,7 +174,7 @@ class TextDoubleState extends createjs.Container{
                 this.text = d;
            }else{
                this.text = "";
-               console.error("MenuItemText.setData :  Illegal Data");
+               console.error("TextDoubleState.setData :  Illegal Data");
            }
         }else{
             this.text = d[propName];
@@ -147,6 +187,10 @@ class TextDoubleState extends createjs.Container{
     }
     get selected(){
         return this._selected;
+    }
+    clear(){
+      this.removeAllChildren();
+      Tools.clearProp(this);
     }
 }
 

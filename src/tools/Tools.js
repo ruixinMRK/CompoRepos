@@ -11,6 +11,7 @@ class Tools{
 
   }
 
+
   /*
   *  15-264    操作DOM有关
   *
@@ -121,6 +122,7 @@ class Tools{
       div.style[attr] = obj[attr];
     }
   }
+
   //给css增加一个规则
   static addRule(sheet, selectorText, cssText, position){
 
